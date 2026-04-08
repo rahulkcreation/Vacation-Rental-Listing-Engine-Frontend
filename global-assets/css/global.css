@@ -11,7 +11,10 @@
 /* ─────────────────────────────────────────────────────────
    Design Tokens
    ───────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap');
+
 :root {
+    --leb-font-main: 'Figtree', sans-serif;
 
     /* ── Brand / Primary Palette ── */
     --leb-primary-color:    #F15E74;   /* Coral red – buttons, accents */

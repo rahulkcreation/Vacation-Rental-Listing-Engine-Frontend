@@ -85,6 +85,12 @@ $listings = $wpdb->get_results($query);
                 $loc_display = $listing->location_name ? $listing->location_name : 'Premium Location';
                 $title = sprintf("%s in %s", $type_display, $loc_display);
 
+                // Configurable Title Character Limit.
+                $title_limit = 35;
+                if (mb_strlen($title) > $title_limit) {
+                    $title = mb_substr($title, 0, $title_limit) . '..';
+                }
+
                 $summary = sprintf("%d bedroom, %d bed", $listing->bedroom, $listing->bed);
                 $redirect_url = lef_get_secure_detail_url($listing->id);
             ?>
@@ -115,8 +121,8 @@ $listings = $wpdb->get_results($query);
                         </div>
                         <p class="lef-property-summary"><?php echo esc_html($summary); ?></p>
                         <div class="lef-property-price">
-                            <span class="lef-price-amount"><?php echo esc_html($listing->price); ?></span>
-                            <span class="lef-price-period">/ night</span>
+                            <span class="lef-price-amount">₹<?php echo esc_html($listing->price); ?></span>
+                            <span class="lef-price-period">/ Night</span>
                         </div>
                     </div>
                 </div>
