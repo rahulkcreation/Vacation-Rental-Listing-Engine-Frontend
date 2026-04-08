@@ -1,0 +1,70 @@
+/**
+ * global.css
+ *
+ * Global CSS custom-property (variable) system for the Listing Engine Backend plugin.
+ * This file ONLY defines variables and typography — NO layout or component rules.
+ * All component/template CSS files import from these tokens.
+ *
+ * @package ListingEngineBackend
+ */
+
+/* ─────────────────────────────────────────────────────────
+   Design Tokens
+   ───────────────────────────────────────────────────────── */
+:root {
+
+    /* ── Brand / Primary Palette ── */
+    --leb-primary-color:    #F15E74;   /* Coral red – buttons, accents */
+    --leb-primary-dark:     #e8445e;   /* Darker variant for gradients */
+    --leb-primary-glow:     rgba(241, 94, 116, 0.25);  /* Box-shadow tint */
+    --leb-primary-light-bg: #ffe6ea;   /* Soft red for focus rings */
+
+    /* ── Secondary / Surface ── */
+    --leb-secondary-color:  #2C3E50;   /* Dark blue-grey – headings */
+    --leb-bg-light:         #FAFAFA;   /* Page background */
+    --leb-white:            #ffffff;
+
+    /* ── Semantic Status Colors ── */
+    --leb-success-color:    #16a34a;
+    --leb-success-light-bg: #d5ffe5;
+    --leb-warning-color:    #f59e0b;
+    --leb-warning-light-bg: #fff2dc;
+    --leb-error-color:      #ea0124;
+    --leb-error-light-bg:   #ffe6ea;
+    --leb-info-color:       #2563eb;
+    --leb-info-light-bg:    #dbeafe;
+
+    /* ── Text ── */
+    --leb-text-color:       #000000;
+    --leb-text-muted:       #5a6e7c;   /* Soft grey for secondary text */
+
+    /* ── Borders ── */
+    --leb-border-color:     #e9eef3;   /* Light border */
+    --leb-border-default:   #e2e8f0;   /* Slightly darker border */
+
+    /* ── Shadows ── */
+    --leb-card-shadow:      0 12px 30px rgba(0, 0, 0, 0.05);
+    --leb-focus-shadow:     0 0 0 4px var(--leb-primary-light-bg);
+
+    /* ── Alpha / Transparency ── */
+    --leb-overlay-bg:       rgba(255, 255, 255, 0.75);
+    --leb-overlay-dark:     rgba(0, 0, 0, 0.15); /* Darker backdrop for modals */
+    --leb-white-alpha-40:   rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================
+ * Global UI Overrides
+ * ============================================ */
+
+/* Remove default browser/WordPress outline and focus shadow centrally */
+*:focus,
+*:focus-visible,
+*:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Reset WordPress default paragraph margin */
+p {
+    margin: 0;
+}
