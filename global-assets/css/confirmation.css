@@ -28,6 +28,7 @@
     border-radius: 20px;
     width: 100%;
     max-width: 450px;
+    font-family: var(--leb-font-main);
     box-shadow: var(--leb-card-shadow);
     transform: translateY(20px);
     transition: transform 0.3s ease;

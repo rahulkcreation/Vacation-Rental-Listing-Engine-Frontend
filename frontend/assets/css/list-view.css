@@ -18,16 +18,17 @@
 }
 
 .lef-section-title {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 600;
     color: var(--leb-secondary-color);
+    margin: 0;
 }
 
 /* Property Grid */
 .lef-property-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
+    gap: 25px 20px;
 }
 
 .lef-property-card {
@@ -58,10 +59,7 @@
 }
 
 .lef-card-image.lef-is-placeholder {
-    object-fit: contain;
-    padding: 40px;
-    background: var(--leb-bg-light);
-    opacity: 0.6;
+    background: var(--leb-border-default);
 }
 
 .lef-favorite-btn {
@@ -138,7 +136,7 @@
 }
 
 .lef-property-title {
-    font-size: 15px;
+    font-size: 1.45rem;
     font-weight: 500;
     color: var(--leb-text-color);
     margin: 0;
@@ -154,11 +152,12 @@
 
 .lef-property-price {
     margin: 0px;
-    font-size: 1.45rem;
-    font-weight: 700;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-top: -4px;
 }
 
-.lef-price-amount{
+.lef-price-amount {
     text-decoration: underline;
 }
 
@@ -178,13 +177,13 @@
 /* Responsive */
 @media (max-width: 1200px) {
     .lef-property-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
 @media (max-width: 900px) {
     .lef-property-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .lef-main {
@@ -194,6 +193,31 @@
 
 @media (max-width: 600px) {
     .lef-property-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
+
+    .lef-section-title {
+        font-size: 2.2rem;
+        font-weight: 600;
+    }
+}
+
+@media (max-width: 375px) {
+
+    .lef-property-title {
+        font-size: 1.3rem;
+    }
+
+    .lef-property-summary{
+        font-size: 1.25rem;
+    }
+
+    .lef-property-price {
+        margin: 0px;
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-top: -4px;
+    }
+
+
 }
