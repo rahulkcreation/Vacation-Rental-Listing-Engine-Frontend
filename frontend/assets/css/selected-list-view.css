@@ -21,8 +21,6 @@
     grid-template-columns: repeat(6, 1fr);
 }
 
-
-
 /* ── Carousel Layout ── */
 .lef-carousel-wrapper {
     position: relative;
@@ -46,14 +44,12 @@
     /* Hide scrollbar Chrome/Safari */
 }
 
+/* Base Carousel Item (6 items) */
 .lef-carousel-track .lef-property-card {
-    flex: 0 0 calc(100% / 6 - 17px);
-    /* Align with 6-col grid */
+    flex: 0 0 calc((100% - (5 * 12px)) / 6);
     scroll-snap-align: start;
     min-width: 200px;
 }
-
-
 
 /* ── Navigation Arrows ── */
 .lef-carousel-nav {
@@ -64,7 +60,7 @@
     height: 40px;
     border-radius: 50%;
     background: var(--leb-white);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--leb-card-shadow);
     border: none;
     cursor: pointer;
     z-index: 10;
@@ -90,12 +86,11 @@
     right: -20px;
 }
 
-/* Hide arrows if on edges (Handled by JS later) */
 .lef-carousel-nav.is-hidden {
     display: none;
 }
 
-/* ── Card Styling (Consistent with list-view.css but unique classes) ── */
+/* ── Card Styling ── */
 .lef-property-card {
     background: var(--leb-white);
     border-radius: 12px;
@@ -111,7 +106,7 @@
     position: relative;
     width: 100%;
     aspect-ratio: 4/3;
-    background: #f0f0f0;
+    background: var(--leb-bg-light);
     display: flex;
     overflow: hidden;
 }
@@ -127,7 +122,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f8fafc;
 }
 
 .lef-is-placeholder {
@@ -141,7 +135,7 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--leb-overlay-bg);
     border: none;
     width: 32px;
     height: 32px;
@@ -159,10 +153,6 @@
     fill: none;
     stroke: var(--leb-secondary-color);
     stroke-width: 2;
-}
-
-.lef-favorite-btn:hover {
-    transform: scale(1.1);
 }
 
 .lef-favorite-btn.is-active svg {
@@ -205,14 +195,13 @@
 
 /* ── See All Card ── */
 .lef-see-all-card {
-    background: #fdfdfd;
+    background: var(--leb-white);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     position: relative;
     border: 1px dashed var(--leb-border-color);
-    /* Dashed border for See All */
 }
 
 .lef-see-all-content {
@@ -224,7 +213,7 @@
     gap: 20px;
 }
 
-/* 3-Image Collage (Stacked Effect) */
+/* 3-Image Collage */
 .lef-see-all-collage {
     position: relative;
     width: 120px;
@@ -239,7 +228,7 @@
     border-radius: 8px;
     overflow: hidden;
     background: var(--leb-white);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--leb-card-shadow);
     border: 2px solid var(--leb-white);
     transition: transform 0.3s ease;
 }
@@ -300,31 +289,59 @@
     font-size: 14px;
 }
 
-.lef-see-all-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/* ── Responsive Breakpoints ── */
 
-
+/* <= 1250px: 4 Items */
 @media (max-width: 1250px) {
     .lef-grid-wrapper {
         grid-template-columns: repeat(4, 1fr);
     }
+
+    .lef-carousel-track .lef-property-card {
+        flex: 0 0 calc((100% - (3 * 12px)) / 4);
+    }
 }
 
+/* <= 910px: 3 Items */
 @media (max-width: 910px) {
     .lef-grid-wrapper {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    .lef-carousel-track .lef-property-card {
+        flex: 0 0 calc((100% - (2 * 12px)) / 3);
+    }
 }
 
+/* <= 650px: 2 Items */
 @media (max-width: 650px) {
     .lef-grid-wrapper {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .lef-carousel-track .lef-property-card {
+        flex: 0 0 calc((100% - (1 * 12px)) / 2);
+    }
+
+    .lef-carousel-nav {
+        transform: translateY(-620%);
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+
+    }
+
+    .lef-carousel-nav.lef-nav-next {
+        right: 0;
+    }
+
+    .lef-carousel-nav.lef-nav-prev {
+        left: auto;
+        right: 35px;
+    }
 }
 
+/* Mobile Adjustments */
 @media (max-width: 400px) {
     .lef-property-title {
         font-size: 1.3rem;
@@ -334,17 +351,18 @@
         font-size: 1.1rem;
     }
 
-    .lef-property-price{
+    .lef-property-price {
         font-size: 1.2rem;
-    }
-
-    .lef-carousel-nav.lef-nav-prev, .lef-carousel-nav.lef-nav-next{
-        display: none;
     }
 }
 
+/* <= 320px: 1 Item */
 @media (max-width: 320px) {
     .lef-grid-wrapper {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: 1fr;
+    }
+
+    .lef-carousel-track .lef-property-card {
+        flex: 0 0 100%;
     }
 }

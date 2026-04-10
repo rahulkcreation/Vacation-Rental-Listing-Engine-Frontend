@@ -81,21 +81,34 @@
                 if (!$track.length) return;
 
                 // Scroll Logic
-                const scrollAmount = () => {
-                    const firstCard = $track.find('.lef-property-card').first();
-                    return firstCard.outerWidth() + 20; // card width + gap
+                const getScrollAmount = () => {
+                    const $cards = $track.find('.lef-property-card');
+                    if (!$cards.length) return 0;
+                    
+                    const cardWidth = $cards.first().outerWidth();
+                    // Get gap from CSS variable or computed style
+                    const gap = parseInt($track.css('gap')) || 12;
+                    
+                    // Scroll by N cards based on view mode (usually we scroll by 1 card or full view)
+                    // Let's scroll by the width of visible cards or a single card.
+                    // To fix "list pura last tak chala ja rha", we ensure we scroll exactly one card width + gap.
+                    return cardWidth + gap;
                 };
 
                 $btnPrev.on('click', function() {
-                    $track.animate({
-                        scrollLeft: '-=' + scrollAmount()
-                    }, 400);
+                    const amount = getScrollAmount();
+                    $track[0].scrollBy({
+                        left: -amount,
+                        behavior: 'smooth'
+                    });
                 });
 
                 $btnNext.on('click', function() {
-                    $track.animate({
-                        scrollLeft: '+=' + scrollAmount()
-                    }, 400);
+                    const amount = getScrollAmount();
+                    $track[0].scrollBy({
+                        left: amount,
+                        behavior: 'smooth'
+                    });
                 });
 
                 // Update Button Visibility
@@ -103,8 +116,8 @@
                     const scrollLeft = $track.scrollLeft();
                     const maxScroll = $track[0].scrollWidth - $track[0].clientWidth;
 
-                    $btnPrev.toggleClass('is-hidden', scrollLeft <= 5);
-                    $btnNext.toggleClass('is-hidden', scrollLeft >= maxScroll - 5);
+                    $btnPrev.toggleClass('is-hidden', scrollLeft <= 10);
+                    $btnNext.toggleClass('is-hidden', scrollLeft >= maxScroll - 10);
                 };
 
                 $track.on('scroll', updateButtons);
