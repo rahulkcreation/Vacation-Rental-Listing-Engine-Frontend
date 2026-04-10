@@ -8,33 +8,20 @@
 /* ── Container Logic ── */
 .lef-selected-container {
     width: 100%;
-    margin: 20px 0;
+    margin: 0;
     font-family: var(--leb-font-main);
-    overflow: hidden; /* Prevent horizontal scroll on page */
+    /* overflow: hidden; */
+    /* Prevent horizontal scroll on page */
 }
 
 /* ── Grid Layout (6 Columns) ── */
 .lef-grid-wrapper {
     display: grid;
-    gap: 20px;
+    gap: 20px 12px;
     grid-template-columns: repeat(6, 1fr);
 }
 
-@media (max-width: 1400px) {
-    .lef-grid-wrapper { grid-template-columns: repeat(4, 1fr); }
-}
 
-@media (max-width: 1024px) {
-    .lef-grid-wrapper { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (max-width: 768px) {
-    .lef-grid-wrapper { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-    .lef-grid-wrapper { grid-template-columns: 1fr; }
-}
 
 /* ── Carousel Layout ── */
 .lef-carousel-wrapper {
@@ -45,39 +32,28 @@
 
 .lef-carousel-track {
     display: flex;
-    gap: 20px;
+    gap: 12px;
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* Hide scrollbar Firefox */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
     padding: 10px 0;
 }
 
 .lef-carousel-track::-webkit-scrollbar {
-    display: none; /* Hide scrollbar Chrome/Safari */
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
 }
 
 .lef-carousel-track .lef-property-card {
-    flex: 0 0 calc(100% / 6 - 17px); /* Align with 6-col grid */
+    flex: 0 0 calc(100% / 6 - 17px);
+    /* Align with 6-col grid */
     scroll-snap-align: start;
     min-width: 200px;
 }
 
-@media (max-width: 1400px) {
-    .lef-carousel-track .lef-property-card { flex: 0 0 calc(100% / 4 - 15px); }
-}
 
-@media (max-width: 1024px) {
-    .lef-carousel-track .lef-property-card { flex: 0 0 calc(100% / 3 - 14px); }
-}
-
-@media (max-width: 768px) {
-    .lef-carousel-track .lef-property-card { flex: 0 0 calc(100% / 2 - 10px); }
-}
-
-@media (max-width: 480px) {
-    .lef-carousel-track .lef-property-card { flex: 0 0 100%; }
-}
 
 /* ── Navigation Arrows ── */
 .lef-carousel-nav {
@@ -88,7 +64,7 @@
     height: 40px;
     border-radius: 50%;
     background: var(--leb-white);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border: none;
     cursor: pointer;
     z-index: 10;
@@ -106,11 +82,18 @@
     background: var(--leb-bg-light);
 }
 
-.lef-carousel-nav.lef-nav-prev { left: -20px; }
-.lef-carousel-nav.lef-nav-next { right: -20px; }
+.lef-carousel-nav.lef-nav-prev {
+    left: -20px;
+}
+
+.lef-carousel-nav.lef-nav-next {
+    right: -20px;
+}
 
 /* Hide arrows if on edges (Handled by JS later) */
-.lef-carousel-nav.is-hidden { display: none; }
+.lef-carousel-nav.is-hidden {
+    display: none;
+}
 
 /* ── Card Styling (Consistent with list-view.css but unique classes) ── */
 .lef-property-card {
@@ -124,16 +107,13 @@
     flex-direction: column;
 }
 
-.lef-property-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--leb-card-shadow);
-}
-
 .lef-card-image-container {
     position: relative;
     width: 100%;
     aspect-ratio: 4/3;
     background: #f0f0f0;
+    display: flex;
+    overflow: hidden;
 }
 
 .lef-card-image {
@@ -191,29 +171,30 @@
 }
 
 .lef-card-body {
-    padding: 15px;
+    padding: 12px 10px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
 .lef-property-title {
-    margin: 0 0 4px;
-    font-size: 15px;
-    font-weight: 600;
+    margin: 0px;
+    font-size: 1.45rem;
+    font-weight: 550;
     color: var(--leb-secondary-color);
 }
 
 .lef-property-summary {
-    margin: 0 0 10px;
+    margin: 0px;
     font-size: 13px;
     color: var(--leb-text-muted);
 }
 
 .lef-property-price {
     margin-top: auto;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .lef-price-period {
@@ -224,33 +205,146 @@
 
 /* ── See All Card ── */
 .lef-see-all-card {
-    background: var(--leb-bg-light);
+    background: #fdfdfd;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+    border: 1px dashed var(--leb-border-color);
+    /* Dashed border for See All */
 }
 
 .lef-see-all-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    width: 100%;
+    padding: 20px;
+    gap: 20px;
 }
 
-.lef-see-all-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
+/* 3-Image Collage (Stacked Effect) */
+.lef-see-all-collage {
+    position: relative;
+    width: 120px;
+    height: 80px;
+    margin-bottom: 30px;
+}
+
+.lef-collage-item {
+    position: absolute;
+    width: 60px;
+    height: 75px;
+    border-radius: 8px;
+    overflow: hidden;
     background: var(--leb-white);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--leb-white);
+    transition: transform 0.3s ease;
+}
+
+.lef-collage-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.lef-collage-1 {
+    z-index: 1;
+    left: 0;
+    transform: rotate(-15deg) translateY(5px);
+}
+
+.lef-collage-2 {
+    z-index: 3;
+    left: 30px;
+    top: -5px;
+}
+
+.lef-collage-3 {
+    z-index: 2;
+    left: 60px;
+    transform: rotate(15deg) translateY(5px);
+}
+
+.lef-see-all-card:hover .lef-collage-1 {
+    transform: rotate(-25deg) translate(-10px, 0);
+}
+
+.lef-see-all-card:hover .lef-collage-2 {
+    transform: translateY(-8px) scale(1.05);
+}
+
+.lef-see-all-card:hover .lef-collage-3 {
+    transform: rotate(25deg) translate(10px, 0);
+}
+
+.lef-see-all-footer {
     display: flex;
     align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    gap: 10px;
+    background: var(--leb-secondary-color);
+    color: var(--leb-white);
+    padding: 5px 18px;
+    border-radius: 30px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.lef-see-all-card:hover .lef-see-all-footer {
+    transform: scale(1.05);
 }
 
 .lef-see-all-text {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 14px;
-    color: var(--leb-secondary-color);
+}
+
+.lef-see-all-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 1250px) {
+    .lef-grid-wrapper {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 910px) {
+    .lef-grid-wrapper {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .lef-grid-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .lef-property-title {
+        font-size: 1.3rem;
+    }
+
+    .lef-property-summary {
+        font-size: 1.1rem;
+    }
+
+    .lef-property-price{
+        font-size: 1.2rem;
+    }
+
+    .lef-carousel-nav.lef-nav-prev, .lef-carousel-nav.lef-nav-next{
+        display: none;
+    }
+}
+
+@media (max-width: 320px) {
+    .lef-grid-wrapper {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

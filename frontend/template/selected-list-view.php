@@ -24,6 +24,9 @@ $count        = intval( $atts['count'] );
 $location_slug = sanitize_text_field( $atts['location'] );
 $type_slug     = sanitize_text_field( $atts['type'] );
 
+// ── CONFIGURATION ──
+$title_char_limit = 35; // Max characters for property title (Type in Location)
+
 // 2. Lookup IDs from names if provided.
 $location_id = 0;
 if ( ! empty( $location_slug ) ) {
@@ -76,9 +79,7 @@ if ( ! empty( $location_slug ) || ! empty( $type_slug ) ) {
 	$see_all_url = add_query_arg( $params, $see_all_url );
 }
 
-// 5. Configurable Variable for Character Limit.
-$title_char_limit = 33; 
-
+// 5. Rendering Logic Starts Below
 ?>
 
 <div class="lef-selected-container <?php echo ($view_mode === 'carousel') ? 'lef-view-carousel' : 'lef-view-grid'; ?>">
@@ -147,16 +148,52 @@ $title_char_limit = 33;
             <?php endforeach; ?>
         <?php endif; ?>
 
+        <?php 
+        // Collect up to 3 images for the 'See All' card collage
+        $collage_images = array();
+        if ( $listings ) {
+            foreach ( $listings as $listing_item ) {
+                if ( count( $collage_images ) >= 3 ) break;
+                
+                $img_data = $wpdb->get_var( $wpdb->prepare(
+                    "SELECT image FROM {$wpdb->prefix}ls_img WHERE property_id = %d",
+                    $listing_item->id
+                ));
+                if ( $img_data ) {
+                    $decoded_img = json_decode( $img_data, true );
+                    if ( is_array( $decoded_img ) && ! empty( $decoded_img ) ) {
+                        usort( $decoded_img, function( $a, $b ) { return $a['sort_order'] - $b['sort_order']; } );
+                        $collage_images[] = $decoded_img[0]['url'];
+                    }
+                }
+            }
+        }
+        // Fill defaults if less than 3
+        $fallback_svg = LEF_PLUGIN_URL . 'global-assets/images/no-image.svg';
+        while ( count( $collage_images ) < 3 ) {
+            $collage_images[] = $fallback_svg;
+        }
+        ?>
+
         <!-- See All Card -->
         <div class="lef-property-card lef-see-all-card" data-redirect="<?php echo esc_url( $see_all_url ); ?>">
             <div class="lef-see-all-content">
-                <div class="lef-see-all-icon">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                <div class="lef-see-all-collage">
+                    <?php foreach ( $collage_images as $index => $img_url ) : ?>
+                        <div class="lef-collage-item lef-collage-<?php echo $index + 1; ?>">
+                            <img src="<?php echo esc_url( $img_url ); ?>" alt="Preview">
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <span class="lef-see-all-text">See all</span>
+                <div class="lef-see-all-footer">
+                    <span class="lef-see-all-text">See all</span>
+                    <div class="lef-see-all-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
 
