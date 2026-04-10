@@ -46,6 +46,7 @@
     aspect-ratio: 1;
     overflow: hidden;
     border-radius: 12px;
+    display: flex;
 }
 
 .lef-card-image {

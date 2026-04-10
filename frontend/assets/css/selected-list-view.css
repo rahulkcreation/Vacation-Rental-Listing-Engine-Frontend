@@ -93,7 +93,7 @@
 /* ── Card Styling ── */
 .lef-property-card {
     background: var(--leb-white);
-    border-radius: 12px;
+    border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -273,7 +273,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--leb-secondary-color);
+    background: var(--leb-primary-color);
     color: var(--leb-white);
     padding: 5px 18px;
     border-radius: 30px;
