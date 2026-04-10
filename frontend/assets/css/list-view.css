@@ -164,10 +164,10 @@
 
 /* Empty State */
 .lef-no-properties {
-    padding: 64px 0;
-    text-align: left;
+    padding: 10px 0;
+    text-align: center;
     color: var(--leb-text-muted);
-    font-size: 16px;
+    font-size: 14px;
 }
 
 /* ── Responsive Breakpoints ── */
@@ -193,7 +193,7 @@
     }
 
     .lef-section-title {
-        font-size: 2.2rem;
+        font-size: 2.1rem;
         font-weight: 600;
     }
 }
