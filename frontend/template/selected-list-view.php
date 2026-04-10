@@ -164,7 +164,10 @@ if ( ! empty( $location_slug ) || ! empty( $type_slug ) ) {
                     $decoded_img = json_decode( $img_data, true );
                     if ( is_array( $decoded_img ) && ! empty( $decoded_img ) ) {
                         usort( $decoded_img, function( $a, $b ) { return $a['sort_order'] - $b['sort_order']; } );
-                        $collage_images[] = $decoded_img[0]['url'];
+                        $img_url = ! empty( $decoded_img[0]['url'] ) ? $decoded_img[0]['url'] : '';
+                        if ( $img_url ) {
+                            $collage_images[] = $img_url;
+                        }
                     }
                 }
             }
@@ -182,7 +185,9 @@ if ( ! empty( $location_slug ) || ! empty( $type_slug ) ) {
                 <div class="lef-see-all-collage">
                     <?php foreach ( $collage_images as $index => $img_url ) : ?>
                         <div class="lef-collage-item lef-collage-<?php echo $index + 1; ?>">
-                            <img src="<?php echo esc_url( $img_url ); ?>" alt="Preview">
+                            <img src="<?php echo esc_url( $img_url ); ?>" 
+                                 alt="Preview"
+                                 onerror="this.src='<?php echo esc_url($fallback_img); ?>';">
                         </div>
                     <?php endforeach; ?>
                 </div>
