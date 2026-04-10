@@ -12,27 +12,49 @@ if (! defined('ABSPATH')) {
 
 global $wpdb;
 
-// 1. Fetch Location from Query Params for Dynamic Header.
-$location_id = isset($_GET['location']) ? intval($_GET['location']) : 0;
-$location_name = '';
-$count_text = 'Premium Property';
+// 1. Extract and Sanitize Parameters.
+$location_param = isset($_GET['location']) ? sanitize_text_field($_GET['location']) : '';
+$type_param     = isset($_GET['type'])     ? sanitize_text_field($_GET['type'])     : '';
+$guests_param   = isset($_GET['guests'])   ? intval($_GET['guests'])                : 0;
+$amenities_raw  = isset($_GET['amenities']) ? sanitize_text_field($_GET['amenities']) : '';
+$min_price      = isset($_GET['min-price']) ? floatval($_GET['min-price'])           : 0;
+$max_price      = isset($_GET['max-price']) ? floatval($_GET['max-price'])           : 0;
+$sort           = isset($_GET['sort'])      ? sanitize_text_field($_GET['sort'])      : '';
 
-if ($location_id > 0) {
-    $location_name = $wpdb->get_var($wpdb->prepare(
-        "SELECT name FROM {$wpdb->prefix}ls_location WHERE id = %d",
-        $location_id
-    ));
-
-    if ($location_name) {
-        $total_count = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM {$wpdb->prefix}ls_listings WHERE location = %d AND status = 'published'",
-            $location_id
+// 2. Map Name-Based Parameters to IDs.
+$location_id = 0;
+if ($location_param) {
+    if (is_numeric($location_param)) {
+        $location_id = intval($location_param);
+    } else {
+        $location_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT id FROM {$wpdb->prefix}ls_location WHERE name LIKE %s",
+            '%' . $wpdb->esc_like($location_param) . '%'
         ));
-        $count_text = sprintf("Over %d homes in %s", number_format($total_count), $location_name);
     }
 }
 
-// 2. Fetch Listings.
+$type_id = 0;
+if ($type_param) {
+    $type_id = $wpdb->get_var($wpdb->prepare(
+        "SELECT id FROM {$wpdb->prefix}ls_types WHERE name LIKE %s",
+        '%' . $wpdb->esc_like($type_param) . '%'
+    ));
+}
+
+$amenity_ids = array();
+if ($amenities_raw) {
+    $amenity_names = array_map('trim', explode(',', $amenities_raw));
+    foreach ($amenity_names as $a_name) {
+        $a_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT id FROM {$wpdb->prefix}ls_amenities WHERE name LIKE %s",
+            '%' . $wpdb->esc_like($a_name) . '%'
+        ));
+        if ($a_id) $amenity_ids[] = $a_id;
+    }
+}
+
+// 3. Build Dynamic Query.
 $query = "
 	SELECT l.*, t.name as type_name, loc.name as location_name 
 	FROM {$wpdb->prefix}ls_listings l
@@ -41,11 +63,59 @@ $query = "
 	WHERE l.status = 'published'
 ";
 
+// Location Fallback: Exact/Similar Location ID OR Partial Address Match.
 if ($location_id > 0) {
     $query .= $wpdb->prepare(" AND l.location = %d", $location_id);
+} elseif ($location_param) {
+    $query .= $wpdb->prepare(" AND (l.address LIKE %s OR loc.name LIKE %s)", 
+        '%' . $wpdb->esc_like($location_param) . '%',
+        '%' . $wpdb->esc_like($location_param) . '%'
+    );
+}
+
+if ($type_id > 0) {
+    $query .= $wpdb->prepare(" AND l.type = %d", $type_id);
+}
+
+if ($guests_param > 0) {
+    // Note: Assuming 'guest' column exists in wp_ls_listings
+    $query .= $wpdb->prepare(" AND l.guest >= %d", $guests_param);
+}
+
+if ($min_price > 0) {
+    $query .= $wpdb->prepare(" AND l.price >= %f", $min_price);
+}
+
+if ($max_price > 0) {
+    $query .= $wpdb->prepare(" AND l.price <= %f", $max_price);
+}
+
+// Amenities (Must match ALL requested amenities).
+if (! empty($amenity_ids)) {
+    foreach ($amenity_ids as $id) {
+        $query .= $wpdb->prepare(" AND FIND_IN_SET(%d, l.amenities)", $id);
+    }
+}
+
+// 4. Sorting & Execution.
+if ($sort === 'price_low_to_high') {
+    $query .= " ORDER BY l.price ASC";
+} elseif ($sort === 'price_high_to_low') {
+    $query .= " ORDER BY l.price DESC";
+} else {
+    // Default: Latest entries first
+    $query .= " ORDER BY l.id DESC";
 }
 
 $listings = $wpdb->get_results($query);
+
+// 5. Update Header Text based on count and location.
+$count_text = sprintf("%d %s", count($listings), count($listings) === 1 ? 'Premium Property' : 'Premium Properties');
+if ($location_param) {
+    $count_text .= sprintf(" in %s", esc_html($location_param));
+} elseif ($type_param) {
+    $count_text .= sprintf(" of type %s", esc_html($type_param));
+}
 
 ?>
 
