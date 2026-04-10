@@ -14,7 +14,7 @@ window.SearchBar = (function($) {
         selectedLocation: '',
         checkin: '',
         checkout: '',
-        adults: 1,
+        adults: 0,
         children: 0,
         infants: 0,
         activeSection: null,
@@ -158,13 +158,97 @@ window.SearchBar = (function($) {
         });
     }
 
+    function showMobileSuggestions(query) {
+        const $list = $('#mobileSuggestions');
+        if (!query.trim()) {
+            $list.empty().hide();
+            return;
+        }
+
+        $.ajax({
+            url: lef_ajax_obj.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'lef_search_suggestions',
+                query: query,
+                nonce: lef_ajax_obj.nonce
+            },
+            success: function(response) {
+                if (response.success && response.data.length > 0) {
+                    let html = '';
+                    response.data.forEach(item => {
+                        html += `
+                            <div class="suggestion-item" onclick="SearchBar.selectLocation('${item.name.replace(/'/g, "\\'")}', '${item.type}', '${(item.address || "").replace(/'/g, "\\'")}', '${(item.location || "").replace(/'/g, "\\'")}')">
+                                <div class="suggestion-icon">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                </div>
+                                <div class="suggestion-text">
+                                    <strong>${item.name}</strong>
+                                    <span>${item.subtitle || ''}</span>
+                                </div>
+                            </div>`;
+                    });
+                    $list.html(html).show();
+                } else {
+                    $list.empty().hide();
+                }
+            }
+        });
+    }
+
+    function showMobileSuggestions(query) {
+        const $list = $('#mobileSuggestions');
+        if (!query.trim()) {
+            $list.empty().hide();
+            return;
+        }
+
+        $.ajax({
+            url: lef_ajax_obj.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'lef_search_suggestions',
+                query: query,
+                nonce: lef_ajax_obj.nonce
+            },
+            success: function(response) {
+                if (response.success && response.data.length > 0) {
+                    let html = '';
+                    response.data.forEach(item => {
+                        html += `
+                            <div class="suggestion-item" onclick="SearchBar.selectLocation('${item.name.replace(/'/g, "\\'")}', '${item.type}', '${(item.address || "").replace(/'/g, "\\'")}', '${(item.location || "").replace(/'/g, "\\'")}')">
+                                <div class="suggestion-icon">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                </div>
+                                <div class="suggestion-text">
+                                    <strong>${item.name}</strong>
+                                    <span>${item.subtitle || ''}</span>
+                                </div>
+                            </div>`;
+                    });
+                    $list.html(html).show();
+                } else {
+                    $list.empty().hide();
+                }
+            }
+        });
+    }
+
     function selectLocation(name, type, address, location) {
         state.location = name;
         state.locationType = type || 'Location';
         state.selectedAddress = address || '';
         state.selectedLocation = location || '';
+        
+        // Update Desktop UI
         $('#locationDisplay').val(name).addClass('has-value');
         $('#locationWrapper').addClass('has-value');
+        
+        // Update Mobile UI
+        $('#mobileLocationInput').val(name);
+        $('#mobileSuggestions').empty().hide();
+        updateMobileTrigger();
+        
         // Popup persists as requested until outside click
     }
 
@@ -279,9 +363,14 @@ window.SearchBar = (function($) {
     }
 
     function updateGuestButtons() {
-        $('#adultsMinus').prop('disabled', state.adults <= 1);
+        $('#adultsMinus').prop('disabled', state.adults <= 0);
         $('#childrenMinus').prop('disabled', state.children <= 0);
         $('#infantsMinus').prop('disabled', state.infants <= 0);
+        
+        // Mobile buttons
+        $('#mobileAdultsMinus').prop('disabled', state.adults <= 0);
+        $('#mobileChildrenMinus').prop('disabled', state.children <= 0);
+        $('#mobileInfantsMinus').prop('disabled', state.infants <= 0);
     }
 
     function updateGuestDisplay() {
@@ -299,8 +388,9 @@ window.SearchBar = (function($) {
 
     function clearGuests(e) {
         e.stopPropagation();
-        state.adults = 1; state.children = 0; state.infants = 0;
-        $('#adultsCount').text('1'); $('#childrenCount').text('0'); $('#infantsCount').text('0');
+        state.adults = 0; state.children = 0; state.infants = 0;
+        $('#adultsCount').text('0'); $('#childrenCount').text('0'); $('#infantsCount').text('0');
+        $('#mobileAdultsCount').text('0'); $('#mobileChildrenCount').text('0'); $('#mobileInfantsCount').text('0');
         updateGuestButtons(); updateGuestDisplay();
     }
 
@@ -339,14 +429,31 @@ window.SearchBar = (function($) {
         for (let i = 0; i < firstDay; i++) html += '<div></div>';
         
         const daysInMonth = new Date(state.mobileCalendarMonth.getFullYear(), state.mobileCalendarMonth.getMonth() + 1, 0).getDate();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(state.mobileCalendarMonth.getFullYear(), state.mobileCalendarMonth.getMonth(), day);
             const dateStr = date.toISOString().split('T')[0];
+            const isPast = date < today;
+            const isToday = date.getTime() === today.getTime();
             const isCheckin = dateStr === state.checkin;
             const isCheckout = dateStr === state.checkout;
+            
+            let inRange = false;
+            if (state.checkin && state.checkout) {
+                const cin = new Date(state.checkin);
+                const cout = new Date(state.checkout);
+                inRange = date > cin && date < cout;
+            }
+            
             let classes = 'calendar-day';
+            if (isPast) classes += ' disabled';
+            if (isToday && !isCheckin && !isCheckout) classes += ' today';
             if (isCheckin || isCheckout) classes += ' selected';
-            html += `<button class="${classes}" onclick="SearchBar.mobileSelectDate('${dateStr}')">${day}</button>`;
+            if (inRange) classes += ' in-range';
+            
+            html += `<button class="${classes}" ${isPast ? 'disabled' : ''} onclick="SearchBar.mobileSelectDate('${dateStr}')">${day}</button>`;
         }
         $grid.html(html);
     }
@@ -366,7 +473,7 @@ window.SearchBar = (function($) {
     }
 
     function resetMobile() {
-        state.location = ''; state.checkin = ''; state.checkout = ''; state.adults = 1; state.children = 0; state.infants = 0;
+        state.location = ''; state.checkin = ''; state.checkout = ''; state.adults = 0; state.children = 0; state.infants = 0;
         $('#mobileLocationInput').val('');
         updateMobileTrigger();
         renderMobileCalendar();
@@ -375,6 +482,20 @@ window.SearchBar = (function($) {
     // ==================== SEARCH HANDLING ====================
 
     function handleSearch() {
+        // Validation: At least one field must be filled
+        const hasLocation = state.location.trim() !== '';
+        const hasDates = state.checkin !== '';
+        const hasGuests = (state.adults + state.children + state.infants) > 0;
+
+        if (!hasLocation && !hasDates && !hasGuests) {
+            if (window.LEB_Toast) {
+                window.LEB_Toast.show('Please select a destination, date, or guests to search.', 'error');
+            } else {
+                alert('Please select a destination, date, or guests to search.');
+            }
+            return;
+        }
+
         const query = new URLSearchParams();
         
         if (state.location) {
@@ -409,6 +530,7 @@ window.SearchBar = (function($) {
         openSection,
         closePopup,
         showSuggestions,
+        showMobileSuggestions,
         selectLocation,
         clearLocation,
         prevMonth,

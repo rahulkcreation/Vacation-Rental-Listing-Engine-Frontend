@@ -120,7 +120,7 @@ $archive_url = $archive_page_id ? get_permalink($archive_page_id) : home_url('/'
                     <div class="guest-info"><h4>Adults</h4><p>Ages 13 or above</p></div>
                     <div class="guest-controls">
                         <button class="guest-btn" type="button" id="adultsMinus" onclick="SearchBar.updateGuests('adults', -1)">−</button>
-                        <span class="guest-count" id="adultsCount">1</span>
+                        <span class="guest-count" id="adultsCount">0</span>
                         <button class="guest-btn" type="button" id="adultsPlus" onclick="SearchBar.updateGuests('adults', 1)">+</button>
                     </div>
                 </div>
@@ -191,7 +191,7 @@ $archive_url = $archive_page_id ? get_permalink($archive_page_id) : home_url('/'
                         <div class="guest-info"><h4>Adults</h4><p>Ages 13 or above</p></div>
                         <div class="guest-controls">
                             <button class="guest-btn" type="button" id="mobileAdultsMinus" onclick="SearchBar.updateMobileGuests('adults', -1)">−</button>
-                            <span class="guest-count" id="mobileAdultsCount">1</span>
+                            <span class="guest-count" id="mobileAdultsCount">0</span>
                             <button class="guest-btn" type="button" id="mobileAdultsPlus" onclick="SearchBar.updateMobileGuests('adults', 1)">+</button>
                         </div>
                     </div>
