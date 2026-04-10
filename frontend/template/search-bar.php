@@ -73,13 +73,16 @@ $archive_url = $archive_page_id ? get_permalink($archive_page_id) : home_url('/'
     <!-- Mobile Search Bar Trigger -->
     <section class="mobile-search-section mobile-only">
         <div class="mobile-search-trigger" onclick="SearchBar.openMobileModal()">
-            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+           
             <div class="mobile-search-text">
                 <span id="mobileLocationText">Anywhere</span>
                 <span id="mobileDetailText">Any week · Add guests</span>
             </div>
             <div class="mobile-search-icon">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M4 21v-7m0-4V3m8 18v-11m0-4V3m8 18v-3m0-4V3M1 14h6m2-6h6m2 10h6"/></svg>
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
             </div>
         </div>
     </section>
@@ -170,13 +173,12 @@ $archive_url = $archive_page_id ? get_permalink($archive_page_id) : home_url('/'
             <!-- Date Tab -->
             <div class="mobile-tab-content" id="mobileDateTab">
                 <div class="mobile-date-picker">
-                    <div class="mobile-calendar-header">
-                        <div class="mobile-calendar-month" id="mobileCalendarMonth"></div>
-                    </div>
+                   
                     <div class="mobile-calendar-nav">
                         <button class="mobile-calendar-nav-btn" type="button" onclick="SearchBar.mobilePrevMonth()">
                             <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
+                         <div class="mobile-calendar-month" id="mobileCalendarMonth"></div>
                         <button class="mobile-calendar-nav-btn" type="button" onclick="SearchBar.mobileNextMonth()">
                             <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"/></svg>
                         </button>
