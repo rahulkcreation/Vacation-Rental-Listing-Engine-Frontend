@@ -418,9 +418,10 @@ function lef_get_similar_properties() {
 
 	$similar = $wpdb->get_results( $wpdb->prepare(
 		"SELECT p.id, p.title, p.price, p.guests, p.location,
-		        loc.name as location_name
+		        loc.name as location_name, t.name as type_name
 		 FROM {$wpdb->prefix}ls_property p
 		 LEFT JOIN {$wpdb->prefix}ls_location loc ON p.location = loc.id
+		 LEFT JOIN {$wpdb->prefix}ls_types t ON p.type = t.id
 		 WHERE p.id != %d
 		   AND p.status = 'published'
 		   AND (
@@ -436,9 +437,9 @@ function lef_get_similar_properties() {
 	$result = array();
 	if ( ! empty( $similar ) ) {
 		foreach ( $similar as $prop ) {
-			// Fetch property image (match property_id with id column in ls_img as per requirement)
+			// Fetch property image (match property ID with property_id column)
 			$img_data_json = $wpdb->get_var( $wpdb->prepare(
-				"SELECT image FROM {$wpdb->prefix}ls_img WHERE id = %d",
+				"SELECT image FROM {$wpdb->prefix}ls_img WHERE property_id = %d",
 				$prop->id
 			) );
 
@@ -446,25 +447,29 @@ function lef_get_similar_properties() {
 			if ( $img_data_json ) {
 				$img_data = json_decode( $img_data_json, true );
 				if ( is_array( $img_data ) ) {
-					// Strictly find sort_order == 0
-					foreach ( $img_data as $img_obj ) {
-						if ( isset( $img_obj['sort_order'] ) && (int) $img_obj['sort_order'] === 0 ) {
-							$img_url = ! empty( $img_obj['url'] ) ? $img_obj['url'] : '';
-							break;
-						}
-					}
-					// Fallback: If no sort_order 0, take first available with URL
-					if ( empty( $img_url ) ) {
+					// Check if it's a multidimensional array (list of image objects)
+					$is_list = isset( $img_data[0] ) && is_array( $img_data[0] );
+
+					if ( $is_list ) {
+						// Strictly find sort_order == 0
 						foreach ( $img_data as $img_obj ) {
-							if ( ! empty( $img_obj['url'] ) ) {
-								$img_url = $img_obj['url'];
+							if ( isset( $img_obj['sort_order'] ) && (int) $img_obj['sort_order'] === 0 ) {
+								$img_url = ! empty( $img_obj['url'] ) ? $img_obj['url'] : '';
 								break;
 							}
 						}
-					}
-					// Extra fallback for single object format
-					if ( empty( $img_url ) && isset( $img_data['url'] ) ) {
-						$img_url = $img_data['url'];
+						// Fallback: If no sort_order 0, take first available with URL
+						if ( empty( $img_url ) ) {
+							foreach ( $img_data as $img_obj ) {
+								if ( ! empty( $img_obj['url'] ) ) {
+									$img_url = $img_obj['url'];
+									break;
+								}
+							}
+						}
+					} else {
+						// Single object format
+						$img_url = ! empty( $img_data['url'] ) ? $img_data['url'] : '';
 					}
 				}
 			}
@@ -484,7 +489,7 @@ function lef_get_similar_properties() {
 
 			$result[] = array(
 				'id'            => $prop->id,
-				'title'         => $prop->title,
+				'title'         => sprintf( "%s in %s", ($prop->type_name ? $prop->type_name : 'Property'), ($prop->location_name ? $prop->location_name : 'Nearby') ),
 				'price'         => floatval( $prop->price ),
 				'location_name' => $prop->location_name,
 				'image'         => $img_url,
