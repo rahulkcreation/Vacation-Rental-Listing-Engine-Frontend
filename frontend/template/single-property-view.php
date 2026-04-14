@@ -67,12 +67,7 @@ if ( $host_id ) {
 	$host_name_meta = get_user_meta( $host_id, 'full_name', true );
 	$host_name      = ! empty( $host_name_meta ) ? $host_name_meta : ( $host_user ? $host_user->display_name : '' );
 
-	$host_pic_meta  = get_user_meta( $host_id, 'profile_pic', true );
-	if ( $host_pic_meta ) {
-		$pic_data = json_decode( $host_pic_meta, true );
-		// Check both 'url' and 'path' keys (varies by plugin version)
-		$host_pic = isset( $pic_data['url'] ) ? $pic_data['url'] : ( isset( $pic_data['path'] ) ? $pic_data['path'] : '' );
-	}
+	$host_pic  = lef_get_user_profile_pic( $host_id );
 }
 
 /* ── 5. Reviews (approved only) ── */
@@ -94,12 +89,7 @@ foreach ( $reviews_data as $rev ) {
 	if ( empty( $rev_name ) ) {
 		$rev_name = $rev->display_name;
 	}
-	$rev_pic_meta = get_user_meta( $rev->user_id, 'profile_pic', true );
-	$rev_pic      = '';
-	if ( $rev_pic_meta ) {
-		$rev_pic_data = json_decode( $rev_pic_meta, true );
-		$rev_pic      = isset( $rev_pic_data['url'] ) ? $rev_pic_data['url'] : '';
-	}
+	$rev_pic      = lef_get_user_profile_pic( $rev->user_id );
 
 	$total_rating += floatval( $rev->rating );
 	$reviews[]     = array(
@@ -312,11 +302,7 @@ function lef_format_review_date( $date_str ) {
             <!-- Host -->
             <div class="lefdk-host-details">
                 <div class="lefdk-hd-photo">
-                    <?php if ( $host_pic ) : ?>
                     <img src="<?php echo esc_url( $host_pic ); ?>" alt="<?php echo esc_attr( $host_name ); ?>">
-                    <?php else : ?>
-                    <img src="<?php echo esc_url( LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png' ); ?>" alt="Host">
-                    <?php endif; ?>
                 </div>
                 <div class="lefdk-hd-info">
                     <span class="lefdk-hd-i-name">Hosted by <?php echo esc_html( $host_name ); ?></span>
@@ -431,6 +417,7 @@ function lef_format_review_date( $date_str ) {
         </div>
     </div>
 
+    <?php if ( $review_count > 0 || ( is_user_logged_in() && $can_review ) ) : ?>
     <!-- ── Reviews Section ── -->
     <div class="lefdk-all-review">
         <div class="lefdk-ar-review">
@@ -438,7 +425,7 @@ function lef_format_review_date( $date_str ) {
             <div class="lefdk-ar-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
             <div class="lefdk-ar-r-total-revi"><span class="lefdk-dot"> · </span><?php echo $review_count; ?> reviews</div>
             <?php else : ?>
-            <div class="lefdk-ar-r-number">No Reviews</div>
+            <div class="lefdk-ar-r-number">No Reviews Yet</div>
             <?php endif; ?>
         </div>
 
@@ -447,7 +434,7 @@ function lef_format_review_date( $date_str ) {
             <?php foreach ( $reviews_visible as $rev ) : ?>
             <div class="lefdk-rc-card">
                 <div class="lefdk-rc-header">
-                    <img src="<?php echo esc_url( $rev['avatar'] ? $rev['avatar'] : LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png' ); ?>" alt="Avatar" class="lefdk-rc-avatar">
+                    <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar">
                     <div class="lefdk-rc-info">
                         <span class="lefdk-rc-name"><?php echo esc_html( $rev['name'] ); ?></span>
                         <div class="lefdk-rc-date"><?php echo lef_format_review_date( $rev['created_at'] ); ?> <span class="lefdk-rc-rating"><?php echo $star_svg_review; ?><?php echo $rev['rating']; ?></span></div>
@@ -469,6 +456,7 @@ function lef_format_review_date( $date_str ) {
         </div>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
 
     <!-- ── Similar Properties ── -->
     <div class="lefdk-similar-results">
@@ -530,11 +518,7 @@ function lef_format_review_date( $date_str ) {
         <!-- Host -->
         <div class="lefmb-host-details">
             <div class="lefmb-hd-photo">
-                <?php if ( $host_pic ) : ?>
                 <img src="<?php echo esc_url( $host_pic ); ?>" alt="<?php echo esc_attr( $host_name ); ?>">
-                <?php else : ?>
-                <img src="<?php echo esc_url( LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png' ); ?>" alt="Host">
-                <?php endif; ?>
             </div>
             <div class="lefmb-hd-info">
                 <span class="lefmb-hd-i-name">Hosted by <?php echo esc_html( $host_name ); ?></span>
@@ -590,6 +574,7 @@ function lef_format_review_date( $date_str ) {
             </div>
         </div>
 
+        <?php if ( $review_count > 0 || ( is_user_logged_in() && $can_review ) ) : ?>
         <!-- Reviews -->
         <div class="lefmb-all-review">
             <div class="lefmb-ar-review">
@@ -597,7 +582,7 @@ function lef_format_review_date( $date_str ) {
                 <div class="lefmb-ar-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
                 <div class="lefmb-ar-r-total-revi"><span class="lefmb-dot"> · </span><?php echo $review_count; ?> reviews</div>
                 <?php else : ?>
-                <div class="lefmb-ar-r-number">No Reviews</div>
+                <div class="lefmb-ar-r-number">No Reviews Yet</div>
                 <?php endif; ?>
             </div>
 
@@ -606,7 +591,7 @@ function lef_format_review_date( $date_str ) {
                 <?php foreach ( $reviews_visible as $rev ) : ?>
                 <div class="lefmb-rc-card">
                     <div class="lefmb-rc-header">
-                        <img src="<?php echo esc_url( $rev['avatar'] ? $rev['avatar'] : LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png' ); ?>" alt="Avatar" class="lefdk-rc-avatar">
+                        <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar">
                         <div class="lefmb-rc-info">
                             <span class="lefmb-rc-name"><?php echo esc_html( $rev['name'] ); ?></span>
                             <div class="lefmb-rc-date"><?php echo lef_format_review_date( $rev['created_at'] ); ?> <span class="lefmb-rc-rating"><?php echo $star_svg_review; ?><?php echo $rev['rating']; ?></span></div>
@@ -628,6 +613,7 @@ function lef_format_review_date( $date_str ) {
             </div>
             <?php endif; ?>
         </div>
+        <?php endif; ?>
 
         <!-- Similar Properties -->
         <div class="lefmb-similar-results">
@@ -708,7 +694,7 @@ function lef_format_review_date( $date_str ) {
         <?php foreach ( $reviews as $rev ) : ?>
         <div class="lefdk-rc-card">
             <div class="lefdk-rc-header">
-                <img src="<?php echo esc_url( $rev['avatar'] ? $rev['avatar'] : LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png' ); ?>" alt="Avatar" class="lefdk-rc-avatar">
+                <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar">
                 <div class="lefdk-rc-info">
                     <span class="lefdk-rc-name"><?php echo esc_html( $rev['name'] ); ?></span>
                     <div class="lefdk-rc-date"><?php echo lef_format_review_date( $rev['created_at'] ); ?> <span class="lefdk-rc-rating"><?php echo $star_svg_review; ?><?php echo $rev['rating']; ?></span></div>

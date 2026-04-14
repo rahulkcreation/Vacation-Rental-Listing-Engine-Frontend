@@ -647,6 +647,9 @@
                 const html = res.data.properties.map(buildSimilarCard).join('');
                 $('#lef-spv-similar-dk').html(html);
                 $('#lef-spv-similar-mb').html(html);
+                $('.lefdk-similar-results, .lefmb-similar-results').show();
+            } else {
+                $('.lefdk-similar-results, .lefmb-similar-results').hide();
             }
         });
     }

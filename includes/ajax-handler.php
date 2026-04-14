@@ -9,6 +9,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// ─────────────────────────────────────────────────────────────
+// Helper Functions
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Robustly fetch user profile picture URL.
+ * Handles both JSON-encoded data and plain URL strings.
+ * Falls back to a predefined placeholder if no image exists.
+ *
+ * @param int $user_id User ID to fetch the picture for.
+ * @return string Profile picture URL.
+ */
+function lef_get_user_profile_pic( $user_id ) {
+	$pic_meta = get_user_meta( $user_id, 'profile_pic', true );
+	$pic_url  = '';
+
+	if ( ! empty( $pic_meta ) ) {
+		// Attempt to decode as JSON
+		$pic_data = json_decode( $pic_meta, true );
+		
+		if ( is_array( $pic_data ) ) {
+			// It was JSON, check for 'url' or 'path' keys
+			$pic_url = isset( $pic_data['url'] ) ? $pic_data['url'] : ( isset( $pic_data['path'] ) ? $pic_data['path'] : '' );
+		} elseif ( is_string( $pic_meta ) ) {
+			// It's a plain string, check if it looks like a URL
+			$pic_url = $pic_meta;
+		}
+	}
+
+	// Fallback to placeholder if still empty
+	if ( empty( $pic_url ) ) {
+		$pic_url = LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png';
+	}
+
+	return esc_url( $pic_url );
+}
+
 /**
  * Handle location and address suggestions for the search bar.
  */
@@ -181,13 +218,8 @@ function lef_get_property_reviews() {
 
 	$result = array();
 	foreach ( $reviews as $rev ) {
-		// Fetch reviewer profile pic
-		$pic_meta = get_user_meta( $rev->user_id, 'profile_pic', true );
-		$pic_url  = '';
-		if ( $pic_meta ) {
-			$pic_data = json_decode( $pic_meta, true );
-			$pic_url  = isset( $pic_data['url'] ) ? $pic_data['url'] : '';
-		}
+		// Fetch reviewer profile pic using helper
+		$pic_url = lef_get_user_profile_pic( $rev->user_id );
 
 		// Fetch reviewer full name
 		$full_name = get_user_meta( $rev->user_id, 'full_name', true );
@@ -340,7 +372,10 @@ function lef_get_similar_properties() {
 
 	// Get current property details for comparison
 	$current = $wpdb->get_row( $wpdb->prepare(
-		"SELECT location, property_type, price, guests FROM {$wpdb->prefix}ls_property WHERE id = %d",
+		"SELECT p.location, p.property_type, p.amenities, TRIM(LOWER(loc.name)) as location_name 
+		 FROM {$wpdb->prefix}ls_property p 
+		 LEFT JOIN {$wpdb->prefix}ls_location loc ON p.location = loc.id
+		 WHERE p.id = %d",
 		$property_id
 	) );
 
@@ -348,9 +383,29 @@ function lef_get_similar_properties() {
 		wp_send_json_error( array( 'message' => 'Property not found.' ) );
 	}
 
-	// Find similar: same location first, then same type, similar price range (±50%)
-	$price_low  = floatval( $current->price ) * 0.5;
-	$price_high = floatval( $current->price ) * 1.5;
+	$loc_name = $current->location_name;
+
+	// ── Build Amenity Clause ──
+	$amenity_clause = "";
+	$amenities_raw  = $current->amenities;
+	if ( ! empty( $amenities_raw ) ) {
+		$amenity_ids = json_decode( $amenities_raw, true );
+		if ( ! is_array( $amenity_ids ) ) {
+			$amenity_ids = array_map( 'intval', array_filter( explode( ',', $amenities_raw ) ) );
+		}
+		
+		if ( ! empty( $amenity_ids ) ) {
+			$parts = array();
+			foreach ( $amenity_ids as $aid ) {
+				$aid = intval( $aid );
+				$parts[] = "p.amenities LIKE '%\"$aid\"%'";
+				$parts[] = "FIND_IN_SET('$aid', p.amenities)";
+			}
+			if ( ! empty( $parts ) ) {
+				$amenity_clause = "OR (" . implode( ' OR ', $parts ) . ")";
+			}
+		}
+	}
 
 	$similar = $wpdb->get_results( $wpdb->prepare(
 		"SELECT p.id, p.title, p.price, p.guests, p.location,
@@ -359,53 +414,54 @@ function lef_get_similar_properties() {
 		 LEFT JOIN {$wpdb->prefix}ls_location loc ON p.location = loc.id
 		 WHERE p.id != %d
 		   AND p.status = 'published'
-		   AND (p.location = %s OR p.property_type = %s OR (p.price BETWEEN %f AND %f))
-		 ORDER BY
-		   CASE WHEN p.location = %s THEN 0 ELSE 1 END,
-		   CASE WHEN p.property_type = %s THEN 0 ELSE 1 END,
-		   ABS(p.price - %f) ASC
-		 LIMIT 5",
+		   AND (
+		       (loc.name IS NOT NULL AND TRIM(LOWER(loc.name)) = %s) OR 
+		       (p.property_type IS NOT NULL AND p.property_type != '' AND p.property_type = %s)
+		       $amenity_clause
+		   )
+		 LIMIT 8",
 		$property_id,
-		$current->location, $current->property_type, $price_low, $price_high,
-		$current->location, $current->property_type, floatval( $current->price )
+		$loc_name, $current->property_type
 	) );
 
 	$result = array();
-	foreach ( $similar as $prop ) {
-		// Fetch first image
-		$img_row = $wpdb->get_row( $wpdb->prepare(
-			"SELECT image FROM {$wpdb->prefix}ls_img WHERE property_id = %d ORDER BY sort_order ASC LIMIT 1",
-			$prop->id
-		) );
-		$img_url = '';
-		if ( $img_row && $img_row->image ) {
-			$img_data = json_decode( $img_row->image, true );
-			$img_url  = isset( $img_data['url'] ) ? $img_data['url'] : '';
+	if ( ! empty( $similar ) ) {
+		foreach ( $similar as $prop ) {
+			// Fetch first image
+			$img_row = $wpdb->get_row( $wpdb->prepare(
+				"SELECT image FROM {$wpdb->prefix}ls_img WHERE property_id = %d ORDER BY sort_order ASC LIMIT 1",
+				$prop->id
+			) );
+			$img_url = '';
+			if ( $img_row && $img_row->image ) {
+				$img_data = json_decode( $img_row->image, true );
+				$img_url  = isset( $img_data['url'] ) ? $img_data['url'] : '';
+			}
+
+			// Fetch average rating
+			$avg_rating = $wpdb->get_var( $wpdb->prepare(
+				"SELECT AVG(rating) FROM {$wpdb->prefix}ls_reviews WHERE property_id = %d AND status = 'approve'",
+				$prop->id
+			) );
+			$total_reviews = $wpdb->get_var( $wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->prefix}ls_reviews WHERE property_id = %d AND status = 'approve'",
+				$prop->id
+			) );
+
+			// Build secure URL
+			$detail_url = lef_get_secure_detail_url( $prop->id );
+
+			$result[] = array(
+				'id'            => $prop->id,
+				'title'         => $prop->title,
+				'price'         => floatval( $prop->price ),
+				'location_name' => $prop->location_name,
+				'image'         => $img_url,
+				'avg_rating'    => $avg_rating ? round( floatval( $avg_rating ), 1 ) : 0,
+				'total_reviews' => intval( $total_reviews ),
+				'url'           => $detail_url,
+			);
 		}
-
-		// Fetch average rating
-		$avg_rating = $wpdb->get_var( $wpdb->prepare(
-			"SELECT AVG(rating) FROM {$wpdb->prefix}ls_reviews WHERE property_id = %d AND status = 'approve'",
-			$prop->id
-		) );
-		$total_reviews = $wpdb->get_var( $wpdb->prepare(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}ls_reviews WHERE property_id = %d AND status = 'approve'",
-			$prop->id
-		) );
-
-		// Build secure URL
-		$detail_url = lef_get_secure_detail_url( $prop->id );
-
-		$result[] = array(
-			'id'            => $prop->id,
-			'title'         => $prop->title,
-			'price'         => floatval( $prop->price ),
-			'location_name' => $prop->location_name,
-			'image'         => $img_url,
-			'avg_rating'    => $avg_rating ? round( floatval( $avg_rating ), 1 ) : 0,
-			'total_reviews' => intval( $total_reviews ),
-			'url'           => $detail_url,
-		);
 	}
 
 	wp_send_json_success( array( 'properties' => $result ) );
