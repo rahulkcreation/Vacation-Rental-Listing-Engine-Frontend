@@ -22,25 +22,34 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string Profile picture URL.
  */
 function lef_get_user_profile_pic( $user_id ) {
+	$plugin_url = rtrim( LEF_PLUGIN_URL, '/' );
+	$placeholder = $plugin_url . '/global-assets/images/placeholder-avatar.png';
+	
+	if ( ! $user_id ) return esc_url( $placeholder );
+
 	$pic_meta = get_user_meta( $user_id, 'profile_pic', true );
 	$pic_url  = '';
 
 	if ( ! empty( $pic_meta ) ) {
-		// Attempt to decode as JSON
-		$pic_data = json_decode( $pic_meta, true );
-		
-		if ( is_array( $pic_data ) ) {
-			// It was JSON, check for 'url' or 'path' keys
-			$pic_url = isset( $pic_data['url'] ) ? $pic_data['url'] : ( isset( $pic_data['path'] ) ? $pic_data['path'] : '' );
-		} elseif ( is_string( $pic_meta ) ) {
-			// It's a plain string, check if it looks like a URL
-			$pic_url = $pic_meta;
+		// Attempt to decode as JSON if it looks like it
+		if ( strpos( $pic_meta, '{' ) === 0 || strpos( $pic_meta, '[' ) === 0 ) {
+			$pic_data = json_decode( $pic_meta, true );
+			if ( is_array( $pic_data ) ) {
+				// It was JSON, check for 'url' or 'path' keys
+				$pic_url = isset( $pic_data['url'] ) ? $pic_data['url'] : ( isset( $pic_data['path'] ) ? $pic_data['path'] : '' );
+			}
+		}
+
+		// If not JSON or pic_url still empty, trust the meta string directly
+		if ( empty( $pic_url ) && is_string( $pic_meta ) ) {
+			$pic_url = trim( $pic_meta );
 		}
 	}
 
-	// Fallback to placeholder if still empty
+	// Final Fallback: if empty, show placeholder. 
+	// Otherwise, return the URL and let client-side 'onerror' handle 404s.
 	if ( empty( $pic_url ) ) {
-		$pic_url = LEF_PLUGIN_URL . 'global-assets/images/placeholder-avatar.png';
+		$pic_url = $placeholder;
 	}
 
 	return esc_url( $pic_url );
@@ -372,7 +381,7 @@ function lef_get_similar_properties() {
 
 	// Get current property details for comparison
 	$current = $wpdb->get_row( $wpdb->prepare(
-		"SELECT p.location, p.property_type, p.amenities, TRIM(LOWER(loc.name)) as location_name 
+		"SELECT p.location, p.type, p.amenities, TRIM(LOWER(loc.name)) as location_name 
 		 FROM {$wpdb->prefix}ls_property p 
 		 LEFT JOIN {$wpdb->prefix}ls_location loc ON p.location = loc.id
 		 WHERE p.id = %d",
@@ -416,12 +425,12 @@ function lef_get_similar_properties() {
 		   AND p.status = 'published'
 		   AND (
 		       (loc.name IS NOT NULL AND TRIM(LOWER(loc.name)) = %s) OR 
-		       (p.property_type IS NOT NULL AND p.property_type != '' AND p.property_type = %s)
+		       (p.type IS NOT NULL AND p.type != '' AND p.type = %s)
 		       $amenity_clause
 		   )
 		 LIMIT 8",
 		$property_id,
-		$loc_name, $current->property_type
+		$loc_name, $current->type
 	) );
 
 	$result = array();
@@ -435,7 +444,28 @@ function lef_get_similar_properties() {
 			$img_url = '';
 			if ( $img_row && $img_row->image ) {
 				$img_data = json_decode( $img_row->image, true );
-				$img_url  = isset( $img_data['url'] ) ? $img_data['url'] : '';
+				if ( is_array( $img_data ) ) {
+					// Handle array format: search for sort_order === 0
+					foreach ( $img_data as $img_obj ) {
+						if ( isset( $img_obj['sort_order'] ) && intval( $img_obj['sort_order'] ) === 0 ) {
+							$img_url = $img_obj['url'];
+							break;
+						}
+					}
+					// If no sort_order 0 found, just take the first one with a URL
+					if ( empty( $img_url ) ) {
+						foreach ( $img_data as $img_obj ) {
+							if ( ! empty( $img_obj['url'] ) ) {
+								$img_url = $img_obj['url'];
+								break;
+							}
+						}
+					}
+					// Check for legacy single-object format
+					if ( empty( $img_url ) && isset( $img_data['url'] ) ) {
+						$img_url = $img_data['url'];
+					}
+				}
 			}
 
 			// Fetch average rating

@@ -161,6 +161,7 @@ function lef_enqueue_assets() {
 				'max_guests'    => $spv_max_guests,
 				'blocked_dates' => $spv_blocked,
 				'is_logged_in'  => is_user_logged_in() ? '1' : '0',
+				'plugin_url'    => LEF_PLUGIN_URL,
 			) );
 		}
 

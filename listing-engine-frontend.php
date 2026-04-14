@@ -3,11 +3,11 @@
  * Plugin Name: Listing Engine Frontend
  * Plugin URI: https://arttechfuzion.com
  * Description: Replicates property listing engine UI with dynamic data.
- * Version:     1.8.8
+ * Version:     1.9.1
  * Author:      Art-Tech Fuzion
  * Author URI:  https://arttechfuzion.com
  * Text Domain: listing-engine-frontend
- * Last Modified: 2026-04-15 - Fixed host and reviewer profile picture handling to support both JSON and plain URLs, and added a profession placeholder avatar.
+ * Last Modified: 2026-04-15 - Refined image extraction to strictly find sort_order 0 and improved profile pic retrieval to trust meta URLs, ensuring actual images show over placeholders.
  *
  * @package ListingEngineFrontend
  */

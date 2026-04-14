@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 $property_id = get_query_var( 'lef_property_id', 0 );
+$placeholder_pic = rtrim( LEF_PLUGIN_URL, '/' ) . '/global-assets/images/placeholder-avatar.png';
+$placeholder_prop = rtrim( LEF_PLUGIN_URL, '/' ) . '/global-assets/images/placeholder.png';
 
 /* ── 1. Property Row ── */
 $property = $wpdb->get_row( $wpdb->prepare(
@@ -302,7 +304,7 @@ function lef_format_review_date( $date_str ) {
             <!-- Host -->
             <div class="lefdk-host-details">
                 <div class="lefdk-hd-photo">
-                    <img src="<?php echo esc_url( $host_pic ); ?>" alt="<?php echo esc_attr( $host_name ); ?>">
+                    <img src="<?php echo esc_url( $host_pic ); ?>" alt="<?php echo esc_attr( $host_name ); ?>" onerror="this.src='<?php echo esc_url( $placeholder_pic ); ?>';">
                 </div>
                 <div class="lefdk-hd-info">
                     <span class="lefdk-hd-i-name">Hosted by <?php echo esc_html( $host_name ); ?></span>
@@ -518,7 +520,7 @@ function lef_format_review_date( $date_str ) {
         <!-- Host -->
         <div class="lefmb-host-details">
             <div class="lefmb-hd-photo">
-                <img src="<?php echo esc_url( $host_pic ); ?>" alt="<?php echo esc_attr( $host_name ); ?>">
+                <img src="<?php echo esc_url( $host_pic ); ?>" alt="<?php echo esc_attr( $host_name ); ?>" onerror="this.src='<?php echo esc_url( $placeholder_pic ); ?>';">
             </div>
             <div class="lefmb-hd-info">
                 <span class="lefmb-hd-i-name">Hosted by <?php echo esc_html( $host_name ); ?></span>
@@ -591,7 +593,7 @@ function lef_format_review_date( $date_str ) {
                 <?php foreach ( $reviews_visible as $rev ) : ?>
                 <div class="lefmb-rc-card">
                     <div class="lefmb-rc-header">
-                        <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar">
+                        <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar" onerror="this.src='<?php echo esc_url( $placeholder_pic ); ?>';">
                         <div class="lefmb-rc-info">
                             <span class="lefmb-rc-name"><?php echo esc_html( $rev['name'] ); ?></span>
                             <div class="lefmb-rc-date"><?php echo lef_format_review_date( $rev['created_at'] ); ?> <span class="lefmb-rc-rating"><?php echo $star_svg_review; ?><?php echo $rev['rating']; ?></span></div>
@@ -694,7 +696,7 @@ function lef_format_review_date( $date_str ) {
         <?php foreach ( $reviews as $rev ) : ?>
         <div class="lefdk-rc-card">
             <div class="lefdk-rc-header">
-                <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar">
+                <img src="<?php echo esc_url( $rev['avatar'] ); ?>" alt="Avatar" class="lefdk-rc-avatar" onerror="this.src='<?php echo esc_url( $placeholder_pic ); ?>';">
                 <div class="lefdk-rc-info">
                     <span class="lefdk-rc-name"><?php echo esc_html( $rev['name'] ); ?></span>
                     <div class="lefdk-rc-date"><?php echo lef_format_review_date( $rev['created_at'] ); ?> <span class="lefdk-rc-rating"><?php echo $star_svg_review; ?><?php echo $rev['rating']; ?></span></div>
