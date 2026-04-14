@@ -8,3 +8,5 @@
 [selected_list_view view="grid" location="Mumbai" type="Villa"] — Focused grid view for specific filters.
 
 [premium_search_bar]
+
+[single_property_view]

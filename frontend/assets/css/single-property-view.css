@@ -1,0 +1,1613 @@
+/**
+ * single-property-view.css
+ *
+ * Styles for the Single Property View template.
+ * All colors reference global.css CSS custom properties.
+ * Desktop-first layout with mobile (<= 800px) adaptation.
+ *
+ * @package ListingEngineFrontend
+ */
+
+/* ─────────────────────────────────────────────────────────────
+   Base Reset & Wrapper
+   ───────────────────────────────────────────────────────────── */
+#lef-spv-root *,
+#lef-spv-root *::before,
+#lef-spv-root *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ==================== DESKTOP CONTAINER ==================== */
+.lef-dk-main-cont {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+    overflow: visible;
+}
+
+/* ── Title Bar ── */
+.lefdk-title-cont {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 0.4rem;
+}
+
+h1.lefdk-title {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.lefdk-extra-cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    color: var(--leb-text-color);
+}
+
+.lefdk-h-btn {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.lefdk-h-btn:hover {
+    color: var(--leb-primary-dark);
+}
+
+.lefdk-extra-cont svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ── Image Grid ── */
+.lefdk-img-cont {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    height: 450px;
+    gap: 0.5rem;
+    overflow: clip;
+}
+
+@media (max-width: 1000px) {
+    .lefdk-img-cont {
+        height: 380px;
+    }
+}
+
+.lefdk-img-1 img {
+    border-radius: 15px 0 0 15px;
+}
+
+.lefdk-img-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.lefdk-img-2 img:nth-of-type(2),
+.lefdk-img-2 img:nth-of-type(4) {
+    border-radius: 0 15px 15px 0;
+}
+
+.lefdk-img-cont img {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.lefdk-all-photo-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: var(--leb-white);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+.lefdk-all-photo-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    transition: ease-out;
+    opacity: 1;
+}
+
+/* ── Details Container ── */
+.lefdk-details-cont {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    border: solid var(--leb-border-default);
+    border-width: 0 0 1.5px 0;
+}
+
+.lefdk-d-right {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 60%;
+}
+
+.lefdk-d-title-cont {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 1.3rem 0rem;
+    gap: 5px;
+}
+
+h1.lefdk-d-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+ol.lefdk-list-order {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    list-style: none;
+}
+
+.lefdk-list {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--leb-text-muted);
+}
+
+.lefdk-review {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.lefdk-r-number,
+.lefdk-r-total-revi {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    gap: 0.4rem;
+}
+
+/* ── Host Details ── */
+.lefdk-host-details {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border: solid var(--leb-border-default);
+    border-width: 1.5px 0;
+}
+
+.lefdk-hd-photo {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 100rem;
+    border: solid 1px var(--leb-border-default);
+    box-shadow: var(--leb-card-shadow);
+}
+
+.lefdk-hd-photo img {
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+}
+
+.lefdk-hd-info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+}
+
+span.lefdk-hd-i-name {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+span.lefdk-hd-i-tag {
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--leb-text-muted);
+}
+
+/* ── Description ── */
+.lefdk-description {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 1.6rem 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--leb-text-muted);
+}
+
+.lefdk-desc-btn,
+.lefdk-show-amenity-btn {
+    background-color: var(--leb-bg-light);
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    border: solid 1px var(--leb-border-color);
+    cursor: pointer;
+    color: var(--leb-text-color);
+    line-height: 20px;
+}
+
+.lefdk-desc-btn:hover,
+.lefdk-show-amenity-btn:hover {
+    background-color: var(--leb-border-color);
+}
+
+/* ── Amenities ── */
+.lefdk-amenity-cont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.6rem;
+    padding: 1.6rem 0;
+    border: solid var(--leb-border-default);
+    border-width: 1.5px 0;
+}
+
+.lefdk-am-heading,
+.lefdk-cal-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+ol.lefdk-am-lists,
+.lef-spv-amenity-full-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 1.4rem 0.6rem;
+    list-style: none;
+}
+
+list.lefdk-am-li-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* ── Calendar ── */
+.lefdk-calender {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.2rem;
+    padding: 1.6rem 0;
+}
+
+.lefdk-cal-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.lefdk-cal-month-container {
+    width: 100%;
+    border: 1px solid var(--leb-border-default);
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    background: var(--leb-white);
+}
+
+.lefdk-cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.lefdk-cal-month {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+}
+
+.lefdk-cal-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.lefdk-cal-nav-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--leb-border-default);
+    background: var(--leb-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.lefdk-cal-nav-btn:hover {
+    background: var(--leb-bg-light);
+    border-color: var(--leb-primary-color);
+}
+
+.lefdk-cal-nav-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--leb-text-color);
+}
+
+.lefdk-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.lefdk-cal-day-name {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--leb-text-muted);
+    padding: 0.5rem 0;
+}
+
+.lefdk-cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--leb-text-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 36px;
+    height: auto;
+    margin: auto;
+}
+
+.lefdk-cal-day:hover:not(.lefdk-cal-day-disabled):not(.lefdk-cal-day-blocked) {
+    background: var(--leb-bg-light);
+    border: 1px solid var(--leb-primary-color);
+}
+
+.lefdk-cal-day-selected {
+    background: var(--leb-primary-color) !important;
+    color: var(--leb-white) !important;
+}
+
+.lefdk-cal-day-selected:hover {
+    background: var(--leb-primary-dark) !important;
+}
+
+.lefdk-cal-day-in-range {
+    background: var(--leb-primary-light-bg);
+    border-radius: 50%;
+}
+
+.lefdk-cal-day-disabled {
+    color: var(--leb-border-color);
+    cursor: not-allowed;
+}
+
+.lefdk-cal-day-blocked {
+    color: var(--leb-border-color);
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.lefdk-cal-day-today {
+    border: 1px solid var(--leb-primary-color);
+    font-weight: 600;
+}
+
+span.lefdk-cal-clear-btn {
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-align: right;
+    cursor: pointer;
+}
+
+span.lefdk-cal-clear-btn:hover {
+    color: var(--leb-primary-color);
+}
+
+/* ── Reservation Form (sticky right) ── */
+.lefdk-d-left {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    width: 40%;
+    position: sticky;
+    top: 0px;
+    align-self: flex-start;
+    height: 100%;
+    z-index: 10;
+}
+
+.lefdk-l-form-cont {
+    background-color: var(--leb-white);
+    border: solid 1px var(--leb-border-color);
+    box-shadow: var(--leb-card-shadow);
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 90%;
+    margin: 2rem 0;
+}
+
+.lefdk-lf-price-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.2rem;
+}
+
+.lefdk-lf-price-amount {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--leb-text-color);
+}
+
+.lefdk-lf-price-unit {
+    font-size: 0.9rem;
+    color: var(--leb-text-muted);
+    font-weight: 400;
+}
+
+.lefdk-lf-dates {
+    border: 1px solid var(--leb-border-default);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 0.8rem;
+}
+
+.lefdk-lf-date-row {
+    display: flex;
+}
+
+.lefdk-lf-date-field {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.lefdk-lf-date-field:first-child {
+    border-right: 1px solid var(--leb-border-default);
+}
+
+.lefdk-lf-date-field label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--leb-text-color);
+    margin-bottom: 0.2rem;
+}
+
+.lefdk-lf-date-field span {
+    font-size: 0.85rem;
+    color: var(--leb-text-muted);
+}
+
+.lefdk-lf-guests {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--leb-border-default);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.lefdk-lf-guests label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--leb-text-color);
+    margin-bottom: 0.2rem;
+}
+
+.lefdk-lf-guests span {
+    font-size: 0.85rem;
+    color: var(--leb-text-muted);
+}
+
+.lefdk-lf-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--leb-primary-color);
+    color: var(--leb-white);
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lefdk-lf-btn:hover {
+    background: var(--leb-primary-dark);
+}
+
+.lefdk-lf-info {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--leb-text-muted);
+    text-align: center;
+}
+
+h1.lefdk-l-form-heading {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+/* ── Guest Dropdown ── */
+.lef-spv-guests-dropdown {
+    border: 1px solid var(--leb-border-default);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: var(--leb-white);
+    box-shadow: var(--leb-card-shadow);
+}
+
+.lef-spv-gd-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--leb-border-color);
+}
+
+.lef-spv-gd-row:last-child {
+    border-bottom: none;
+}
+
+.lef-spv-gd-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lef-spv-gd-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+}
+
+.lef-spv-gd-sub {
+    font-size: 0.75rem;
+    color: var(--leb-text-muted);
+}
+
+.lef-spv-gd-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.lef-spv-gd-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--leb-border-default);
+    background: var(--leb-white);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--leb-text-color);
+}
+
+.lef-spv-gd-btn:hover {
+    border-color: var(--leb-primary-color);
+    background: var(--leb-primary-light-bg);
+}
+
+.lef-spv-gd-count {
+    font-size: 0.95rem;
+    font-weight: 500;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ── Reviews Section ── */
+.lefdk-all-review {
+    display: flex;
+    padding: 1.6rem 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.lefdk-ar-review {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.lefdk-ar-r-number {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.6rem;
+}
+
+.lefdk-ar-r-number svg {
+    width: 18px !important;
+    height: auto !important;
+}
+
+.lefdk-review-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.3rem;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.lefdk-rc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.lefdk-rc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.lefdk-rc-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.lefdk-rc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lefdk-rc-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+}
+
+.lefdk-rc-date {
+    font-size: 0.8rem;
+    color: var(--leb-text-muted);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.lefdk-rc-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+}
+
+.lefdk-rc-rating svg {
+    width: 10px;
+    height: auto;
+}
+
+.lefdk-rc-text {
+    font-size: 0.9rem;
+    color: var(--leb-text-muted);
+    line-height: 1.5;
+    width: 90%;
+}
+
+/* ── Similar Properties ── */
+.lefdk-similar-results {
+    display: flex;
+    padding: 1.6rem 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    border: solid var(--leb-border-default);
+    border-width: 1.5px 0 0 0;
+}
+
+.lefdk-sm-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+.lefdk-sm-r-cards,
+.lefmb-sm-r-cards {
+    display: flex;
+    gap: 1.2rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.5rem 0;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.lefdk-sm-r-cards::-webkit-scrollbar,
+.lefmb-sm-r-cards::-webkit-scrollbar {
+    display: none;
+}
+
+.lefdk-sm-rc-item,
+.lefmb-sm-rc-item {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.lefdk-sm-rc-img,
+.lefmb-sm-rc-img {
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.lefdk-sm-rc-img img,
+.lefmb-sm-rc-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.lefdk-sm-rc-item:hover .lefdk-sm-rc-img img {
+    transform: scale(1.05);
+}
+
+.lefdk-sm-rc-details,
+.lefmb-sm-rc-details {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.3rem;
+    padding: 0.6rem 0;
+}
+
+.lefdk-sm-rc-title,
+.lefmb-sm-rc-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+    line-height: 1.3;
+}
+
+.lefdk-sm-rc-price,
+.lefmb-sm-rc-price {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--leb-text-color);
+    margin-top: 0.2rem;
+}
+
+.lefdk-sm-rc-price span,
+.lefmb-sm-rc-price span {
+    font-weight: 400;
+    color: var(--leb-text-muted);
+}
+
+.lefdk-sm-rc-rating,
+.lefmb-sm-rc-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--leb-text-color);
+}
+
+.lefdk-sm-rc-rating svg,
+.lefmb-sm-rc-rating svg {
+    width: 12px;
+    height: 12px;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   VIEW SWITCHING (JS-controlled, NOT media queries)
+   Both views start hidden. JS toggles the correct one on load
+   and resize via the 'lef-spv-active' class.
+   ───────────────────────────────────────────────────────────── */
+.lef-dk-main-cont,
+.lef-mb-main-cont {
+    display: none !important;
+}
+
+.lef-dk-main-cont.lef-spv-active {
+    display: block !important;
+}
+
+.lef-mb-main-cont.lef-spv-active {
+    display: flex !important;
+}
+
+/* Calendar padding override for mobile */
+.lef-mb-main-cont .lefdk-calender {
+    padding: 0px;
+}
+
+.lef-mb-main-cont {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+/* ── Mobile Header ── */
+.lefmb-header-cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--leb-card-shadow);
+    background-color: var(--leb-white);
+    padding: 1rem 1.3rem;
+    min-height: 65px;
+}
+
+.lefmb-bck-btn svg,
+.lefmb-e-btn svg {
+    width: 16px !important;
+    cursor: pointer;
+    height: auto !important;
+}
+
+.lefmb-bck-btn,
+.lefmb-e-btn {
+    cursor: pointer;
+}
+
+.lefmb-extra-btn-cont {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+}
+
+/* ── Mobile Image Slider ── */
+.lefmb-img-cont {
+    position: relative;
+    overflow: hidden;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    z-index: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.lefmb-img-cont::-webkit-scrollbar {
+    display: none;
+}
+
+.lefmb-img-cont img {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    aspect-ratio: 100 / 90;
+    object-fit: cover;
+    object-position: center;
+    scroll-snap-align: start;
+}
+
+span.lefmb-img-count {
+    position: absolute;
+    bottom: 45px;
+    right: 15px;
+    background-color: var(--leb-primary-color);
+    color: var(--leb-white);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+/* ── Mobile Details Container ── */
+.lefmb-prop-details-cont {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1.8rem 1.3rem;
+    padding-bottom: 100px;
+    border-radius: 20px;
+    margin-top: -20px;
+    z-index: 1;
+    background-color: var(--leb-white);
+    gap: 1.6rem;
+}
+
+.lefmb-prop-heading-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    width: 100%;
+}
+
+h1.lefmb-prop-d-heading {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.lefmb-prop-title-cont {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+    color: var(--leb-text-muted);
+}
+
+h1.lefmb-prop-title {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+ol.lefmb-list-order {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    list-style: none;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.lefmb-review {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.lefmb-r-number,
+.lefmb-r-total-revi {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 400;
+    gap: 0.4rem;
+}
+
+/* ── Mobile Host ── */
+.lefmb-host-details {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem 0rem;
+    gap: 0.8rem;
+    border: solid var(--leb-border-default);
+    border-width: 1.4px 0;
+}
+
+.lefmb-hd-photo {
+    border-radius: 100rem;
+    border: solid 1px var(--leb-border-default);
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+}
+
+.lefmb-hd-photo img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+}
+
+.lefmb-hd-info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 0.2rem;
+}
+
+span.lefmb-hd-i-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+span.lefmb-hd-i-tag {
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--leb-text-muted);
+}
+
+/* ── Mobile Description ── */
+.lefmb-description {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--leb-text-muted);
+    width: 100%;
+}
+
+.lefmb-desc-btn,
+.lefmb-show-amenity-btn {
+    background-color: var(--leb-bg-light);
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    border: solid 1px var(--leb-border-color);
+    cursor: pointer;
+    color: var(--leb-text-color);
+    line-height: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+/* ── Mobile Amenities ── */
+.lefmb-amenity-cont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.6rem;
+    padding: 1.6rem 0;
+    border: solid var(--leb-border-default);
+    border-width: 1.5px 0;
+}
+
+h1.lefmb-am-heading {
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+ol.lefmb-am-lists {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 1.4rem 1rem;
+    list-style: none;
+}
+
+list.lefmb-am-li-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+list.lefmb-am-li-list svg {
+    width: 20px !important;
+    height: auto !important;
+}
+
+/* ── Mobile Reviews ── */
+.lefmb-all-review {
+    display: flex;
+    padding: 1.6rem 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    border: solid var(--leb-border-default);
+    border-width: 1.4px 0;
+    width: 100%;
+}
+
+.lefmb-ar-review {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.lefmb-ar-r-number {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.6rem;
+}
+
+.lefmb-ar-r-number svg {
+    width: 18px !important;
+    height: auto !important;
+}
+
+.lefmb-review-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.3rem;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.lefmb-rc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.lefmb-rc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.lefmb-rc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lefmb-rc-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+}
+
+.lefmb-rc-date {
+    font-size: 0.8rem;
+    color: var(--leb-text-muted);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.lefmb-rc-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--leb-text-color);
+}
+
+.lefmb-rc-rating svg {
+    width: 10px;
+    height: auto;
+}
+
+.lefmb-rc-text {
+    font-size: 0.9rem;
+    color: var(--leb-text-muted);
+    line-height: 1.5;
+    width: 95%;
+}
+
+/* ── Mobile Similar ── */
+.lefmb-similar-results {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+.lefmb-sm-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+/* ── Mobile Sticky Bottom Nav ── */
+.lefmb-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 1.2rem 1rem;
+    background-color: var(--leb-white);
+    width: 100%;
+    border: solid var(--leb-border-default);
+    border-width: 1.5px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.lefmb-reserv-right-cont {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+}
+
+.lefmb-night-price {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.lefmb-night-info {
+    color: var(--leb-text-muted);
+    font-weight: 400;
+    font-size: 0.8rem;
+}
+
+.lefmb-reserv-btn {
+    background-color: var(--leb-primary-color);
+    color: var(--leb-white);
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 100rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.lefmb-reserv-btn:hover {
+    background-color: var(--leb-primary-dark);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS (max 450px & 360px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 450px) {
+    h1.lefmb-prop-d-heading {
+        font-size: 1.4rem;
+    }
+    ol.lefmb-am-lists {
+        grid-template-columns: 1fr;
+    }
+    .lefmb-review-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 360px) {
+    h1.lefmb-prop-d-heading {
+        font-size: 1.2rem;
+    }
+    h1.lefmb-prop-title {
+        font-size: 0.8rem;
+    }
+    ol.lefmb-list-order,
+    .lefmb-r-number,
+    .lefmb-r-total-revi {
+        font-size: 0.7rem;
+    }
+    .lefmb-description {
+        font-size: 0.85rem;
+    }
+    h1.lefmb-am-heading,
+    .lefdk-cal-heading,
+    .lefmb-sm-heading {
+        font-size: 1.3rem;
+    }
+    .lefdk-cal-day {
+        width: 30px;
+    }
+    .lefmb-rc-text {
+        width: 100%;
+    }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   MODAL / POPUP STYLES
+   ───────────────────────────────────────────────────────────── */
+.lef-spv-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: lefSpvFadeIn 0.25s ease;
+}
+
+@keyframes lefSpvFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.lef-spv-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--leb-border-color);
+    position: sticky;
+    top: 0;
+    background: var(--leb-white);
+    z-index: 1;
+    border-radius: 20px 20px 0 0;
+}
+
+.lef-spv-modal-header h2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.lef-spv-modal-close {
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.lef-spv-modal-close:hover {
+    background: var(--leb-bg-light);
+}
+
+.lef-spv-modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+}
+
+.lef-spv-modal > .lef-spv-modal-header,
+.lef-spv-modal > .lef-spv-modal-body {
+    background: var(--leb-white);
+}
+
+/* Non-fullscreen modals get a centered card */
+.lef-spv-modal:not(.lef-spv-fullscreen) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lef-spv-modal:not(.lef-spv-fullscreen) > .lef-spv-modal-header,
+.lef-spv-modal:not(.lef-spv-fullscreen) > .lef-spv-modal-body {
+    width: 100%; /* they are inside a flex container that IS the card */
+}
+
+/* Use an inner wrapper approach: the modal IS the overlay, the children are the card */
+.lef-spv-modal {
+    flex-direction: column;
+}
+
+.lef-spv-modal:not(.lef-spv-fullscreen) {
+    padding: 2rem;
+}
+
+.lef-spv-modal:not(.lef-spv-fullscreen) .lef-spv-modal-header,
+.lef-spv-modal:not(.lef-spv-fullscreen) .lef-spv-modal-body {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.lef-spv-modal:not(.lef-spv-fullscreen) .lef-spv-modal-header {
+    border-radius: 20px 20px 0 0;
+}
+
+.lef-spv-modal:not(.lef-spv-fullscreen) .lef-spv-modal-body {
+    border-radius: 0 0 20px 20px;
+}
+
+/* ── Fullscreen modals (mobile reservation) ── */
+.lef-spv-fullscreen {
+    flex-direction: column;
+    padding: 0;
+}
+
+.lef-spv-fullscreen .lef-spv-modal-header {
+    border-radius: 0;
+}
+
+.lef-spv-fullscreen .lef-spv-modal-body {
+    max-height: calc(100vh - 60px);
+    border-radius: 0;
+    flex: 1;
+}
+
+/* ── Photo Gallery inside Modal ── */
+.lef-spv-photo-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.lef-spv-photo-gallery img {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* ── Full description in modal ── */
+.lef-spv-desc-full {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--leb-text-muted);
+}
+
+/* ── Reviews in modal ── */
+.lef-spv-reviews-full {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ── Review Form ── */
+.lef-spv-rating-select {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.lef-spv-stars {
+    display: flex;
+    gap: 4px;
+}
+
+.lef-spv-star {
+    font-size: 1.8rem;
+    color: var(--leb-border-default);
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.lef-spv-star.active,
+.lef-spv-star:hover {
+    color: var(--leb-warning-color);
+}
+
+#lef-spv-review-text {
+    width: 100%;
+    border: 1px solid var(--leb-border-default);
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 0.95rem;
+    font-family: var(--leb-font-main);
+    resize: vertical;
+    margin-bottom: 1rem;
+    min-height: 120px;
+}
+
+#lef-spv-review-text:focus {
+    border-color: var(--leb-primary-color) !important;
+    outline: none !important;
+}

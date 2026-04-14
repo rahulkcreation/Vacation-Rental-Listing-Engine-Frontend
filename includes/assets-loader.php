@@ -95,6 +95,75 @@ function lef_enqueue_assets() {
 			) );
 		}
 
+		// ─────────────────────────────────────────────────────────────
+		// Assets for [single_property_view]
+		// ─────────────────────────────────────────────────────────────
+		if ( has_shortcode( $post->post_content, 'single_property_view' ) ) {
+
+			/* ── CSS ── */
+			wp_enqueue_style(
+				'lef-single-property-view',
+				LEF_PLUGIN_URL . 'frontend/assets/css/single-property-view.css',
+				array( 'lef-global-styles' ),
+				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/css/single-property-view.css' )
+			);
+
+			/* ── JS ── */
+			wp_enqueue_script(
+				'lef-single-property-view-js',
+				LEF_PLUGIN_URL . 'frontend/assets/js/single-property-view.js',
+				array( 'jquery' ),
+				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/js/single-property-view.js' ),
+				true
+			);
+
+			/**
+			 * Localize property-specific data so JS can consume it
+			 * without additional AJAX calls.
+			 */
+			$spv_property_id = lef_get_decoded_listing_id();
+			$spv_price       = 0;
+			$spv_max_guests  = 10;
+			$spv_blocked     = array();
+
+			if ( $spv_property_id ) {
+				global $wpdb;
+
+				$spv_prop = $wpdb->get_row( $wpdb->prepare(
+					"SELECT price, guests FROM {$wpdb->prefix}ls_property WHERE id = %d",
+					$spv_property_id
+				) );
+
+				if ( $spv_prop ) {
+					$spv_price      = floatval( $spv_prop->price );
+					$spv_max_guests = intval( $spv_prop->guests );
+				}
+
+				// Blocked dates
+				$block_rows = $wpdb->get_results( $wpdb->prepare(
+					"SELECT dates FROM {$wpdb->prefix}ls_block_date WHERE property_id = %d",
+					$spv_property_id
+				) );
+				foreach ( $block_rows as $br ) {
+					$dates_arr = json_decode( $br->dates, true );
+					if ( is_array( $dates_arr ) ) {
+						$spv_blocked = array_merge( $spv_blocked, $dates_arr );
+					}
+				}
+				$spv_blocked = array_values( array_unique( $spv_blocked ) );
+			}
+
+			wp_localize_script( 'lef-single-property-view-js', 'lef_spv_data', array(
+				'ajax_url'      => admin_url( 'admin-ajax.php' ),
+				'nonce'         => wp_create_nonce( 'lef_spv_nonce' ),
+				'property_id'   => $spv_property_id ? $spv_property_id : 0,
+				'price'         => $spv_price,
+				'max_guests'    => $spv_max_guests,
+				'blocked_dates' => $spv_blocked,
+				'is_logged_in'  => is_user_logged_in() ? '1' : '0',
+			) );
+		}
+
 		// Pass localized data to JS (if either script is enqueued)
 		if ( wp_script_is( 'lef-list-view-js', 'enqueued' ) || wp_script_is( 'lef-selected-view-js', 'enqueued' ) ) {
 			wp_localize_script( 
