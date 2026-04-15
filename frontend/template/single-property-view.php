@@ -487,7 +487,22 @@ function lef_render_review_stars($rating)
                                 </div>
                                 <div class="lefdk-rc-r-info-cont">
                                     <div class="lefdk-rc-date"><span class="lefdk-rc-rating"><?php echo lef_render_review_stars($rev['rating']); ?></span> <?php echo " - " . lef_format_review_date($rev['created_at']); ?> </div>
-                                    <p class="lefdk-rc-text"><?php echo esc_html(lef_truncate_review($rev['review'], $lef_review_char_limit)); ?></p>
+                                    <p class="lefdk-rc-text">
+                                        <?php
+                                        $full_review = $rev['review'];
+                                        if (mb_strlen($full_review) > $lef_review_char_limit) :
+                                            echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
+                                        ?>
+                                            <span class="lef-spv-see-more"
+                                                data-avatar="<?php echo esc_url($rev['avatar']); ?>"
+                                                data-name="<?php echo esc_attr($rev['name']); ?>"
+                                                data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
+                                                data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
+                                                data-full-review="<?php echo esc_attr($full_review); ?>">Show more ></span>
+                                        <?php else : ?>
+                                            <?php echo esc_html($full_review); ?>
+                                        <?php endif; ?>
+                                    </p>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -649,7 +664,22 @@ function lef_render_review_stars($rating)
                                             <div class="lefmb-rc-date"><?php echo lef_format_review_date($rev['created_at']); ?> <span class="lefmb-rc-rating"><?php echo lef_render_review_stars($rev['rating']); ?></span></div>
                                         </div>
                                     </div>
-                                    <p class="lefmb-rc-text"><?php echo esc_html(lef_truncate_review($rev['review'], $lef_review_char_limit)); ?></p>
+                                    <p class="lefmb-rc-text">
+                                        <?php
+                                        $full_review = $rev['review'];
+                                        if (mb_strlen($full_review) > $lef_review_char_limit) :
+                                            echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
+                                        ?>
+                                            <span class="lef-spv-see-more"
+                                                data-avatar="<?php echo esc_url($rev['avatar']); ?>"
+                                                data-name="<?php echo esc_attr($rev['name']); ?>"
+                                                data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
+                                                data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
+                                                data-full-review="<?php echo esc_attr($full_review); ?>">Show more ></span>
+                                        <?php else : ?>
+                                            <?php echo esc_html($full_review); ?>
+                                        <?php endif; ?>
+                                    </p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -766,7 +796,22 @@ function lef_render_review_stars($rating)
                         </div>
                     </div>
                     <div class="lefdk-rc-date"><?php echo lef_format_review_date($rev['created_at']); ?><span class="lefdk-rc-rating"><?php echo lef_render_review_stars($rev['rating']); ?></span></div>
-                    <p class="lefdk-rc-text"><?php echo esc_html(lef_truncate_review($rev['review'], $lef_review_char_limit)); ?></p>
+                    <p class="lefdk-rc-text">
+                        <?php
+                        $full_review = $rev['review'];
+                        if (mb_strlen($full_review) > $lef_review_char_limit) :
+                            echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
+                        ?>
+                            <span class="lef-spv-see-more"
+                                data-avatar="<?php echo esc_url($rev['avatar']); ?>"
+                                data-name="<?php echo esc_attr($rev['name']); ?>"
+                                data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
+                                data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
+                                data-full-review="<?php echo esc_attr($full_review); ?>">Show more ></span>
+                        <?php else : ?>
+                            <?php echo esc_html($full_review); ?>
+                        <?php endif; ?>
+                    </p>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -790,6 +835,34 @@ function lef_render_review_stars($rating)
                 </div>
                 <textarea id="lef-spv-review-text" placeholder="Write your review here..." rows="5"><?php echo $has_review ? esc_textarea($existing_review->review) : ''; ?></textarea>
                 <button class="lefdk-lf-btn" id="lef-spv-submit-review-btn">Submit Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Detail Popup -->
+    <div class="lef-spv-modal" id="lef-spv-review-detail-modal" style="display:none;">
+        <div class="lef-spv-modal-inner">
+            <div class="lef-spv-modal-header">
+                <span class="lef-spv-modal-close" data-close="lef-spv-review-detail-modal">✕</span>
+                <h2>Review Detail</h2>
+            </div>
+            <div class="lef-spv-modal-body">
+                <div class="lefdk-rc-card" style="border:none; padding:0; width:100%;">
+                    <div class="lefdk-rc-header">
+                        <img src="" alt="Avatar" class="lefdk-rc-avatar" id="lef-review-detail-avatar">
+                        <div class="lefdk-rc-info">
+                            <span class="lefdk-rc-name" id="lef-review-detail-name"></span>
+                            <span class="lefdk-rc-user-tag">Verified User</span>
+                        </div>
+                    </div>
+                    <div class="lefdk-rc-r-info-cont">
+                        <div class="lefdk-rc-date">
+                            <span class="lefdk-rc-rating" id="lef-review-detail-rating"></span>
+                            <span id="lef-review-detail-date"></span>
+                        </div>
+                        <p class="lefdk-rc-text" id="lef-review-detail-text" style="font-size:1.6rem; line-height:1.6;"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

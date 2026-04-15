@@ -760,6 +760,20 @@ span.lefdk-rc-user-tag {
     color: var(--leb-text-muted);
 }
 
+.lef-spv-see-more {
+    color: var(--leb-text-color);
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 1.4rem;
+    white-space: nowrap;
+}
+
+.lef-spv-see-more:hover {
+    color: var(--leb-text-color);
+    opacity: 0.8;
+}
+
 /* ── Similar Properties ── */
 .lefdk-similar-results {
     display: flex;

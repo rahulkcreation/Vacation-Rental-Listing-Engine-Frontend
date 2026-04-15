@@ -57,6 +57,7 @@
         initGuestDropdowns();
         initReserveButtons();
         initReviewPopups();
+        initReviewDetailPopup();
         initModalCloseButtons();
         loadSimilarProperties();
         initMobileSlider();
@@ -182,6 +183,26 @@
     function initAmenityPopup() {
         $('#lef-spv-amenity-more, #lef-spv-amenity-more-mb').on('click', function () {
             showModal('lef-spv-amenity-modal');
+        });
+    }
+
+
+    /* ==================== REVIEW DETAIL POPUP ==================== */
+    function initReviewDetailPopup() {
+        $(document).on('click', '.lef-spv-see-more', function () {
+            const avatar = $(this).data('avatar');
+            const name   = $(this).data('name');
+            const date   = $(this).data('date');
+            const rating = $(this).data('rating');
+            const full   = $(this).data('full-review');
+
+            $('#lef-review-detail-avatar').attr('src', avatar);
+            $('#lef-review-detail-name').text(name);
+            $('#lef-review-detail-date').text(date);
+            $('#lef-review-detail-rating').html(rating);
+            $('#lef-review-detail-text').text(full);
+
+            showModal('lef-spv-review-detail-modal');
         });
     }
 
