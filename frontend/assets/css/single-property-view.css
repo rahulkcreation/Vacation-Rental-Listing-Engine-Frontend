@@ -895,16 +895,16 @@ span.lefdk-rc-user-tag {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     box-shadow: var(--leb-card-shadow);
     background-color: var(--leb-white);
     padding: 1rem 1.3rem;
-    min-height: 65px;
+    min-height: 60px;
 }
 
 .lefmb-bck-btn svg,
 .lefmb-e-btn svg {
-    width: 16px !important;
+    width: 18px !important;
     cursor: pointer;
     height: auto !important;
 }
