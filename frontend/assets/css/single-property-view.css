@@ -27,7 +27,6 @@ h1.lefdk-title {
     font-size: 2.5rem;
     font-weight: 550;
     margin: 0;
-    color: var(--leb-text-color);
 }
 
 .lefdk-extra-cont {
@@ -149,7 +148,6 @@ h1.lefdk-d-title {
     font-size: 2rem;
     font-weight: 550;
     margin: 0;
-    color: var(--leb-text-color);
 }
 
 ol.lefdk-list-order {
@@ -221,7 +219,6 @@ ol.lefdk-list-order {
 span.lefdk-hd-i-name {
     font-size: 1.5rem;
     font-weight: 550;
-    color: var(--leb-text-color);
 }
 
 span.lefdk-hd-i-tag {
@@ -350,7 +347,6 @@ ol.lefdk-am-lists,
 .lefdk-cal-month {
     font-size: 1.7rem;
     font-weight: 500;
-    color: var(--leb-text-color);
 }
 
 .lefdk-cal-nav-btn {
@@ -397,7 +393,6 @@ ol.lefdk-am-lists,
     justify-content: center;
     font-size: 1.3rem;
     font-weight: 550;
-    color: var(--leb-text-color);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -484,7 +479,6 @@ span.lefdk-cal-clear-btn:hover {
 .lefdk-lf-price-amount {
     font-size: 2rem;
     font-weight: 550;
-    color: var(--leb-text-color);
 }
 
 span.lefdk-lf-price-unit {
@@ -521,7 +515,6 @@ span.lefdk-lf-price-unit {
     font-size: 0.9rem;
     font-weight: 600;
     text-transform: uppercase;
-    color: var(--leb-text-color);
     margin-bottom: 0.2rem;
 }
 
@@ -596,7 +589,6 @@ span.lefdk-lf-price-unit {
 .lef-spv-gd-title {
     font-size: 1.4rem;
     font-weight: 500;
-    color: var(--leb-text-color);
     line-height: 1;
 }
 
@@ -1650,7 +1642,6 @@ list.lefmb-am-li-list svg {
     font-size: 2rem;
     font-weight: 550;
     margin: 0;
-    color: var(--leb-text-color);
 }
 
 .lefdk-cal-modal-header p {
