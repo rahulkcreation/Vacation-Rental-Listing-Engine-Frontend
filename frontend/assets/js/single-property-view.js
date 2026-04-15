@@ -16,6 +16,23 @@
 (function ($) {
     'use strict';
 
+    /**
+     * Early Device Detection
+     * Checks window width and sets a cookie to ensure the server renders the correct view.
+     * If the cookie is missing or incorrect, it reloads the page.
+     */
+    (function () {
+        var width = window.innerWidth;
+        var currentMode = width > 800 ? 'desktop' : 'mobile';
+        var cookieValue = document.cookie.split('; ').find(row => row.startsWith('lef_device_view='));
+        var storedMode = cookieValue ? cookieValue.split('=')[1] : null;
+
+        if (storedMode !== currentMode) {
+            document.cookie = "lef_device_view=" + currentMode + "; path=/; max-age=" + (60 * 60 * 24 * 30);
+            window.location.reload();
+        }
+    })();
+
     // ─────────────────────────────────────────────────────────────
     // Constants & State
     // ─────────────────────────────────────────────────────────────
@@ -44,9 +61,8 @@
     // Initialization
     // ─────────────────────────────────────────────────────────────
     $(document).ready(function () {
-        // JS-controlled view switching (runs FIRST)
-        handleViewSwitch();
-        $(window).on('resize', debounce(handleViewSwitch, 150));
+        // Watch for resize crossing (requires reload for mode switch)
+        $(window).on('resize', debounce(checkResizeCrossing, 200));
 
         initShareButtons();
         initWishlistButtons();
@@ -65,27 +81,20 @@
     });
 
 
-    /* ==================== VIEW SWITCH CONTROLLER ==================== */
+    /* ==================== VIEW & RELOAD CONTROLLER ==================== */
     /**
-     * Toggles between Desktop and Mobile views based on window width.
-     * Only the active view gets the 'lef-spv-active' class; the other
-     * is completely hidden (display:none via CSS).
-     * Breakpoint: 800px
+     * Enforces page reloads when crossing the 800px breakpoint.
+     * Since the server only renders one view (Desktop or Mobile) based on cookies,
+     * a resize across the boundary requires a fresh server render.
      */
     const BREAKPOINT = 800;
+    const initialMode = window.innerWidth > BREAKPOINT ? 'desktop' : 'mobile';
 
-    function handleViewSwitch() {
-        const $desktop = $('#lef-spv-desktop');
-        const $mobile  = $('#lef-spv-mobile');
-
-        if (window.innerWidth <= BREAKPOINT) {
-            // Activate Mobile, deactivate Desktop
-            $desktop.removeClass('lef-spv-active');
-            $mobile.addClass('lef-spv-active');
-        } else {
-            // Activate Desktop, deactivate Mobile
-            $mobile.removeClass('lef-spv-active');
-            $desktop.addClass('lef-spv-active');
+    function checkResizeCrossing() {
+        const currentMode = window.innerWidth > BREAKPOINT ? 'desktop' : 'mobile';
+        if (currentMode !== initialMode) {
+            // Crossed the breakpoint! Blank the screen and request reload as requested.
+            $('body').css('background', '#fff').html('<div id="lef-spv-reload-overlay" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; font-family:var(--leb-font-main); background:#fff; color:var(--leb-text-color);"><h1 style="font-size:2.5rem; margin-bottom:1rem; font-weight:600;">Screen Resize Detected</h1><p style="font-size:1.6rem; margin-bottom:2rem; color:var(--leb-text-muted);">Please refresh the page to switch to ' + currentMode + ' view.</p><button onclick="window.location.reload();" style="padding:12px 28px; border-radius:12px; border:none; background:var(--leb-text-color); color:#fff; font-size:1.4rem; font-weight:500; cursor:pointer; transition: opacity 0.2s;">Refresh Page</button></div>');
         }
     }
 

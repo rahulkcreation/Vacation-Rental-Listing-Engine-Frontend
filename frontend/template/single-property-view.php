@@ -279,10 +279,15 @@ function lef_render_review_stars($rating)
     data-is-wishlisted="<?php echo $is_wishlisted ? '1' : '0'; ?>"
     data-is-logged-in="<?php echo is_user_logged_in() ? '1' : '0'; ?>">
 
-    <!-- ==============================
-     DESKTOP VIEW
-     ============================== -->
-    <div class="lef-dk-main-cont" id="lef-spv-desktop">
+
+    <?php
+    $device_view = isset($_COOKIE['lef_device_view']) ? $_COOKIE['lef_device_view'] : 'desktop'; // Default to desktop if no cookie
+    if ($device_view === 'desktop') :
+    ?>
+        <!-- ==============================
+         DESKTOP VIEW
+         ============================== -->
+        <div class="lef-dk-main-cont" id="lef-spv-desktop">
 
         <!-- ── Title Bar ── -->
         <div class="lefdk-title-cont">
@@ -526,14 +531,15 @@ function lef_render_review_stars($rating)
             <h1 class="lefdk-sm-heading">More stays nearby</h1>
             <div class="lefdk-sm-r-cards" id="lef-spv-similar-dk"></div>
         </div>
-
     </div>
+    <?php endif; // End Desktop View ?>
 
 
-    <!-- ==============================
-     MOBILE VIEW
-     ============================== -->
-    <div class="lef-mb-main-cont" id="lef-spv-mobile">
+    <?php if ($device_view === 'mobile') : ?>
+        <!-- ==============================
+         MOBILE VIEW
+         ============================== -->
+        <div class="lef-mb-main-cont" id="lef-spv-mobile">
 
         <!-- ── Header ── -->
         <div class="lefmb-header-cont">
@@ -713,8 +719,8 @@ function lef_render_review_stars($rating)
             </div>
 
         </div>
-
     </div>
+    <?php endif; // End Mobile View ?>
 
 
     <!-- ==============================

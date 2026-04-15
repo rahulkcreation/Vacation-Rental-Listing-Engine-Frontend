@@ -866,21 +866,16 @@ span.lefdk-rc-user-tag {
 
 
 /* ─────────────────────────────────────────────────────────────
-   VIEW SWITCHING (JS-controlled, NOT media queries)
-   Both views start hidden. JS toggles the correct one on load
-   and resize via the 'lef-spv-active' class.
+   VIEW HANDLING (Server-Side + Reload Protection)
+   The server only outputs one view (Desktop or Mobile) based 
+   on a session cookie. Resize crossing is handled by JS.
    ───────────────────────────────────────────────────────────── */
-.lef-dk-main-cont,
+.lef-dk-main-cont {
+    display: block;
+}
+
 .lef-mb-main-cont {
-    display: none !important;
-}
-
-.lef-dk-main-cont.lef-spv-active {
-    display: block !important;
-}
-
-.lef-mb-main-cont.lef-spv-active {
-    display: flex !important;
+    display: flex;
 }
 
 /* Calendar padding override for mobile */
