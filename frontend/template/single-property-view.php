@@ -774,21 +774,23 @@ function lef_render_review_stars($rating)
 
     <!-- Write / Edit Review Popup -->
     <div class="lef-spv-modal" id="lef-spv-review-form-modal" style="display:none;">
-        <div class="lef-spv-modal-header">
-            <span class="lef-spv-modal-close" data-close="lef-spv-review-form-modal">✕</span>
-            <h2><?php echo $has_review ? 'Edit Your Review' : 'Write a Review'; ?></h2>
-        </div>
-        <div class="lef-spv-modal-body">
-            <div class="lef-spv-rating-select" id="lef-spv-rating-select">
-                <span>Select Rating:</span>
-                <div class="lef-spv-stars">
-                    <?php for ($s = 1; $s <= 5; $s++) : ?>
-                        <span class="lef-spv-star" data-value="<?php echo $s; ?>">★</span>
-                    <?php endfor; ?>
-                </div>
+        <div class="lef-spv-modal-inner">
+            <div class="lef-spv-modal-header">
+                <span class="lef-spv-modal-close" data-close="lef-spv-review-form-modal">✕</span>
+                <h2><?php echo $has_review ? 'Edit Your Review' : 'Write a Review'; ?></h2>
             </div>
-            <textarea id="lef-spv-review-text" placeholder="Write your review here..." rows="5"><?php echo $has_review ? esc_textarea($existing_review->review) : ''; ?></textarea>
-            <button class="lefdk-lf-btn" id="lef-spv-submit-review-btn">Submit Review</button>
+            <div class="lef-spv-modal-body">
+                <div class="lef-spv-rating-select" id="lef-spv-rating-select">
+                    <span>Select Rating:</span>
+                    <div class="lef-spv-stars">
+                        <?php for ($s = 1; $s <= 5; $s++) : ?>
+                            <span class="lef-spv-star" data-value="<?php echo $s; ?>">★</span>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+                <textarea id="lef-spv-review-text" placeholder="Write your review here..." rows="5"><?php echo $has_review ? esc_textarea($existing_review->review) : ''; ?></textarea>
+                <button class="lefdk-lf-btn" id="lef-spv-submit-review-btn">Submit Review</button>
+            </div>
         </div>
     </div>
 

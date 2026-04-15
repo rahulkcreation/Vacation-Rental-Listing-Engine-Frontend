@@ -1573,7 +1573,7 @@ list.lefmb-am-li-list svg {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
-    font-size: 0.95rem;
+    font-size: 1.6rem;
     font-weight: 500;
 }
 
@@ -1591,7 +1591,7 @@ list.lefmb-am-li-list svg {
 
 .lef-spv-star.active,
 .lef-spv-star:hover {
-    color: var(--leb-warning-color);
+    color: var(--leb-text-color);
 }
 
 #lef-spv-review-text {
@@ -1599,7 +1599,7 @@ list.lefmb-am-li-list svg {
     border: 1px solid var(--leb-border-default);
     border-radius: 12px;
     padding: 1rem;
-    font-size: 0.95rem;
+    font-size: 1.4rem;
     font-family: var(--leb-font-main);
     resize: vertical;
     margin-bottom: 1rem;
