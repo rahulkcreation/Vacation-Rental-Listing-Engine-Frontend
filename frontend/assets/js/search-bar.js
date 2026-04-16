@@ -31,12 +31,12 @@ window.SearchBar = (function($) {
         renderCalendar();
         updateGuestButtons();
         updateGuestDisplay();
-        requestGeolocation();
     }
 
-    function requestGeolocation() {
+    function requestGeolocation(callback) {
         if (!navigator.geolocation) {
             state.geoPermission = 'denied';
+            if (callback) callback();
             return;
         }
 
@@ -45,9 +45,11 @@ window.SearchBar = (function($) {
                 state.lat = position.coords.latitude;
                 state.lng = position.coords.longitude;
                 state.geoPermission = 'granted';
+                if (callback) callback();
             },
             (error) => {
                 state.geoPermission = 'denied';
+                if (callback) callback();
             }
         );
     }
@@ -80,9 +82,15 @@ window.SearchBar = (function($) {
             if (!$mainInput.is(':focus')) {
                 $mainInput.focus();
             }
-            // Trigger suggestion check immediately on click
-            // If query is empty, it will show nearby suggestions if GPS is granted
-            showSuggestions($mainInput.val());
+
+            // Trigger suggestion check on click
+            if (state.geoPermission === 'prompt') {
+                requestGeolocation(() => {
+                    showSuggestions($mainInput.val());
+                });
+            } else {
+                showSuggestions($mainInput.val());
+            }
         }
     }
 
@@ -405,6 +413,17 @@ window.SearchBar = (function($) {
         $('.mobile-tab-content').removeClass('active');
         $(`.mobile-tab[data-tab="${tab}"]`).addClass('active');
         $('#mobile' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Tab').addClass('active');
+
+        if (tab === 'location') {
+            const $input = $('#mobileLocationInput');
+            if (state.geoPermission === 'prompt') {
+                requestGeolocation(() => {
+                    showMobileSuggestions($input.val());
+                });
+            } else {
+                showMobileSuggestions($input.val());
+            }
+        }
     }
 
     function renderMobileCalendar() {

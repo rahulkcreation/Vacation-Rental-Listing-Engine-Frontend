@@ -116,6 +116,7 @@ function lef_handle_search_suggestions() {
 	wp_send_json_success(array_slice($unique_results, 0, (empty($_POST['query']) ? 4 : 10)));
 }
 add_action('wp_ajax_lef_search_suggestions', 'lef_handle_search_suggestions');
+add_action('wp_ajax_nopriv_lef_search_suggestions', 'lef_handle_search_suggestions');
 /**
  * Wishlist Toggle handler.
  * Adds/Removes a property from user's wishlist.
