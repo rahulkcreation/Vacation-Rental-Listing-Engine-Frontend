@@ -520,9 +520,14 @@ window.SearchBar = (function($) {
         if (state.checkin) query.set('checkin', state.checkin);
         if (state.checkout) query.set('checkout', state.checkout);
         
-        // Unified guests parameter
-        const totalGuests = state.adults + state.children + state.infants;
+        // Unified guests parameter (Excludes infants as per requirements)
+        const totalGuests = state.adults + state.children;
         query.set('guests', totalGuests);
+        
+        // Pass infants as separate parameter
+        if (state.infants > 0) {
+            query.set('infant', state.infants);
+        }
 
         const target = state.archiveUrl + (state.archiveUrl.includes('?') ? '&' : '?') + query.toString();
         window.location.href = target;
