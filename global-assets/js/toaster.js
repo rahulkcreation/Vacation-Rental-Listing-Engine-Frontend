@@ -1,11 +1,17 @@
 /**
  * toaster.js
+ * 
+ * Global Toast notification component.
+ * Uses the #lef-toaster-container from toaster.php.
  */
-const LEB_Toast = {
+const LEF_Toast = {
     container: null,
 
     init() {
+        // Container is already provided by toaster.php in the footer
         this.container = document.getElementById('lef-toaster-container');
+        
+        // Fallback for extreme cases
         if (!this.container) {
             this.container = document.createElement('div');
             this.container.id = 'lef-toaster-container';
@@ -15,7 +21,7 @@ const LEB_Toast = {
     },
 
     show(message, type = 'info', duration = 2000) {
-        this.init();
+        if (!this.container) this.init();
 
         const toast = document.createElement('div');
         toast.className = `lef-toast ${type}`;
@@ -43,4 +49,4 @@ const LEB_Toast = {
     }
 };
 
-window.LEB_Toast = LEB_Toast;
+window.LEF_Toast = LEF_Toast;

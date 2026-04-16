@@ -46,20 +46,20 @@ function lef_db_fetch_status(table, cardEle) {
             lef_db_update_badge(cardEle.querySelector('#status-created'), data.created ? 'success' : 'error', data.created ? '✓ Yes' : '✗ No');
             lef_db_update_badge(cardEle.querySelector('#status-rows'), data.complete ? 'success' : 'error', data.complete ? '✓ All Present' : '✗ Missing');
             
-            if (window.LEB_Toast) {
-                window.LEB_Toast.show(`${table} status refreshed.`, 'info');
+            if (window.LEF_Toast) {
+                window.LEF_Toast.show(`${table} status refreshed.`, 'info');
             }
         } else {
             console.error('Failed to fetch DB status', res);
-            if (window.LEB_Toast) {
-                window.LEB_Toast.show(`Failed to fetch status for ${table}.`, 'error');
+            if (window.LEF_Toast) {
+                window.LEF_Toast.show(`Failed to fetch status for ${table}.`, 'error');
             }
         }
     })
     .catch(err => {
         console.error(err);
-        if (window.LEB_Toast) {
-            window.LEB_Toast.show('Network error while fetching DB status.', 'error');
+        if (window.LEF_Toast) {
+            window.LEF_Toast.show('Network error while fetching DB status.', 'error');
         }
     });
 }
@@ -80,8 +80,8 @@ window.lef_db_refresh = function(table) {
 window.lef_db_repair = function(table) {
     if (!table) return;
 
-    if (window.LEB_Confirm) {
-        window.LEB_Confirm.open({
+    if (window.LEF_Confirm) {
+        window.LEF_Confirm.open({
             title: 'Repair Database Table',
             message: `Are you sure you want to create or repair the table: ${table}? This will execute database modifications.`
         }, function(confirmed) {
@@ -125,21 +125,21 @@ function lef_db_execute_repair(table) {
             lef_db_update_badge(cardEle.querySelector('#status-created'), data.created ? 'success' : 'error', data.created ? '✓ Yes' : '✗ No');
             lef_db_update_badge(cardEle.querySelector('#status-rows'), data.complete ? 'success' : 'error', data.complete ? '✓ All Present' : '✗ Missing');
             
-            if (window.LEB_Toast) {
-                window.LEB_Toast.show(`Successfully repaired ${table}.`, 'success');
+            if (window.LEF_Toast) {
+                window.LEF_Toast.show(`Successfully repaired ${table}.`, 'success');
             }
         } else {
             console.error('Failed to repair table', res);
-            if (window.LEB_Toast) {
+            if (window.LEF_Toast) {
                 const msg = res.data && res.data.message ? res.data.message : `Failed to repair ${table}.`;
-                window.LEB_Toast.show(msg, 'error');
+                window.LEF_Toast.show(msg, 'error');
             }
         }
     })
     .catch(err => {
         console.error(err);
-        if (window.LEB_Toast) {
-            window.LEB_Toast.show('Network error while repairing table.', 'error');
+        if (window.LEF_Toast) {
+            window.LEF_Toast.show('Network error while repairing table.', 'error');
         }
     });
 }

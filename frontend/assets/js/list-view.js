@@ -30,8 +30,8 @@
 
             // 1. Check Login Status
             if (!lefData || lefData.isLoggedIn !== '1') {
-                if (window.LEB_Toast) {
-                    LEB_Toast.show('Please login to add in wishlist', 'error');
+                if (window.LEF_Toast) {
+                    LEF_Toast.show('Please login to add in wishlist', 'error');
                 }
                 return;
             }
@@ -53,19 +53,19 @@
                         const status = res.data.status;
                         $btn.toggleClass('is-active', status === 'added');
                         
-                        if (window.LEB_Toast) {
-                            LEB_Toast.show(res.data.message, 'success');
+                        if (window.LEF_Toast) {
+                            LEF_Toast.show(res.data.message, 'success');
                         }
                     } else {
-                        if (window.LEB_Toast) {
-                            LEB_Toast.show(res.data.message || 'Failed to update wishlist', 'error');
+                        if (window.LEF_Toast) {
+                            LEF_Toast.show(res.data.message || 'Failed to update wishlist', 'error');
                         }
                     }
                 },
                 error: function() {
                     $btn.removeClass('is-loading');
-                    if (window.LEB_Toast) {
-                        LEB_Toast.show('Network error. Please try again.', 'error');
+                    if (window.LEF_Toast) {
+                        LEF_Toast.show('Network error. Please try again.', 'error');
                     }
                 }
             });
@@ -76,7 +76,7 @@
             const redirectUrl = $(this).attr('data-redirect');
             
             if (redirectUrl === 'error_not_found') {
-                LEB_Toast.show('Page not found', 'error');
+                LEF_Toast.show('Page not found', 'error');
             } else {
                 window.location.href = redirectUrl;
             }

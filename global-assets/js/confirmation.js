@@ -1,35 +1,27 @@
 /**
  * confirmation.js
+ * 
+ * Global Confirmation Modal component.
+ * Uses the #lef-confirmation-modal from confirmation.php.
  */
-const LEB_Confirm = {
+const LEF_Confirm = {
     modal: null,
     callback: null,
 
     init() {
+        // Modal is already provided by confirmation.php in the footer
         this.modal = document.getElementById('lef-confirmation-modal');
-        if (!this.modal) {
-            const modalHtml = `
-                <div id="lef-confirmation-modal" class="lef-modal">
-                    <div class="lef-modal-content">
-                        <h3 id="lef-confirm-title">Confirm Action</h3>
-                        <p id="lef-confirm-message">Are you sure you want to proceed?</p>
-                        <div class="lef-modal-actions">
-                            <button id="lef-confirm-no" class="lef-btn lef-btn-secondary">No</button>
-                            <button id="lef-confirm-yes" class="lef-btn lef-btn-primary">Yes</button>
-                        </div>
-                    </div>
-                </div>`;
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
-            this.modal = document.getElementById('lef-confirmation-modal');
-        }
         
-        // Always re-bind events to ensure they work on the newly created or existing modal
-        this.modal.querySelector('#lef-confirm-no').onclick = () => this.close(false);
-        this.modal.querySelector('#lef-confirm-yes').onclick = () => this.close(true);
+        // Setup internal event listeners once
+        if (this.modal && !this.modal.dataset.eventsBound) {
+            this.modal.querySelector('#lef-confirm-no').onclick = () => this.close(false);
+            this.modal.querySelector('#lef-confirm-yes').onclick = () => this.close(true);
+            this.modal.dataset.eventsBound = "true";
+        }
     },
 
     open(options, callback) {
-        this.init();
+        if (!this.modal) this.init();
         if (!this.modal) return;
 
         this.callback = callback;
@@ -48,4 +40,4 @@ const LEB_Confirm = {
     }
 };
 
-window.LEB_Confirm = LEB_Confirm;
+window.LEF_Confirm = LEF_Confirm;

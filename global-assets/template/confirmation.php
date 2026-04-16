@@ -1,3 +1,9 @@
+<?php
+/**
+ * Global Confirmation Modal template.
+ * Hooked into wp_footer and admin_footer.
+ */
+?>
 <div id="lef-confirmation-modal" class="lef-modal">
     <div class="lef-modal-content">
         <h3 id="lef-confirm-title">Confirm Action</h3>

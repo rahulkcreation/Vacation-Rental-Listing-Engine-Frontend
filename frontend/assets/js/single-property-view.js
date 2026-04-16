@@ -6,7 +6,7 @@
  * popups, calendar, reservation form, guest dropdown, reviews, and similar
  * properties.
  *
- * Dependencies: jQuery (WordPress default), LEB_Toast (global toaster)
+ * Dependencies: jQuery (WordPress default), LEF_Toast (global toaster)
  * Localized data: lef_spv_data { ajax_url, nonce, property_id, price,
  *                                 max_guests, blocked_dates, is_logged_in }
  *
@@ -127,7 +127,7 @@
             const url = window.location.href;
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(url).then(function () {
-                    window.LEB_Toast && LEB_Toast.show('Link copied!', 'success');
+                    window.LEF_Toast && LEF_Toast.show('Link copied!', 'success');
                 });
             } else {
                 // Fallback
@@ -137,7 +137,7 @@
                 input.select();
                 document.execCommand('copy');
                 document.body.removeChild(input);
-                window.LEB_Toast && LEB_Toast.show('Link copied!', 'success');
+                window.LEF_Toast && LEF_Toast.show('Link copied!', 'success');
             }
         });
     }
@@ -147,7 +147,7 @@
     function initWishlistButtons() {
         $('#lef-spv-wishlist-btn, #lef-spv-wishlist-btn-mb').on('click', function () {
             if (!LOGGED_IN) {
-                window.LEB_Toast && LEB_Toast.show('Please log in to save properties.', 'error');
+                window.LEF_Toast && LEF_Toast.show('Please log in to save properties.', 'error');
                 return;
             }
 
@@ -160,7 +160,7 @@
                     const isSaved = res.data.status === 'added';
                     // Update ALL heart icons on the page
                     $('.lef-spv-heart-icon').html(isSaved ? heartFilledSVG() : heartEmptySVG());
-                    window.LEB_Toast && LEB_Toast.show(isSaved ? 'Saved!' : 'Removed from saved.', 'success');
+                    window.LEF_Toast && LEF_Toast.show(isSaved ? 'Saved!' : 'Removed from saved.', 'success');
                 }
             });
         });
@@ -261,7 +261,7 @@
             const review = $('#lef-spv-review-text').val().trim();
 
             if (!rating || !review) {
-                window.LEB_Toast && LEB_Toast.show('Please select a rating and write a review.', 'error');
+                window.LEF_Toast && LEF_Toast.show('Please select a rating and write a review.', 'error');
                 return;
             }
 
@@ -277,10 +277,10 @@
             }, function (res) {
                 $btn.prop('disabled', false).text('Submit Review');
                 if (res.success) {
-                    window.LEB_Toast && LEB_Toast.show(res.data.message, 'success');
+                    window.LEF_Toast && LEF_Toast.show(res.data.message, 'success');
                     hideModal('lef-spv-review-form-modal');
                 } else {
-                    window.LEB_Toast && LEB_Toast.show(res.data.message || 'Error submitting review.', 'error');
+                    window.LEF_Toast && LEF_Toast.show(res.data.message || 'Error submitting review.', 'error');
                 }
             });
         });
@@ -484,7 +484,7 @@
                     return d > calState.checkIn && d < clicked;
                 });
                 if (hasBlocked) {
-                    window.LEB_Toast && LEB_Toast.show('Selected range contains blocked dates.', 'error');
+                    window.LEF_Toast && LEF_Toast.show('Selected range contains blocked dates.', 'error');
                     calState.checkIn  = clicked;
                     calState.checkOut = null;
                 } else {
@@ -566,7 +566,7 @@
             if (action === 'plus') {
                 const totalNow = guests.adults + guests.children; // infants don't count toward max
                 if (type !== 'infants' && totalNow >= MAX_GUEST) {
-                    window.LEB_Toast && LEB_Toast.show('Maximum ' + MAX_GUEST + ' guests allowed.', 'info');
+                    window.LEF_Toast && LEF_Toast.show('Maximum ' + MAX_GUEST + ' guests allowed.', 'info');
                     return;
                 }
                 guests[type]++;
@@ -633,17 +633,17 @@
 
     function submitReservation($btn) {
         if (!LOGGED_IN) {
-            window.LEB_Toast && LEB_Toast.show('Please log in to make a reservation.', 'error');
+            window.LEF_Toast && LEF_Toast.show('Please log in to make a reservation.', 'error');
             return;
         }
         if (!calState.checkIn || !calState.checkOut) {
-            window.LEB_Toast && LEB_Toast.show('Please select check-in and check-out dates.', 'error');
+            window.LEF_Toast && LEF_Toast.show('Please select check-in and check-out dates.', 'error');
             return;
         }
 
         const nights = Math.round((calState.checkOut - calState.checkIn) / (1000 * 60 * 60 * 24));
         if (nights <= 0) {
-            window.LEB_Toast && LEB_Toast.show('Invalid date range.', 'error');
+            window.LEF_Toast && LEF_Toast.show('Invalid date range.', 'error');
             return;
         }
 
@@ -664,7 +664,7 @@
         }, function (res) {
             $btn.prop('disabled', false).text('Reserve');
             if (res.success) {
-                window.LEB_Toast && LEB_Toast.show(res.data.message, 'success');
+                window.LEF_Toast && LEF_Toast.show(res.data.message, 'success');
                 // Reset form
                 calState.checkIn  = null;
                 calState.checkOut = null;
@@ -676,11 +676,11 @@
                 syncDatesToForm();
                 hideModal('lef-spv-mb-reserve-modal');
             } else {
-                window.LEB_Toast && LEB_Toast.show(res.data.message || 'Reservation failed.', 'error');
+                window.LEF_Toast && LEF_Toast.show(res.data.message || 'Reservation failed.', 'error');
             }
         }).fail(function () {
             $btn.prop('disabled', false).text('Reserve');
-            window.LEB_Toast && LEB_Toast.show('Network error. Please try again.', 'error');
+            window.LEF_Toast && LEF_Toast.show('Network error. Please try again.', 'error');
         });
     }
 

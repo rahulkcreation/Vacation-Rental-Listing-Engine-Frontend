@@ -270,3 +270,13 @@ function lef_enqueue_global_components() {
 		true
 	);
 }
+
+/**
+ * Render Global Components (Toaster & Confirmation) in footer.
+ */
+function lef_render_global_components() {
+	include LEF_PLUGIN_DIR . 'global-assets/template/toaster.php';
+	include LEF_PLUGIN_DIR . 'global-assets/template/confirmation.php';
+}
+add_action( 'wp_footer', 'lef_render_global_components' );
+add_action( 'admin_footer', 'lef_render_global_components' );

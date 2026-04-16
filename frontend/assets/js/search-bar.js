@@ -498,8 +498,8 @@ window.SearchBar = (function($) {
         const hasGuests = (state.adults + state.children + state.infants) > 0;
 
         if (!hasLocation && !hasDates && !hasGuests) {
-            if (window.LEB_Toast) {
-                window.LEB_Toast.show('Please select a destination, date, or guests to search.', 'error');
+            if (window.LEF_Toast) {
+                window.LEF_Toast.show('Please select a destination, date, or guests to search.', 'error');
             } else {
                 alert('Please select a destination, date, or guests to search.');
             }
