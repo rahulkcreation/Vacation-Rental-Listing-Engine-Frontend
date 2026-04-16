@@ -13,6 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
+// Fetch current user wishlist if logged in
+$wishlist_ids = array();
+if ( is_user_logged_in() ) {
+    $current_user_id = get_current_user_id();
+    $wishlist_data = $wpdb->get_results( $wpdb->prepare(
+        "SELECT property_id FROM {$wpdb->prefix}ls_wishlist WHERE user_id = %d",
+        $current_user_id
+    ) );
+    if ( $wishlist_data ) {
+        $wishlist_ids = array_map( function( $item ) { return (int) $item->property_id; }, $wishlist_data );
+    }
+}
+
 // 1. Get attributes passed from the handler.
 $atts = get_query_var( 'lef_selected_atts' );
 if ( ! $atts ) {
@@ -143,7 +156,10 @@ if ( ! empty( $location_slug ) || ! empty( $type_slug ) ) {
                              loading="lazy"
                              onerror="this.src='<?php echo esc_url($fallback_img); ?>'; this.classList.add('lef-is-placeholder'); this.parentElement.classList.add('lef-has-placeholder');">
                         
-                        <button class="lef-favorite-btn" aria-label="Add to wishlist">
+                        <?php $is_wishlisted = in_array( (int) $listing->id, $wishlist_ids ); ?>
+                        <button class="lef-favorite-btn <?php echo $is_wishlisted ? 'is-active' : ''; ?>" 
+                                aria-label="Add to wishlist"
+                                data-id="<?php echo esc_attr( $listing->id ); ?>">
                             <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
                     </div>

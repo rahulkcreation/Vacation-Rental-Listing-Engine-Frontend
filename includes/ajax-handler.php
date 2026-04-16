@@ -116,8 +116,55 @@ function lef_handle_search_suggestions() {
 	wp_send_json_success(array_slice($unique_results, 0, (empty($_POST['query']) ? 4 : 10)));
 }
 add_action('wp_ajax_lef_search_suggestions', 'lef_handle_search_suggestions');
-add_action('wp_ajax_nopriv_lef_search_suggestions', 'lef_handle_search_suggestions');
+/**
+ * Wishlist Toggle handler.
+ * Adds/Removes a property from user's wishlist.
+ */
+function lef_handle_toggle_wishlist() {
+	check_ajax_referer( 'lef_wishlist_nonce', 'nonce' );
 
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Please login to add in wishlist.' ) );
+	}
+
+	global $wpdb;
+	$user_id     = get_current_user_id();
+	$property_id = isset( $_POST['property_id'] ) ? intval( $_POST['property_id'] ) : 0;
+
+	if ( ! $property_id ) {
+		wp_send_json_error( array( 'message' => 'Invalid property ID.' ) );
+	}
+
+	$table_name = $wpdb->prefix . 'ls_wishlist';
+
+	// Check if already in wishlist
+	$exists = $wpdb->get_var( $wpdb->prepare(
+		"SELECT id FROM $table_name WHERE user_id = %d AND property_id = %d",
+		$user_id,
+		$property_id
+	) );
+
+	if ( $exists ) {
+		// Remove
+		$wpdb->delete( $table_name, array( 'id' => $exists ) );
+		wp_send_json_success( array( 
+			'status'  => 'removed',
+			'message' => 'Removed from wishlist' 
+		) );
+	} else {
+		// Add
+		$wpdb->insert( $table_name, array(
+			'user_id'     => $user_id,
+			'property_id' => $property_id,
+			'created_at'  => current_time( 'mysql' )
+		) );
+		wp_send_json_success( array( 
+			'status'  => 'added',
+			'message' => 'Added to wishlist!' 
+		) );
+	}
+}
+add_action( 'wp_ajax_lef_toggle_wishlist', 'lef_handle_toggle_wishlist' );
 
 // ─────────────────────────────────────────────────────────────
 // Single Property View — AJAX Handlers

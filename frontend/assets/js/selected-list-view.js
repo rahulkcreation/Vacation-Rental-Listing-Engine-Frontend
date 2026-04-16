@@ -49,23 +49,60 @@
         }
       });
 
-      // 2. Favorite Toggle (Visual Only)
+      // 2. Favorite Toggle (Database Driven)
       $(document).on("click", ".lef-favorite-btn", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (self.isEditorMode()) return; // Disable interactive favorites in editor
+        if (self.isEditorMode()) return;
 
-        $(this).toggleClass("is-active");
+        const $btn = $(this);
+        const propertyId = $btn.data("id");
 
-        // Trigger global toaster if available
-        if (typeof LEB_Toaster !== "undefined") {
-          const isActive = $(this).hasClass("is-active");
-          LEB_Toaster.show(
-            isActive ? "Added to wishlist!" : "Removed from wishlist",
-            "info",
-          );
+        // 1. Check Login Status
+        if (!lefData || lefData.isLoggedIn !== "1") {
+          if (window.LEB_Toast) {
+            LEB_Toast.show("Please login to add in wishlist", "error");
+          }
+          return;
         }
+
+        // 2. Trigger AJAX Toggle
+        $btn.addClass("is-loading"); // Optional loading state
+
+        $.ajax({
+          url: lefData.ajaxUrl,
+          type: "POST",
+          data: {
+            action: "lef_toggle_wishlist",
+            property_id: propertyId,
+            nonce: lefData.wishlistNonce,
+          },
+          success: function (res) {
+            $btn.removeClass("is-loading");
+            if (res.success) {
+              const status = res.data.status;
+              $btn.toggleClass("is-active", status === "added");
+
+              if (window.LEB_Toast) {
+                LEB_Toast.show(res.data.message, "success");
+              }
+            } else {
+              if (window.LEB_Toast) {
+                LEB_Toast.show(
+                  res.data.message || "Failed to update wishlist",
+                  "error",
+                );
+              }
+            }
+          },
+          error: function () {
+            $btn.removeClass("is-loading");
+            if (window.LEB_Toast) {
+              LEB_Toast.show("Network error. Please try again.", "error");
+            }
+          },
+        });
       });
     },
 

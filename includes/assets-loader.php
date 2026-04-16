@@ -171,8 +171,10 @@ function lef_enqueue_assets() {
 				wp_script_is( 'lef-list-view-js', 'enqueued' ) ? 'lef-list-view-js' : 'lef-selected-view-js', 
 				'lefData', 
 				array(
-					'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
-					'pluginUrl' => LEF_PLUGIN_URL,
+					'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+					'pluginUrl'     => LEF_PLUGIN_URL,
+					'isLoggedIn'    => is_user_logged_in() ? '1' : '0',
+					'wishlistNonce' => wp_create_nonce( 'lef_wishlist_nonce' )
 				)
 			);
 		}
