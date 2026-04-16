@@ -880,20 +880,14 @@ span.lefdk-lf-price-unit {
    The server only outputs one view (Desktop or Mobile) based 
    on a session cookie. Resize crossing is handled by JS.
    ───────────────────────────────────────────────────────────── */
+/* Server-Side View Handling */
 .lef-dk-main-cont {
-    display: block;
+    margin: auto;
+    overflow: visible;
 }
 
 .lef-mb-main-cont {
     display: flex;
-}
-
-/* Calendar padding override for mobile */
-.lef-mb-main-cont .lefdk-calender {
-    padding: 0px;
-}
-
-.lef-mb-main-cont {
     flex-direction: column;
     min-height: 100vh;
 }
@@ -1722,12 +1716,6 @@ span.lefmb-hd-i-tag {
 
 .lefdk-cal-close-btn:hover {
     opacity: 0.9;
-}
-
-/* ── Calendar Grid Polish (Modal) ── */
-.lefdk-cal-day-selected {
-    background: var(--leb-text-color) !important;
-    color: var(--leb-white) !important;
 }
 
 
