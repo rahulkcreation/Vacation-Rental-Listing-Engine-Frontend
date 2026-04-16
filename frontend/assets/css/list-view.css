@@ -86,7 +86,7 @@
     stroke-width: 2;
 }
 
-.lef-favorite-btn.active svg {
+.lef-favorite-btn.is-active svg {
     fill: var(--leb-primary-color);
     stroke: var(--leb-primary-color);
 }
