@@ -536,7 +536,7 @@
 
             $('#lef-spv-price-display').html(priceHtml);
             $('#lef-spv-mb-price').text('₹' + total.toLocaleString('en-IN'));
-            $('#lef-spv-mb-price-info').text(nights + ' night' + (nights > 1 ? 's' : '') + ' × ₹' + PRICE.toLocaleString('en-IN'));
+            $('#lef-spv-mb-price-info').text('(For ' + nights + ' night' + (nights > 1 ? 's' : '') + ' × ₹' + PRICE.toLocaleString('en-IN') + ')');
         } else {
             $('#lef-spv-price-display').text('Add dates for prices');
             $('#lef-spv-mb-price').text('Add dates for prices');

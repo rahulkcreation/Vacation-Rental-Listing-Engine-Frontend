@@ -280,7 +280,7 @@ span.lefdk-hd-i-tag {
     margin: 0;
 }
 
-ol.lefdk-am-lists,
+.lefdk-am-lists,
 .lef-spv-amenity-full-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -514,7 +514,7 @@ span.lefdk-lf-price-unit {
 .lefdk-lf-date-field label,
 .lefdk-lf-guests label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 0.2rem;
@@ -703,7 +703,7 @@ span.lefdk-lf-price-unit {
 
 .lefdk-rc-avatar {
     width: 45px;
-    height: 45px !important;
+    height: auto !important;
     border-radius: 100rem !important;
     object-fit: cover;
 }
@@ -720,7 +720,7 @@ span.lefdk-lf-price-unit {
 }
 
 
-span.lefdk-rc-user-tag {
+.lefdk-rc-user-tag {
     font-size: 1.15rem;
     line-height: 10px;
     font-weight: 400;
@@ -728,8 +728,16 @@ span.lefdk-rc-user-tag {
 }
 
 .lefmb-rc-name {
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 1.4rem;
+    font-weight: 550;
+    line-height: 1;
+}
+
+.lefmb-rc-user-tag {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--leb-text-muted);
+    line-height: 1;
 }
 
 .lefdk-rc-date {
@@ -930,7 +938,7 @@ span.lefdk-rc-user-tag {
 
 .lefmb-img-cont {
     overflow-x: auto;
-    aspect-ratio: 100 / 60;
+    aspect-ratio: 100 / 70;
     scroll-snap-type: x mandatory;
     display: flex;
     z-index: 0;
@@ -950,7 +958,7 @@ span.lefdk-rc-user-tag {
     scroll-snap-align: start;
 }
 
-span.lefmb-img-count {
+.lefmb-img-count {
     position: absolute;
     top: 20px;
     right: 15px;
@@ -1014,7 +1022,7 @@ span.lefmb-img-count {
 .lefmb-prop-details-cont {
     display: flex;
     flex-direction: column;
-    padding: 2rem 1.4rem;
+    padding: 2rem;
     padding-bottom: 100px;
     border-radius: 22px;
     margin-top: -30px;
@@ -1032,10 +1040,12 @@ span.lefmb-img-count {
     width: 100%;
 }
 
-h1.lefmb-prop-d-heading {
+.lefmb-prop-d-heading {
     font-size: 2.8rem;
     font-weight: 500;
     margin: 0;
+    line-height: 1.3;
+    text-align: center;
 }
 
 .lefmb-prop-title-cont {
@@ -1053,7 +1063,7 @@ h1.lefmb-prop-d-heading {
 
 }
 
-ol.lefmb-list-order {
+.lefmb-list-order {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1126,8 +1136,8 @@ span.lefmb-hd-i-tag {
 .lefmb-description {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    font-size: 1.4rem;
+    gap: 2rem;
+    font-size: 1.6rem;
     font-weight: 400;
     line-height: 24px;
     color: var(--leb-text-muted);
@@ -1137,9 +1147,10 @@ span.lefmb-hd-i-tag {
 .lefmb-desc-btn,
 .lefmb-show-amenity-btn {
     background-color: var(--leb-bg-light);
-    padding: 0.7rem 1rem;
+    color: var(--leb-text-color);
+    padding: 1rem;
     border-radius: 10px;
-    font-size: 0.85rem;
+    font-size: 1.4rem;
     border: solid 1px var(--leb-border-color);
     cursor: pointer;
     line-height: 20px;
@@ -1153,17 +1164,18 @@ span.lefmb-hd-i-tag {
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
-    padding: 1.6rem 0;
+    padding: 4rem 0;
     border: solid var(--leb-border-default);
     border-width: 1.5px 0;
 }
 
-h1.lefmb-am-heading {
-    font-size: 1.3rem;
-    font-weight: 400;
+.lefmb-am-heading,
+.lefmb-sm-heading {
+    font-size: 2.2rem;
+    font-weight: 550;
 }
 
-ol.lefmb-am-lists {
+.lefmb-am-lists {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
@@ -1171,15 +1183,15 @@ ol.lefmb-am-lists {
     list-style: none;
 }
 
-list.lefmb-am-li-list {
+.lefmb-am-li-list {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.9rem;
+    gap: 1rem;
+    font-size: 1.5rem;
     font-weight: 400;
 }
 
-list.lefmb-am-li-list svg {
+.lefmb-am-li-list svg {
     width: 20px !important;
     height: auto !important;
 }
@@ -1189,7 +1201,7 @@ list.lefmb-am-li-list svg {
 /* ── Mobile Reviews ── */
 .lefmb-all-review {
     display: flex;
-    padding: 1.6rem 0;
+    padding: 3.5rem 0;
     flex-direction: column;
     gap: 1rem;
     border: solid var(--leb-border-default);
@@ -1201,8 +1213,8 @@ list.lefmb-am-li-list svg {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-size: 1.45rem;
-    font-weight: 500;
+    font-size: 2rem;
+    font-weight: 550;
 }
 
 .lefmb-ar-r-number {
@@ -1219,7 +1231,7 @@ list.lefmb-am-li-list svg {
 .lefmb-review-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem 1.3rem;
+    gap: 2rem;
     width: 100%;
     padding: 1rem 0;
 }
@@ -1227,28 +1239,30 @@ list.lefmb-am-li-list svg {
 .lefmb-rc-card {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 1rem;
 }
 
 .lefmb-rc-header {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
+}
+
+.lefmb-rc-r-info-cont {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 6px;
 }
 
 .lefmb-rc-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-}
-
-.lefmb-rc-name {
-    font-size: 0.95rem;
-    font-weight: 500;
+    gap: 5px;
 }
 
 .lefmb-rc-date {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: var(--leb-text-muted);
     display: flex;
     align-items: center;
@@ -1259,8 +1273,6 @@ list.lefmb-am-li-list svg {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    font-size: 0.85rem;
-    font-weight: 500;
 }
 
 .lefmb-rc-rating svg {
@@ -1269,7 +1281,7 @@ list.lefmb-am-li-list svg {
 }
 
 .lefmb-rc-text {
-    font-size: 0.9rem;
+    font-size: 1.4rem;
     color: var(--leb-text-muted);
     line-height: 1.5;
     width: 95%;
@@ -1283,17 +1295,12 @@ list.lefmb-am-li-list svg {
     width: 100%;
 }
 
-.lefmb-sm-heading {
-    font-size: 1.4rem;
-    font-weight: 400;
-}
-
 /* ── Mobile Sticky Bottom Nav ── */
 .lefmb-nav {
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 1.2rem 1rem;
+    padding: 1.2rem 2rem;
     background-color: var(--leb-white);
     width: 100%;
     border: solid var(--leb-border-default);
@@ -1307,28 +1314,30 @@ list.lefmb-am-li-list svg {
 .lefmb-reserv-right-cont {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 4px;
+    gap: 2px;
+    flex-wrap: nowrap;
+    align-items: flex-start;
 }
 
 .lefmb-night-price {
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-size: 1.8rem;
+    font-weight: 550;
 }
 
 .lefmb-night-info {
     color: var(--leb-text-muted);
-    font-weight: 400;
-    font-size: 0.8rem;
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 1;
 }
 
 .lefmb-reserv-btn {
     background-color: var(--leb-primary-color);
     color: var(--leb-white);
     border: none;
-    padding: 0.9rem 2rem;
+    padding: 0.9rem 4rem;
     border-radius: 100rem;
-    font-size: 1rem;
+    font-size: 1.4rem;
     font-weight: 500;
     cursor: pointer;
 }
@@ -1337,58 +1346,28 @@ list.lefmb-am-li-list svg {
     background-color: var(--leb-primary-dark);
 }
 
-
 /* ─────────────────────────────────────────────────────────────
-   RESPONSIVE BREAKPOINTS (max 450px & 360px)
+   MODAL / POPUP RESERVATION STYLES
    ───────────────────────────────────────────────────────────── */
-@media (max-width: 450px) {
-    h1.lefmb-prop-d-heading {
-        font-size: 1.4rem;
-    }
-
-    ol.lefmb-am-lists {
-        grid-template-columns: 1fr;
-    }
-
-    .lefmb-review-cards {
-        grid-template-columns: 1fr;
-    }
+#lefmb-spv-model-inner {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
 }
 
-@media (max-width: 360px) {
-    h1.lefmb-prop-d-heading {
-        font-size: 1.2rem;
-    }
-
-    h1.lefmb-prop-title {
-        font-size: 0.8rem;
-    }
-
-    ol.lefmb-list-order,
-    .lefmb-r-number,
-    .lefmb-r-total-revi {
-        font-size: 0.7rem;
-    }
-
-    .lefmb-description {
-        font-size: 0.85rem;
-    }
-
-    h1.lefmb-am-heading,
-    .lefdk-cal-heading,
-    .lefmb-sm-heading {
-        font-size: 1.3rem;
-    }
-
-    .lefdk-cal-day {
-        width: 30px;
-    }
-
-    .lefmb-rc-text {
-        width: 100%;
-    }
+#lefmb-spv-model-header {
+    max-height: 45px;
 }
 
+#lefmb-spv-model-body {
+    max-height: calc(100vh - 45px);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 1.2rem;
+}
 
 /* ─────────────────────────────────────────────────────────────
    MODAL / POPUP STYLES
@@ -1472,22 +1451,6 @@ list.lefmb-am-li-list svg {
     overflow-y: scroll;
     padding: 2rem 0 0 0;
 }
-
-/* ── Fullscreen modals (mobile reservation) ── */
-/* .lef-spv-fullscreen {
-    flex-direction: column;
-    padding: 0;
-}
-
-.lef-spv-fullscreen .lef-spv-modal-header {
-    border-radius: 0;
-}
-
-.lef-spv-fullscreen .lef-spv-modal-body {
-    max-height: calc(100vh - 60px);
-    border-radius: 0;
-    flex: 1;
-} */
 
 /* ── Full description in modal ── */
 .lef-spv-desc-full {
@@ -1777,5 +1740,123 @@ list.lefmb-am-li-list svg {
     color: var(--leb-white) !important;
 }
 
-/* Desktop Modal specific responsive */
-@media (max-width: 850px) {}
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+   ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 800px) {
+
+    .lef-spv-amenity-full-list .lefdk-am-li-list {
+        font-size: 1.6rem;
+    }
+
+    .lefdk-cal-heading {
+        font-size: 2.2rem;
+    }
+
+    .lefmb-am-li-svg,
+    .lefdk-am-li-svg {
+        width: 22px;
+        height: auto;
+    }
+}
+
+
+@media (max-width: 700px) {
+    .lef-spv-modal-inner {
+        width: 95%;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .lef-spv-amenity-full-list {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .lefmb-review-cards {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width: 375px) {
+    .lefmb-img-cont {
+        aspect-ratio: 100 / 75;
+    }
+
+    .lefmb-s-nav-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .lefmb-img-count {
+        font-size: 1.2rem;
+    }
+
+    .lefmb-prop-d-heading {
+        font-size: 2.4rem;
+    }
+
+    .lefmb-prop-title {
+        font-size: 1.6rem;
+    }
+
+    .lefmb-list-order {
+        font-size: 1.35rem;
+    }
+
+    .lefmb-hd-photo img {
+        width: 46px;
+    }
+
+    .lefmb-prop-details-cont {
+        padding: 2.5rem 1rem;
+        margin-top: -20px;
+    }
+
+    .lef-spv-modal-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .lefmb-description,
+    .lef-spv-desc-full {
+        font-size: 1.4rem;
+    }
+
+    .lefmb-am-heading,
+    .lefmb-sm-heading,
+    .lefdk-cal-heading {
+        font-size: 2rem;
+    }
+
+    .lefmb-am-li-list,
+    .lef-spv-amenity-full-list .lefdk-am-li-list {
+        font-size: 1.35rem;
+    }
+
+    .lefmb-am-li-svg,
+    .lefdk-am-li-svg {
+        width: 20px;
+        height: auto;
+    }
+
+    .lef-spv-modal-body {
+        max-height: 70vh;
+    }
+
+    .lefmb-nav {
+        padding: 1.2rem;
+    }
+
+    .lefmb-night-price {
+        font-size: 1.6rem;
+        max-width: 80%;
+        line-height: 1.1;
+    }
+
+    .lefmb-night-info{
+        font-size: 1.2rem;
+    }
+}

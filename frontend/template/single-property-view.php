@@ -248,7 +248,7 @@ $lef_review_char_limit = 250;
 // ─────────────────────────────────────────────────────────────
 ?>
 
-<div id="lef-spv-root"
+<div class="leb-plugin-wrapper" id="lef-spv-root"
     data-property-id="<?php echo esc_attr($property_id); ?>"
     data-price="<?php echo esc_attr($price); ?>"
     data-max-guests="<?php echo esc_attr($guests); ?>"
@@ -256,10 +256,11 @@ $lef_review_char_limit = 250;
     data-is-logged-in="<?php echo is_user_logged_in() ? '1' : '0'; ?>">
 
 
+
     <?php
     // Detect Elementor Preview/Editor to avoid responsive interference
     $is_elementor_preview = isset($_GET['elementor-preview']) || (isset($_GET['action']) && $_GET['action'] === 'elementor');
-    
+
     if ($is_elementor_preview) {
         $device_view = 'desktop'; // Always default to desktop in the editor/preview
     } else {
@@ -273,251 +274,252 @@ $lef_review_char_limit = 250;
          ============================== -->
         <div class="lef-dk-main-cont" id="lef-spv-desktop">
 
-        <!-- ── Title Bar ── -->
-        <div class="lefdk-title-cont">
-            <h1 class="lefdk-title"><?php echo $title; ?></h1>
-            <div class="lefdk-extra-cont">
-                <div class="lefdk-h-btn" id="lef-spv-share-btn"><?php echo $share_svg; ?>Share</div>
-                <div class="lefdk-h-btn" id="lef-spv-wishlist-btn">
-                    <span class="lef-spv-heart-icon"><?php echo $is_wishlisted ? $heart_svg_filled : $heart_svg_empty; ?></span>Save
+            <!-- ── Title Bar ── -->
+            <div class="lefdk-title-cont">
+                <h1 class="lefdk-title"><?php echo $title; ?></h1>
+                <div class="lefdk-extra-cont">
+                    <div class="lefdk-h-btn" id="lef-spv-share-btn"><?php echo $share_svg; ?>Share</div>
+                    <div class="lefdk-h-btn" id="lef-spv-wishlist-btn">
+                        <span class="lef-spv-heart-icon"><?php echo $is_wishlisted ? $heart_svg_filled : $heart_svg_empty; ?></span>Save
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ── Image Grid ── -->
-        <div class="lefdk-img-cont">
-            <?php if (isset($images[0])) : ?>
-                <div class="lefdk-img-1">
-                    <img src="<?php echo esc_url($images[0]); ?>" alt="<?php echo $title; ?>">
+            <!-- ── Image Grid ── -->
+            <div class="lefdk-img-cont">
+                <?php if (isset($images[0])) : ?>
+                    <div class="lefdk-img-1">
+                        <img src="<?php echo esc_url($images[0]); ?>" alt="<?php echo $title; ?>">
+                    </div>
+                <?php endif; ?>
+                <div class="lefdk-img-2">
+                    <?php for ($i = 1; $i <= 4; $i++) : ?>
+                        <?php if (isset($images[$i])) : ?>
+                            <img src="<?php echo esc_url($images[$i]); ?>" alt="<?php echo $title; ?> photo <?php echo $i + 1; ?>">
+                        <?php endif; ?>
+                    <?php endfor; ?>
                 </div>
-            <?php endif; ?>
-            <div class="lefdk-img-2">
-                <?php for ($i = 1; $i <= 4; $i++) : ?>
-                    <?php if (isset($images[$i])) : ?>
-                        <img src="<?php echo esc_url($images[$i]); ?>" alt="<?php echo $title; ?> photo <?php echo $i + 1; ?>">
-                    <?php endif; ?>
-                <?php endfor; ?>
+
+                <?php if (count($images) > 0) : ?>
+                    <div class="lefdk-all-photo-btn" id="lef-spv-show-photos">
+                        <?php echo $grid_icon_svg; ?>
+                        Show all photos
+                    </div>
+                <?php endif; ?>
             </div>
 
-            <?php if (count($images) > 0) : ?>
-                <div class="lefdk-all-photo-btn" id="lef-spv-show-photos">
-                    <?php echo $grid_icon_svg; ?>
-                    Show all photos
-                </div>
-            <?php endif; ?>
-        </div>
+            <!-- ── Details Container (Left: content, Right: form) ── -->
+            <?php $show_reviews_section = ($review_count > 0 || (is_user_logged_in() && $can_review)); ?>
+            <div class="lefdk-details-cont <?php echo !$show_reviews_section ? 'bottom-line' : ''; ?>">
+                <div class="lefdk-d-right">
+                    <!-- Title & specs -->
+                    <div class="lefdk-d-title-cont">
+                        <h1 class="lefdk-d-title">Entire rental unit in <?php echo esc_html($location_name); ?></h1>
+                        <ol class="lefdk-list-order">
+                            <li class="lefdk-list"><?php echo $guests; ?> guests</li>
+                            <li class="lefdk-list"><span class="lefdk-dot"> · </span><?php echo $bedrooms; ?> bedroom</li>
+                            <li class="lefdk-list"><span class="lefdk-dot"> · </span><?php echo $beds; ?> bed</li>
+                            <li class="lefdk-list"><span class="lefdk-dot"> · </span><?php echo $bathrooms; ?> bathroom</li>
+                        </ol>
+                        <div class="lefdk-review">
+                            <?php if ($review_count > 0) : ?>
+                                <div class="lefdk-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
+                                <div class="lefdk-r-total-revi"><span class="lefdk-dot"> · </span><?php echo $review_count; ?> reviews</div>
+                            <?php else : ?>
+                                <div class="lefdk-r-number">No reviews</div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
 
-        <!-- ── Details Container (Left: content, Right: form) ── -->
-        <?php $show_reviews_section = ($review_count > 0 || (is_user_logged_in() && $can_review)); ?>
-        <div class="lefdk-details-cont <?php echo !$show_reviews_section ? 'bottom-line' : ''; ?>">
-            <div class="lefdk-d-right">
-                <!-- Title & specs -->
-                <div class="lefdk-d-title-cont">
-                    <h1 class="lefdk-d-title">Entire rental unit in <?php echo esc_html($location_name); ?></h1>
-                    <ol class="lefdk-list-order">
-                        <li class="lefdk-list"><?php echo $guests; ?> guests</li>
-                        <li class="lefdk-list"><span class="lefdk-dot"> · </span><?php echo $bedrooms; ?> bedroom</li>
-                        <li class="lefdk-list"><span class="lefdk-dot"> · </span><?php echo $beds; ?> bed</li>
-                        <li class="lefdk-list"><span class="lefdk-dot"> · </span><?php echo $bathrooms; ?> bathroom</li>
-                    </ol>
-                    <div class="lefdk-review">
-                        <?php if ($review_count > 0) : ?>
-                            <div class="lefdk-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
-                            <div class="lefdk-r-total-revi"><span class="lefdk-dot"> · </span><?php echo $review_count; ?> reviews</div>
-                        <?php else : ?>
-                            <div class="lefdk-r-number">No reviews</div>
+                    <!-- Host -->
+                    <div class="lefdk-host-details">
+                        <div class="lefdk-hd-photo">
+                            <img src="<?php echo esc_url($host_pic); ?>" alt="<?php echo esc_attr($host_name); ?>" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
+                        </div>
+                        <div class="lefdk-hd-info">
+                            <span class="lefdk-hd-i-name">Hosted by <?php echo esc_html($host_name); ?></span>
+                            <span class="lefdk-hd-i-tag">Verified Host</span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="lefdk-description">
+                        <p><?php echo nl2br(esc_html($desc_truncated)); ?></p>
+                        <?php if ($show_desc_more) : ?>
+                            <div class="lefdk-desc-btn" id="lef-spv-desc-more">Show more</div>
                         <?php endif; ?>
                     </div>
-                </div>
 
-                <!-- Host -->
-                <div class="lefdk-host-details">
-                    <div class="lefdk-hd-photo">
-                        <img src="<?php echo esc_url($host_pic); ?>" alt="<?php echo esc_attr($host_name); ?>" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
+                    <!-- Amenities -->
+                    <div class="lefdk-amenity-cont">
+                        <h1 class="lefdk-am-heading">What this place offers</h1>
+                        <ol class="lefdk-am-lists">
+                            <?php foreach ($amenities_visible as $am) : ?>
+                                <list class="lefdk-am-li-list">
+                                    <span class="lefdk-am-li-svg">
+                                        <?php if ($am['svg_path']) : ?>
+                                            <img src="<?php echo esc_url($am['svg_path']); ?>" alt="" style="display:block; height:24px; width:24px;">
+                                        <?php endif; ?>
+                                    </span>
+                                    <span class="lefdk-am-li-title"><?php echo esc_html($am['name']); ?></span>
+                                </list>
+                            <?php endforeach; ?>
+                        </ol>
+                        <?php if ($amenities_extra) : ?>
+                            <div class="lefdk-show-amenity-btn" id="lef-spv-amenity-more">Show all <?php echo count($amenities_list); ?> amenities</div>
+                        <?php endif; ?>
                     </div>
-                    <div class="lefdk-hd-info">
-                        <span class="lefdk-hd-i-name">Hosted by <?php echo esc_html($host_name); ?></span>
-                        <span class="lefdk-hd-i-tag">Verified Host</span>
-                    </div>
-                </div>
 
-                <!-- Description -->
-                <div class="lefdk-description">
-                    <p><?php echo nl2br(esc_html($desc_truncated)); ?></p>
-                    <?php if ($show_desc_more) : ?>
-                        <div class="lefdk-desc-btn" id="lef-spv-desc-more">Show more</div>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Amenities -->
-                <div class="lefdk-amenity-cont">
-                    <h1 class="lefdk-am-heading">What this place offers</h1>
-                    <ol class="lefdk-am-lists">
-                        <?php foreach ($amenities_visible as $am) : ?>
-                            <list class="lefdk-am-li-list">
-                                <span class="lefdk-am-li-svg">
-                                    <?php if ($am['svg_path']) : ?>
-                                        <img src="<?php echo esc_url($am['svg_path']); ?>" alt="" style="display:block; height:24px; width:24px;">
-                                    <?php endif; ?>
-                                </span>
-                                <span class="lefdk-am-li-title"><?php echo esc_html($am['name']); ?></span>
-                            </list>
-                        <?php endforeach; ?>
-                    </ol>
-                    <?php if ($amenities_extra) : ?>
-                        <div class="lefdk-show-amenity-btn" id="lef-spv-amenity-more">Show all <?php echo count($amenities_list); ?> amenities</div>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Calendar -->
-                <div class="lefdk-calender">
-                    <h1 class="lefdk-cal-heading">Select check-in date</h1>
-                    <div class="lefdk-cal-wrapper">
-                        <div class="lefdk-cal-month-container">
-                            <div class="lefdk-cal-header">
-                                <button class="lefdk-cal-nav-btn" id="lef-spv-prevMonth">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                                    </svg>
-                                </button>
-                                <span class="lefdk-cal-month" id="lef-spv-currentMonth"></span>
-                                <button class="lefdk-cal-nav-btn" id="lef-spv-nextMonth">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                                    </svg>
-                                </button>
+                    <!-- Calendar -->
+                    <div class="lefdk-calender">
+                        <h1 class="lefdk-cal-heading">Select check-in date</h1>
+                        <div class="lefdk-cal-wrapper">
+                            <div class="lefdk-cal-month-container">
+                                <div class="lefdk-cal-header">
+                                    <button class="lefdk-cal-nav-btn" id="lef-spv-prevMonth">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                                        </svg>
+                                    </button>
+                                    <span class="lefdk-cal-month" id="lef-spv-currentMonth"></span>
+                                    <button class="lefdk-cal-nav-btn" id="lef-spv-nextMonth">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="lefdk-cal-grid" id="lef-spv-calendarGrid"></div>
                             </div>
-                            <div class="lefdk-cal-grid" id="lef-spv-calendarGrid"></div>
+                            <span class="lefdk-cal-clear-btn" id="lef-spv-clearDates">clear dates</span>
                         </div>
-                        <span class="lefdk-cal-clear-btn" id="lef-spv-clearDates">clear dates</span>
                     </div>
+
                 </div>
 
+                <!-- ── RIGHT: Reservation Form ── -->
+                <div class="lefdk-d-left">
+                    <div class="lefdk-l-form-cont" id="lef-spv-reserve-form">
+                        <div class="lefdk-lf-price-header">
+                            <span class="lefdk-lf-price-amount" id="lef-spv-price-display">Add dates for prices</span>
+                        </div>
+                        <div class="lefdk-lf-dates">
+                            <div class="lefdk-lf-date-row">
+                                <div class="lefdk-lf-date-field" id="lef-spv-checkin-field">
+                                    <label>Check-in</label>
+                                    <span id="lef-spv-checkin-label">Add date</span>
+                                </div>
+                                <div class="lefdk-lf-date-field" id="lef-spv-checkout-field">
+                                    <label>Check-out</label>
+                                    <span id="lef-spv-checkout-label">Add date</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lefdk-lf-guests" id="lef-spv-guests-trigger">
+                            <label>Guests</label>
+                            <span id="lef-spv-guests-label">1 guest</span>
+                        </div>
+
+                        <!-- Guest Dropdown -->
+                        <div class="lef-spv-guests-dropdown" id="lef-spv-guests-dropdown" style="display:none;">
+                            <div class="lef-spv-gd-row">
+                                <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Adults</span><span class="lef-spv-gd-sub">Age 13+</span></div>
+                                <div class="lef-spv-gd-controls">
+                                    <button class="lef-spv-gd-btn" data-action="minus" data-type="adults">−</button>
+                                    <span class="lef-spv-gd-count" id="lef-spv-adults-count">1</span>
+                                    <button class="lef-spv-gd-btn" data-action="plus" data-type="adults">+</button>
+                                </div>
+                            </div>
+                            <div class="lef-spv-gd-row">
+                                <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Children</span><span class="lef-spv-gd-sub">Age 2–12</span></div>
+                                <div class="lef-spv-gd-controls">
+                                    <button class="lef-spv-gd-btn" data-action="minus" data-type="children">−</button>
+                                    <span class="lef-spv-gd-count" id="lef-spv-children-count">0</span>
+                                    <button class="lef-spv-gd-btn" data-action="plus" data-type="children">+</button>
+                                </div>
+                            </div>
+                            <div class="lef-spv-gd-row">
+                                <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Infants</span><span class="lef-spv-gd-sub">Under 2</span></div>
+                                <div class="lef-spv-gd-controls">
+                                    <button class="lef-spv-gd-btn" data-action="minus" data-type="infants">−</button>
+                                    <span class="lef-spv-gd-count" id="lef-spv-infants-count">0</span>
+                                    <button class="lef-spv-gd-btn" data-action="plus" data-type="infants">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="lefdk-lf-btn" id="lef-spv-reserve-btn">Reserve</button>
+                        <p class="lefdk-lf-info">You won't be charged yet</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- ── RIGHT: Reservation Form ── -->
-            <div class="lefdk-d-left">
-                <div class="lefdk-l-form-cont" id="lef-spv-reserve-form">
-                    <div class="lefdk-lf-price-header">
-                        <span class="lefdk-lf-price-amount" id="lef-spv-price-display">Add dates for prices</span>
-                    </div>
-                    <div class="lefdk-lf-dates">
-                        <div class="lefdk-lf-date-row">
-                            <div class="lefdk-lf-date-field" id="lef-spv-checkin-field">
-                                <label>Check-in</label>
-                                <span id="lef-spv-checkin-label">Add date</span>
-                            </div>
-                            <div class="lefdk-lf-date-field" id="lef-spv-checkout-field">
-                                <label>Check-out</label>
-                                <span id="lef-spv-checkout-label">Add date</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lefdk-lf-guests" id="lef-spv-guests-trigger">
-                        <label>Guests</label>
-                        <span id="lef-spv-guests-label">1 guest</span>
+            <?php if ($review_count > 0 || (is_user_logged_in() && $can_review)) : ?>
+                <!-- ── Reviews Section ── -->
+                <div class="lefdk-all-review">
+                    <div class="lefdk-ar-review">
+                        <?php if ($review_count > 0) : ?>
+                            <div class="lefdk-ar-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
+                            <div class="lefdk-ar-r-total-revi"><span class="lefdk-dot"> · </span><?php echo $review_count; ?> reviews</div>
+                        <?php else : ?>
+                            <div class="lefdk-ar-r-number">No Reviews Yet</div>
+                        <?php endif; ?>
                     </div>
 
-                    <!-- Guest Dropdown -->
-                    <div class="lef-spv-guests-dropdown" id="lef-spv-guests-dropdown" style="display:none;">
-                        <div class="lef-spv-gd-row">
-                            <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Adults</span><span class="lef-spv-gd-sub">Age 13+</span></div>
-                            <div class="lef-spv-gd-controls">
-                                <button class="lef-spv-gd-btn" data-action="minus" data-type="adults">−</button>
-                                <span class="lef-spv-gd-count" id="lef-spv-adults-count">1</span>
-                                <button class="lef-spv-gd-btn" data-action="plus" data-type="adults">+</button>
-                            </div>
-                        </div>
-                        <div class="lef-spv-gd-row">
-                            <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Children</span><span class="lef-spv-gd-sub">Age 2–12</span></div>
-                            <div class="lef-spv-gd-controls">
-                                <button class="lef-spv-gd-btn" data-action="minus" data-type="children">−</button>
-                                <span class="lef-spv-gd-count" id="lef-spv-children-count">0</span>
-                                <button class="lef-spv-gd-btn" data-action="plus" data-type="children">+</button>
-                            </div>
-                        </div>
-                        <div class="lef-spv-gd-row">
-                            <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Infants</span><span class="lef-spv-gd-sub">Under 2</span></div>
-                            <div class="lef-spv-gd-controls">
-                                <button class="lef-spv-gd-btn" data-action="minus" data-type="infants">−</button>
-                                <span class="lef-spv-gd-count" id="lef-spv-infants-count">0</span>
-                                <button class="lef-spv-gd-btn" data-action="plus" data-type="infants">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="lefdk-lf-btn" id="lef-spv-reserve-btn">Reserve</button>
-                    <p class="lefdk-lf-info">You won't be charged yet</p>
-                </div>
-            </div>
-        </div>
-
-        <?php if ($review_count > 0 || (is_user_logged_in() && $can_review)) : ?>
-            <!-- ── Reviews Section ── -->
-            <div class="lefdk-all-review">
-                <div class="lefdk-ar-review">
                     <?php if ($review_count > 0) : ?>
-                        <div class="lefdk-ar-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
-                        <div class="lefdk-ar-r-total-revi"><span class="lefdk-dot"> · </span><?php echo $review_count; ?> reviews</div>
-                    <?php else : ?>
-                        <div class="lefdk-ar-r-number">No Reviews Yet</div>
-                    <?php endif; ?>
-                </div>
-
-                <?php if ($review_count > 0) : ?>
-                    <div class="lefdk-review-cards">
-                        <?php foreach ($reviews_visible as $rev) : ?>
-                            <div class="lefdk-rc-card">
-                                <div class="lefdk-rc-header">
-                                    <img src="<?php echo esc_url($rev['avatar']); ?>" alt="Avatar" class="lefdk-rc-avatar" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
-                                    <div class="lefdk-rc-info">
-                                        <span class="lefdk-rc-name"><?php echo esc_html($rev['name']); ?></span>
-                                        <span class="lefdk-rc-user-tag">Verified User</span>
+                        <div class="lefdk-review-cards">
+                            <?php foreach ($reviews_visible as $rev) : ?>
+                                <div class="lefdk-rc-card">
+                                    <div class="lefdk-rc-header">
+                                        <img src="<?php echo esc_url($rev['avatar']); ?>" alt="Avatar" class="lefdk-rc-avatar" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
+                                        <div class="lefdk-rc-info">
+                                            <span class="lefdk-rc-name"><?php echo esc_html($rev['name']); ?></span>
+                                            <span class="lefdk-rc-user-tag">Verified User</span>
+                                        </div>
+                                    </div>
+                                    <div class="lefdk-rc-r-info-cont">
+                                        <div class="lefdk-rc-date"><span class="lefdk-rc-rating"><?php echo lef_render_review_stars($rev['rating']); ?></span> <?php echo " - " . lef_format_review_date($rev['created_at']); ?> </div>
+                                        <p class="lefdk-rc-text">
+                                            <?php
+                                            $full_review = $rev['review'];
+                                            if (mb_strlen($full_review) > $lef_review_char_limit) :
+                                                echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
+                                            ?>
+                                                <span class="lef-spv-see-more"
+                                                    data-avatar="<?php echo esc_url($rev['avatar']); ?>"
+                                                    data-name="<?php echo esc_attr($rev['name']); ?>"
+                                                    data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
+                                                    data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
+                                                    data-full-review="<?php echo esc_attr($full_review); ?>">Show more</span>
+                                            <?php else : ?>
+                                                <?php echo esc_html($full_review); ?>
+                                            <?php endif; ?>
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="lefdk-rc-r-info-cont">
-                                    <div class="lefdk-rc-date"><span class="lefdk-rc-rating"><?php echo lef_render_review_stars($rev['rating']); ?></span> <?php echo " - " . lef_format_review_date($rev['created_at']); ?> </div>
-                                    <p class="lefdk-rc-text">
-                                        <?php
-                                        $full_review = $rev['review'];
-                                        if (mb_strlen($full_review) > $lef_review_char_limit) :
-                                            echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
-                                        ?>
-                                            <span class="lef-spv-see-more"
-                                                data-avatar="<?php echo esc_url($rev['avatar']); ?>"
-                                                data-name="<?php echo esc_attr($rev['name']); ?>"
-                                                data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
-                                                data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
-                                                data-full-review="<?php echo esc_attr($full_review); ?>">Show more</span>
-                                        <?php else : ?>
-                                            <?php echo esc_html($full_review); ?>
-                                        <?php endif; ?>
-                                    </p>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
 
-                <?php if ($reviews_extra) : ?>
-                    <div class="lefdk-show-amenity-btn" id="lef-spv-reviews-more">Show all <?php echo $review_count; ?> reviews</div>
-                <?php endif; ?>
+                    <?php if ($reviews_extra) : ?>
+                        <div class="lefdk-show-amenity-btn" id="lef-spv-reviews-more">Show all <?php echo $review_count; ?> reviews</div>
+                    <?php endif; ?>
 
-                <?php if ($can_review && is_user_logged_in()) : ?>
-                    <div class="lefdk-show-amenity-btn" id="lef-spv-write-review-btn">
-                        ✍️ <?php echo $has_review ? 'Edit your review' : 'Write a review'; ?>
-                    </div>
-                <?php endif; ?>
+                    <?php if ($can_review && is_user_logged_in()) : ?>
+                        <div class="lefdk-show-amenity-btn" id="lef-spv-write-review-btn">
+                            ✍️ <?php echo $has_review ? 'Edit your review' : 'Write a review'; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- ── Similar Properties ── -->
+            <div class="lefdk-similar-results">
+                <h1 class="lefdk-sm-heading">More stays nearby</h1>
+                <div class="lefdk-sm-r-cards" id="lef-spv-similar-dk"></div>
             </div>
-        <?php endif; ?>
-
-        <!-- ── Similar Properties ── -->
-        <div class="lefdk-similar-results">
-            <h1 class="lefdk-sm-heading">More stays nearby</h1>
-            <div class="lefdk-sm-r-cards" id="lef-spv-similar-dk"></div>
         </div>
-    </div>
-    <?php endif; // End Desktop View ?>
+    <?php endif; // End Desktop View 
+    ?>
 
 
     <?php if ($device_view === 'mobile') : ?>
@@ -526,194 +528,198 @@ $lef_review_char_limit = 250;
          ============================== -->
         <div class="lef-mb-main-cont" id="lef-spv-mobile">
 
-        <!-- ── Header ── -->
-        <div class="lefmb-header-cont">
-            <span class="lefmb-bck-btn" id="lef-spv-back-btn"><?php echo $back_arrow_svg; ?></span>
-            <div class="lefmb-extra-btn-cont">
-                <span class="lefmb-e-btn" id="lef-spv-share-btn-mb"><?php echo $share_svg; ?></span>
-                <span class="lefmb-e-btn" id="lef-spv-wishlist-btn-mb">
-                    <span class="lef-spv-heart-icon"><?php echo $is_wishlisted ? $heart_svg_filled : $heart_svg_empty; ?></span>
-                </span>
-            </div>
-        </div>
-
-        <!-- ── Image Slider ── -->
-        <div class="lefmb-slider-wrapper">
-            <div class="lefmb-img-cont" id="lef-spv-mb-slider">
-                <?php foreach ($images as $img_url) : ?>
-                    <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo $title; ?>">
-                <?php endforeach; ?>
-            </div>
-
-            <div class="lefmb-slider-nav">
-                <button class="lefmb-s-nav-btn prev" id="lef-spv-slider-prev"><?php echo $slider_prev_svg; ?></button>
-                <button class="lefmb-s-nav-btn next" id="lef-spv-slider-next"><?php echo $slider_next_svg; ?></button>
-            </div>
-            <span class="lefmb-img-count" id="lef-spv-img-counter">1/<?php echo count($images); ?></span>
-        </div>
-
-
-        <!-- ── Property Details ── -->
-        <div class="lefmb-prop-details-cont">
-
-            <div class="lefmb-prop-heading-cont">
-                <h1 class="lefmb-prop-d-heading"><?php echo $title; ?></h1>
-                <div class="lefmb-prop-title-cont">
-                    <p class="lefmb-prop-title">Entire rental unit in <?php echo esc_html($location_name); ?></p>
-                    <ol class="lefmb-list-order">
-                        <li class="lefmb-list"><?php echo $guests; ?> guests</li>
-                        <li class="lefmb-list"><span class="lefmb-dot"> · </span><?php echo $bedrooms; ?> bedroom</li>
-                        <li class="lefmb-list"><span class="lefmb-dot"> · </span><?php echo $beds; ?> bed</li>
-                        <li class="lefmb-list"><span class="lefmb-dot"> · </span><?php echo $bathrooms; ?> bathroom</li>
-                    </ol>
-                    <div class="lefmb-review">
-                        <?php if ($review_count > 0) : ?>
-                            <div class="lefmb-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
-                            <div class="lefmb-r-total-revi"><span class="lefmb-dot"> · </span><?php echo $review_count; ?> reviews</div>
-                        <?php else : ?>
-                            <div class="lefmb-r-number">No reviews</div>
-                        <?php endif; ?>
-                    </div>
+            <!-- ── Header ── -->
+            <div class="lefmb-header-cont">
+                <span class="lefmb-bck-btn" id="lef-spv-back-btn"><?php echo $back_arrow_svg; ?></span>
+                <div class="lefmb-extra-btn-cont">
+                    <span class="lefmb-e-btn" id="lef-spv-share-btn-mb"><?php echo $share_svg; ?></span>
+                    <span class="lefmb-e-btn" id="lef-spv-wishlist-btn-mb">
+                        <span class="lef-spv-heart-icon"><?php echo $is_wishlisted ? $heart_svg_filled : $heart_svg_empty; ?></span>
+                    </span>
                 </div>
             </div>
 
-            <!-- Host -->
-            <div class="lefmb-host-details">
-                <div class="lefmb-hd-photo">
-                    <img src="<?php echo esc_url($host_pic); ?>" alt="<?php echo esc_attr($host_name); ?>" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
-                </div>
-                <div class="lefmb-hd-info">
-                    <span class="lefmb-hd-i-name">Hosted by <?php echo esc_html($host_name); ?></span>
-                    <span class="lefmb-hd-i-tag">Verified Host</span>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <div class="lefmb-description">
-                <p><?php echo nl2br(esc_html($desc_truncated)); ?></p>
-                <?php if ($show_desc_more) : ?>
-                    <div class="lefmb-desc-btn" id="lef-spv-desc-more-mb">Show more</div>
-                <?php endif; ?>
-            </div>
-
-            <!-- Amenities -->
-            <div class="lefmb-amenity-cont">
-                <h1 class="lefmb-am-heading">What this place offers</h1>
-                <ol class="lefmb-am-lists">
-                    <?php foreach ($amenities_visible as $am) : ?>
-                        <list class="lefmb-am-li-list">
-                            <span class="lefmb-am-li-svg">
-                                <?php if ($am['svg_path']) : ?>
-                                    <img src="<?php echo esc_url($am['svg_path']); ?>" alt="" style="display:block; height:24px; width:24px;">
-                                <?php endif; ?>
-                            </span>
-                            <span class="lefmb-am-li-title"><?php echo esc_html($am['name']); ?></span>
-                        </list>
+            <!-- ── Image Slider ── -->
+            <div class="lefmb-slider-wrapper">
+                <div class="lefmb-img-cont" id="lef-spv-mb-slider">
+                    <?php foreach ($images as $img_url) : ?>
+                        <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo $title; ?>">
                     <?php endforeach; ?>
-                </ol>
-                <?php if ($amenities_extra) : ?>
-                    <div class="lefmb-show-amenity-btn" id="lef-spv-amenity-more-mb">Show all <?php echo count($amenities_list); ?> amenities</div>
-                <?php endif; ?>
-            </div>
-
-            <!-- Calendar (shared classes with desktop) -->
-            <div class="lefdk-calender">
-                <h1 class="lefdk-cal-heading">Select check-in date</h1>
-                <div class="lefdk-cal-wrapper">
-                    <div class="lefdk-cal-month-container">
-                        <div class="lefdk-cal-header">
-                            <button class="lefdk-cal-nav-btn" id="lef-spv-prevMonth-mb">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                                </svg>
-                            </button>
-                            <span class="lefdk-cal-month" id="lef-spv-currentMonth-mb"></span>
-                            <button class="lefdk-cal-nav-btn" id="lef-spv-nextMonth-mb">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="lefdk-cal-grid" id="lef-spv-calendarGrid-mb"></div>
-                    </div>
-                    <span class="lefdk-cal-clear-btn" id="lef-spv-clearDates-mb">clear dates</span>
                 </div>
+
+                <div class="lefmb-slider-nav">
+                    <button class="lefmb-s-nav-btn prev" id="lef-spv-slider-prev"><?php echo $slider_prev_svg; ?></button>
+                    <button class="lefmb-s-nav-btn next" id="lef-spv-slider-next"><?php echo $slider_next_svg; ?></button>
+                </div>
+                <span class="lefmb-img-count" id="lef-spv-img-counter">1/<?php echo count($images); ?></span>
             </div>
 
-            <?php if ($review_count > 0 || (is_user_logged_in() && $can_review)) : ?>
-                <!-- Reviews -->
-                <div class="lefmb-all-review">
-                    <div class="lefmb-ar-review">
-                        <?php if ($review_count > 0) : ?>
-                            <div class="lefmb-ar-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
-                            <div class="lefmb-ar-r-total-revi"><span class="lefmb-dot"> · </span><?php echo $review_count; ?> reviews</div>
-                        <?php else : ?>
-                            <div class="lefmb-ar-r-number">No Reviews Yet</div>
-                        <?php endif; ?>
-                    </div>
 
-                    <?php if ($review_count > 0) : ?>
-                        <div class="lefmb-review-cards">
-                            <?php foreach ($reviews_visible as $rev) : ?>
-                                <div class="lefmb-rc-card">
-                                    <div class="lefmb-rc-header">
-                                        <img src="<?php echo esc_url($rev['avatar']); ?>" alt="Avatar" class="lefdk-rc-avatar" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
-                                        <div class="lefmb-rc-info">
-                                            <span class="lefmb-rc-name"><?php echo esc_html($rev['name']); ?></span>
-                                            <div class="lefmb-rc-date"><?php echo lef_format_review_date($rev['created_at']); ?> <span class="lefmb-rc-rating"><?php echo lef_render_review_stars($rev['rating']); ?></span></div>
+            <!-- ── Property Details ── -->
+            <div class="lefmb-prop-details-cont">
+
+                <div class="lefmb-prop-heading-cont">
+                    <h1 class="lefmb-prop-d-heading"><?php echo $title; ?></h1>
+                    <div class="lefmb-prop-title-cont">
+                        <p class="lefmb-prop-title">Entire rental unit in <?php echo esc_html($location_name); ?></p>
+                        <ol class="lefmb-list-order">
+                            <li class="lefmb-list"><?php echo $guests; ?> guests</li>
+                            <li class="lefmb-list"><span class="lefmb-dot"> · </span><?php echo $bedrooms; ?> bedroom</li>
+                            <li class="lefmb-list"><span class="lefmb-dot"> · </span><?php echo $beds; ?> bed</li>
+                            <li class="lefmb-list"><span class="lefmb-dot"> · </span><?php echo $bathrooms; ?> bathroom</li>
+                        </ol>
+                        <div class="lefmb-review">
+                            <?php if ($review_count > 0) : ?>
+                                <div class="lefmb-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
+                                <div class="lefmb-r-total-revi"><span class="lefmb-dot"> · </span><?php echo $review_count; ?> reviews</div>
+                            <?php else : ?>
+                                <div class="lefmb-r-number">No reviews</div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Host -->
+                <div class="lefmb-host-details">
+                    <div class="lefmb-hd-photo">
+                        <img src="<?php echo esc_url($host_pic); ?>" alt="<?php echo esc_attr($host_name); ?>" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
+                    </div>
+                    <div class="lefmb-hd-info">
+                        <span class="lefmb-hd-i-name">Hosted by <?php echo esc_html($host_name); ?></span>
+                        <span class="lefmb-hd-i-tag">Verified Host</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="lefmb-description">
+                    <p><?php echo nl2br(esc_html($desc_truncated)); ?></p>
+                    <?php if ($show_desc_more) : ?>
+                        <div class="lefmb-desc-btn" id="lef-spv-desc-more-mb">Show more</div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Amenities -->
+                <div class="lefmb-amenity-cont">
+                    <h1 class="lefmb-am-heading">What this place offers</h1>
+                    <ol class="lefmb-am-lists">
+                        <?php foreach ($amenities_visible as $am) : ?>
+                            <list class="lefmb-am-li-list">
+                                <span class="lefmb-am-li-svg">
+                                    <?php if ($am['svg_path']) : ?>
+                                        <img src="<?php echo esc_url($am['svg_path']); ?>">
+                                    <?php endif; ?>
+                                </span>
+                                <span class="lefmb-am-li-title"><?php echo esc_html($am['name']); ?></span>
+                            </list>
+                        <?php endforeach; ?>
+                    </ol>
+                    <?php if ($amenities_extra) : ?>
+                        <div class="lefmb-show-amenity-btn" id="lef-spv-amenity-more-mb">Show all <?php echo count($amenities_list); ?> amenities</div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Calendar (shared classes with desktop) -->
+                <div class="lefdk-calender">
+                    <h1 class="lefdk-cal-heading">Select check-in date</h1>
+                    <div class="lefdk-cal-wrapper">
+                        <div class="lefdk-cal-month-container">
+                            <div class="lefdk-cal-header">
+                                <button class="lefdk-cal-nav-btn" id="lef-spv-prevMonth-mb">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                                    </svg>
+                                </button>
+                                <span class="lefdk-cal-month" id="lef-spv-currentMonth-mb"></span>
+                                <button class="lefdk-cal-nav-btn" id="lef-spv-nextMonth-mb">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="lefdk-cal-grid" id="lef-spv-calendarGrid-mb"></div>
+                        </div>
+                        <span class="lefdk-cal-clear-btn" id="lef-spv-clearDates-mb">clear dates</span>
+                    </div>
+                </div>
+
+                <?php if ($review_count > 0 || (is_user_logged_in() && $can_review)) : ?>
+                    <!-- Reviews -->
+                    <div class="lefmb-all-review">
+                        <div class="lefmb-ar-review">
+                            <?php if ($review_count > 0) : ?>
+                                <div class="lefmb-ar-r-number"><?php echo $star_svg_sm; ?><?php echo $avg_rating; ?></div>
+                                <div class="lefmb-ar-r-total-revi"><span class="lefmb-dot"> · </span><?php echo $review_count; ?> reviews</div>
+                            <?php else : ?>
+                                <div class="lefmb-ar-r-number">No Reviews Yet</div>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if ($review_count > 0) : ?>
+                            <div class="lefmb-review-cards">
+                                <?php foreach ($reviews_visible as $rev) : ?>
+                                    <div class="lefmb-rc-card">
+                                        <div class="lefmb-rc-header">
+                                            <img src="<?php echo esc_url($rev['avatar']); ?>" alt="Avatar" class="lefdk-rc-avatar" onerror="this.src='<?php echo esc_url($placeholder_pic); ?>';">
+                                            <div class="lefmb-rc-info">
+                                                <span class="lefmb-rc-name"><?php echo esc_html($rev['name']); ?></span>
+                                                <span class="lefmb-rc-user-tag">Verified User</span>
+                                            </div>
+                                        </div>
+                                        <div class="lefmb-rc-r-info-cont">
+                                            <div class="lefmb-rc-date"><span class="lefmb-rc-rating"><?php echo lef_render_review_stars($rev['rating']) . "-"; ?></span><?php echo lef_format_review_date($rev['created_at']); ?> </div>
+                                            <p class="lefmb-rc-text">
+                                                <?php
+                                                $full_review = $rev['review'];
+                                                if (mb_strlen($full_review) > $lef_review_char_limit) :
+                                                    echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
+                                                ?>
+                                                    <span class="lef-spv-see-more"
+                                                        data-avatar="<?php echo esc_url($rev['avatar']); ?>"
+                                                        data-name="<?php echo esc_attr($rev['name']); ?>"
+                                                        data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
+                                                        data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
+                                                        data-full-review="<?php echo esc_attr($full_review); ?>">Show more</span>
+                                                <?php else : ?>
+                                                    <?php echo esc_html($full_review); ?>
+                                                <?php endif; ?>
+                                            </p>
                                         </div>
                                     </div>
-                                    <p class="lefmb-rc-text">
-                                        <?php
-                                        $full_review = $rev['review'];
-                                        if (mb_strlen($full_review) > $lef_review_char_limit) :
-                                            echo esc_html(mb_substr($full_review, 0, $lef_review_char_limit)) . '...';
-                                        ?>
-                                            <span class="lef-spv-see-more"
-                                                data-avatar="<?php echo esc_url($rev['avatar']); ?>"
-                                                data-name="<?php echo esc_attr($rev['name']); ?>"
-                                                data-date="<?php echo esc_attr(lef_format_review_date($rev['created_at'])); ?>"
-                                                data-rating='<?php echo lef_render_review_stars($rev['rating']); ?>'
-                                                data-full-review="<?php echo esc_attr($full_review); ?>">Show more ></span>
-                                        <?php else : ?>
-                                            <?php echo esc_html($full_review); ?>
-                                        <?php endif; ?>
-                                    </p>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if ($reviews_extra) : ?>
-                        <div class="lefmb-show-amenity-btn" id="lef-spv-reviews-more-mb">Show all <?php echo $review_count; ?> reviews</div>
-                    <?php endif; ?>
+                        <?php if ($reviews_extra) : ?>
+                            <div class="lefmb-show-amenity-btn" id="lef-spv-reviews-more-mb">Show all <?php echo $review_count; ?> reviews</div>
+                        <?php endif; ?>
 
-                    <?php if ($can_review && is_user_logged_in()) : ?>
-                        <div class="lefmb-show-amenity-btn" id="lef-spv-write-review-btn-mb">
-                            ✍️ <?php echo $has_review ? 'Edit your review' : 'Write a review'; ?>
-                        </div>
-                    <?php endif; ?>
+                        <?php if ($can_review && is_user_logged_in()) : ?>
+                            <div class="lefmb-show-amenity-btn" id="lef-spv-write-review-btn-mb">
+                                ✍️ <?php echo $has_review ? 'Edit your review' : 'Write a review'; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Similar Properties -->
+                <div class="lefmb-similar-results">
+                    <h1 class="lefmb-sm-heading">More stays nearby</h1>
+                    <div class="lefmb-sm-r-cards" id="lef-spv-similar-mb"></div>
                 </div>
-            <?php endif; ?>
 
-            <!-- Similar Properties -->
-            <div class="lefmb-similar-results">
-                <h1 class="lefmb-sm-heading">More stays nearby</h1>
-                <div class="lefmb-sm-r-cards" id="lef-spv-similar-mb"></div>
-            </div>
-
-            <!-- Sticky Bottom Bar -->
-            <div class="lefmb-nav" id="lef-spv-mb-nav">
-                <div class="lefmb-reserv-right-cont">
-                    <span class="lefmb-night-price" id="lef-spv-mb-price">Add dates for prices</span>
-                    <span class="lefmb-night-info" id="lef-spv-mb-price-info"></span>
+                <!-- Sticky Bottom Bar -->
+                <div class="lefmb-nav" id="lef-spv-mb-nav">
+                    <div class="lefmb-reserv-right-cont">
+                        <span class="lefmb-night-price" id="lef-spv-mb-price">Add dates for prices </span>
+                        <span class="lefmb-night-info" id="lef-spv-mb-price-info"></span>
+                    </div>
+                    <button class="lefmb-reserv-btn" id="lef-spv-mb-reserve-btn">Reserve</button>
                 </div>
-                <button class="lefmb-reserv-btn" id="lef-spv-mb-reserve-btn">Reserve</button>
-            </div>
 
+            </div>
         </div>
-    </div>
-    <?php endif; // End Mobile View ?>
+    <?php endif; // End Mobile View 
+    ?>
 
 
     <!-- ==============================
@@ -767,7 +773,7 @@ $lef_review_char_limit = 250;
                         <list class="lefdk-am-li-list">
                             <span class="lefdk-am-li-svg">
                                 <?php if ($am['svg_path']) : ?>
-                                    <img src="<?php echo esc_url($am['svg_path']); ?>" alt="" style="display:block; height:24px; width:24px;">
+                                    <img src="<?php echo esc_url($am['svg_path']); ?>">
                                 <?php endif; ?>
                             </span>
                             <span class="lefdk-am-li-title"><?php echo esc_html($am['name']); ?></span>
@@ -868,136 +874,140 @@ $lef_review_char_limit = 250;
 
     <!-- Mobile Reservation Full-screen Modal -->
     <div class="lef-spv-modal lef-spv-fullscreen" id="lef-spv-mb-reserve-modal" style="display:none;">
-        <div class="lef-spv-modal-header">
-            <span class="lef-spv-modal-close" data-close="lef-spv-mb-reserve-modal">✕</span>
-            <h2>Reserve</h2>
-        </div>
-        <div class="lef-spv-modal-body">
-            <div class="lef-spv-mbr-dates">
-                <div class="lefdk-lf-dates">
-                    <div class="lefdk-lf-date-row">
-                        <div class="lefdk-lf-date-field" id="lef-spv-mb-checkin-field">
-                            <label>Check-in</label>
-                            <span id="lef-spv-mb-checkin-label">Add date</span>
+        <div class="lef-spv-modal-inner" id="lefmb-spv-model-inner">
+            <div class="lef-spv-modal-header" id="lefmb-spv-model-header">
+                <span class="lef-spv-modal-close" data-close="lef-spv-mb-reserve-modal">✕</span>
+                <h2>Reserve</h2>
+            </div>
+            <div class="lef-spv-modal-body" id="lefmb-spv-model-body">
+                <div class="lef-spv-mbr-dates">
+                    <div class="lefdk-lf-dates">
+                        <div class="lefdk-lf-date-row">
+                            <div class="lefdk-lf-date-field" id="lef-spv-mb-checkin-field">
+                                <label>Check-in</label>
+                                <span id="lef-spv-mb-checkin-label">Add date</span>
+                            </div>
+                            <div class="lefdk-lf-date-field" id="lef-spv-mb-checkout-field">
+                                <label>Check-out</label>
+                                <span id="lef-spv-mb-checkout-label">Add date</span>
+                            </div>
                         </div>
-                        <div class="lefdk-lf-date-field" id="lef-spv-mb-checkout-field">
-                            <label>Check-out</label>
-                            <span id="lef-spv-mb-checkout-label">Add date</span>
+                    </div>
+                </div>
+
+                <!-- Inline calendar for mobile reservation -->
+                <div class="lefdk-calender" style="padding-top:0;">
+                    <div class="lefdk-cal-wrapper">
+                        <div class="lefdk-cal-month-container">
+                            <div class="lefdk-cal-header">
+                                <button class="lefdk-cal-nav-btn" id="lef-spv-prevMonth-mbr">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                                    </svg>
+                                </button>
+                                <span class="lefdk-cal-month" id="lef-spv-currentMonth-mbr"></span>
+                                <button class="lefdk-cal-nav-btn" id="lef-spv-nextMonth-mbr">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="lefdk-cal-grid" id="lef-spv-calendarGrid-mbr"></div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Inline calendar for mobile reservation -->
-            <div class="lefdk-calender" style="padding-top:0;">
-                <div class="lefdk-cal-wrapper">
-                    <div class="lefdk-cal-month-container">
-                        <div class="lefdk-cal-header">
-                            <button class="lefdk-cal-nav-btn" id="lef-spv-prevMonth-mbr">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                                </svg>
-                            </button>
-                            <span class="lefdk-cal-month" id="lef-spv-currentMonth-mbr"></span>
-                            <button class="lefdk-cal-nav-btn" id="lef-spv-nextMonth-mbr">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                                </svg>
-                            </button>
+                <!-- Guest selector -->
+                <div class="lef-spv-guests-cont">
+                    <div class="lefdk-lf-guests" id="lef-spv-mb-guests-trigger">
+                        <label>Guests</label>
+                        <span id="lef-spv-mb-guests-label">1 guest</span>
+                    </div>
+                    <div class="lef-spv-guests-dropdown" id="lef-spv-mb-guests-dropdown" style="display:none;">
+                        <div class="lef-spv-gd-row">
+                            <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Adults</span><span class="lef-spv-gd-sub">Age 13+</span></div>
+                            <div class="lef-spv-gd-controls">
+                                <button class="lef-spv-gd-btn" data-action="minus" data-type="adults" data-ctx="mb">−</button>
+                                <span class="lef-spv-gd-count" id="lef-spv-mb-adults-count">1</span>
+                                <button class="lef-spv-gd-btn" data-action="plus" data-type="adults" data-ctx="mb">+</button>
+                            </div>
                         </div>
-                        <div class="lefdk-cal-grid" id="lef-spv-calendarGrid-mbr"></div>
+                        <div class="lef-spv-gd-row">
+                            <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Children</span><span class="lef-spv-gd-sub">Age 2–12</span></div>
+                            <div class="lef-spv-gd-controls">
+                                <button class="lef-spv-gd-btn" data-action="minus" data-type="children" data-ctx="mb">−</button>
+                                <span class="lef-spv-gd-count" id="lef-spv-mb-children-count">0</span>
+                                <button class="lef-spv-gd-btn" data-action="plus" data-type="children" data-ctx="mb">+</button>
+                            </div>
+                        </div>
+                        <div class="lef-spv-gd-row">
+                            <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Infants</span><span class="lef-spv-gd-sub">Under 2</span></div>
+                            <div class="lef-spv-gd-controls">
+                                <button class="lef-spv-gd-btn" data-action="minus" data-type="infants" data-ctx="mb">−</button>
+                                <span class="lef-spv-gd-count" id="lef-spv-mb-infants-count">0</span>
+                                <button class="lef-spv-gd-btn" data-action="plus" data-type="infants" data-ctx="mb">+</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Guest selector -->
-            <div class="lefdk-lf-guests" id="lef-spv-mb-guests-trigger">
-                <label>Guests</label>
-                <span id="lef-spv-mb-guests-label">1 guest</span>
+                <button class="lefdk-lf-btn" id="lef-spv-mb-confirm-reserve">Reserve</button>
+                <p class="lefdk-lf-info">You won't be charged yet</p>
             </div>
-            <div class="lef-spv-guests-dropdown" id="lef-spv-mb-guests-dropdown" style="display:none;">
-                <div class="lef-spv-gd-row">
-                    <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Adults</span><span class="lef-spv-gd-sub">Age 13+</span></div>
-                    <div class="lef-spv-gd-controls">
-                        <button class="lef-spv-gd-btn" data-action="minus" data-type="adults" data-ctx="mb">−</button>
-                        <span class="lef-spv-gd-count" id="lef-spv-mb-adults-count">1</span>
-                        <button class="lef-spv-gd-btn" data-action="plus" data-type="adults" data-ctx="mb">+</button>
-                    </div>
-                </div>
-                <div class="lef-spv-gd-row">
-                    <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Children</span><span class="lef-spv-gd-sub">Age 2–12</span></div>
-                    <div class="lef-spv-gd-controls">
-                        <button class="lef-spv-gd-btn" data-action="minus" data-type="children" data-ctx="mb">−</button>
-                        <span class="lef-spv-gd-count" id="lef-spv-mb-children-count">0</span>
-                        <button class="lef-spv-gd-btn" data-action="plus" data-type="children" data-ctx="mb">+</button>
-                    </div>
-                </div>
-                <div class="lef-spv-gd-row">
-                    <div class="lef-spv-gd-info"><span class="lef-spv-gd-title">Infants</span><span class="lef-spv-gd-sub">Under 2</span></div>
-                    <div class="lef-spv-gd-controls">
-                        <button class="lef-spv-gd-btn" data-action="minus" data-type="infants" data-ctx="mb">−</button>
-                        <span class="lef-spv-gd-count" id="lef-spv-mb-infants-count">0</span>
-                        <button class="lef-spv-gd-btn" data-action="plus" data-type="infants" data-ctx="mb">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="lefdk-lf-btn" id="lef-spv-mb-confirm-reserve">Reserve</button>
-            <p class="lefdk-lf-info">You won't be charged yet</p>
         </div>
     </div>
 
-<!-- ─────────────────────────────────────────────────────────────
+    <!-- ─────────────────────────────────────────────────────────────
          CALENDAR MODAL (DESKTOP)
          ───────────────────────────────────────────────────────────── -->
-<div id="lef-spv-calendar-modal" class="lef-spv-modal">
-    <div class="lef-spv-modal-content lef-spv-cal-modal-box">
+    <div id="lef-spv-calendar-modal" class="lef-spv-modal">
+        <div class="lef-spv-modal-content lef-spv-cal-modal-box">
 
 
-        <div class="lefdk-cal-modal-header">
-            <div class="lefdk-cmh-head-info">
-                <h2 id="lef-spv-cal-modal-title">Select dates</h2>
-                <p id="lef-spv-cal-modal-subtitle">Add your travel dates for exact pricing</p>
-            </div>
-            <button class="lef-spv-modal-close" data-close="lef-spv-calendar-modal">✕</button>
-        </div>
-
-        <div class="lefdk-cal-dual-container">
-            <div class="lefsk-cal-months-two">
-                <!-- Month 1 -->
-                <div class="lefdk-cal-month-box">
-                    <div class="lefdk-cal-header">
-                        <button class="lefdk-cal-nav-btn" id="lef-spv-cal-modal-prev">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                            </svg>
-                        </button>
-                        <span class="lefdk-cal-month" id="lef-spv-cal-modal-month1"></span>
-                        <span></span> <!-- Spacer for alignment -->
-                    </div>
-                    <div class="lefdk-cal-grid" id="lef-spv-cal-modal-grid1"></div>
+            <div class="lefdk-cal-modal-header">
+                <div class="lefdk-cmh-head-info">
+                    <h2 id="lef-spv-cal-modal-title">Select dates</h2>
+                    <p id="lef-spv-cal-modal-subtitle">Add your travel dates for exact pricing</p>
                 </div>
-
-                <!-- Month 2 -->
-                <div class="lefdk-cal-month-box">
-                    <div class="lefdk-cal-header">
-                        <span></span> <!-- Spacer -->
-                        <span class="lefdk-cal-month" id="lef-spv-cal-modal-month2"></span>
-                        <button class="lefdk-cal-nav-btn" id="lef-spv-cal-modal-next">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="lefdk-cal-grid" id="lef-spv-cal-modal-grid2"></div>
-                </div>
+                <button class="lef-spv-modal-close" data-close="lef-spv-calendar-modal">✕</button>
             </div>
-            <div class="lefdk-cal-modal-footer">
-                <button class="lefdk-cal-clear-btn" id="lef-spv-cal-modal-clear">Clear dates</button>
-                <button class="lefdk-cal-close-btn" data-close="lef-spv-calendar-modal">Close</button>
+
+            <div class="lefdk-cal-dual-container">
+                <div class="lefsk-cal-months-two">
+                    <!-- Month 1 -->
+                    <div class="lefdk-cal-month-box">
+                        <div class="lefdk-cal-header">
+                            <button class="lefdk-cal-nav-btn" id="lef-spv-cal-modal-prev">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                                </svg>
+                            </button>
+                            <span class="lefdk-cal-month" id="lef-spv-cal-modal-month1"></span>
+                            <span></span> <!-- Spacer for alignment -->
+                        </div>
+                        <div class="lefdk-cal-grid" id="lef-spv-cal-modal-grid1"></div>
+                    </div>
+
+                    <!-- Month 2 -->
+                    <div class="lefdk-cal-month-box">
+                        <div class="lefdk-cal-header">
+                            <span></span> <!-- Spacer -->
+                            <span class="lefdk-cal-month" id="lef-spv-cal-modal-month2"></span>
+                            <button class="lefdk-cal-nav-btn" id="lef-spv-cal-modal-next">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="lefdk-cal-grid" id="lef-spv-cal-modal-grid2"></div>
+                    </div>
+                </div>
+                <div class="lefdk-cal-modal-footer">
+                    <button class="lefdk-cal-clear-btn" id="lef-spv-cal-modal-clear">Clear dates</button>
+                    <button class="lefdk-cal-close-btn" data-close="lef-spv-calendar-modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-</div> <!-- .lef-spv-dk-active or .lef-spv-mb-active -->
+</div> <!-- .leb-plugin-wrapper / #lef-spv-root -->
