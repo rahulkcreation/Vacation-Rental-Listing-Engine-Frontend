@@ -5,7 +5,7 @@
  * Supports both .lef-view-grid and .lef-view-carousel.
  */
 
-/* ── Grid Layout (6 Columns) ── */
+/* ── Grid Layout (5 Columns) ── */
 .lef-grid-wrapper {
     display: grid;
     gap: 20px 12px;
@@ -89,7 +89,6 @@
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid var(--leb-border-color);
     display: flex;
     flex-direction: column;
@@ -104,7 +103,9 @@
     overflow: hidden;
 }
 
-.lef-card-image {
+/* Shared image properties */
+.lef-card-image,
+.lef-collage-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -118,9 +119,9 @@
 }
 
 .lef-is-placeholder {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .lef-favorite-btn {
@@ -152,6 +153,24 @@
     stroke: var(--leb-primary-color);
 }
 
+.lef-favorite-btn.is-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    animation: lefFavPulse 1s infinite alternate;
+}
+
+@keyframes lefFavPulse {
+    from {
+        opacity: 0.4;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+}
+
 .lef-card-body {
     padding: 12px 10px;
     flex-grow: 1;
@@ -161,21 +180,23 @@
 }
 
 .lef-property-title {
-    font-size: 1.45rem;
-    font-weight: 550;
+    font-size: 1.4rem;
+    font-weight: 500;
     color: var(--leb-secondary-color);
+    line-height: 1.2;
 }
 
 .lef-property-summary {
-    margin: 0px;
-    font-size: 13px;
+    font-size: 1.35rem;
     color: var(--leb-text-muted);
+    line-height: 1.2;
 }
 
 .lef-property-price {
     margin-top: auto;
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 500;
+    margin-left: 0.25rem;
 }
 
 .lef-price-period {
@@ -222,12 +243,6 @@
     box-shadow: var(--leb-card-shadow);
     border: 2px solid var(--leb-white);
     transition: transform 0.3s ease;
-}
-
-.lef-collage-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 .lef-collage-1 {
@@ -280,7 +295,7 @@
     font-size: 14px;
 }
 
-.lef-see-all-icon{
+.lef-see-all-icon {
     display: flex;
 }
 
@@ -322,7 +337,6 @@
         width: 30px;
         height: 30px;
         font-size: 12px;
-
     }
 
     .lef-carousel-nav.lef-nav-next {
@@ -345,10 +359,16 @@
     }
 
     .lef-property-price {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
     }
 
-    .lef-see-all-text{
-         font-size: 1.3rem;
+    .lef-see-all-text {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 340px) {
+    .lef-property-title {
+        font-size: 1.25rem;
     }
 }
