@@ -69,7 +69,7 @@ if (!empty($mobile_number)) {
         <div class="lef-edit-prof-photo-preview <?php echo $profile_pic ? 'lef-edit-prof-photo-has-image' : ''; ?>" id="lef-edit-prof-avatar-preview">
             <span><?php echo esc_html($initials); ?></span>
             <?php if ($profile_pic) : ?>
-                <img src="<?php echo esc_url($profile_pic); ?>" alt="Profile preview">
+                <img src="<?php echo esc_url($profile_pic); ?>" alt="Profile preview" onerror="this.onerror=null; this.src='<?php echo esc_url(lef_get_asset_url('global-assets/images/placeholder-avatar.png')); ?>';">
             <?php endif; ?>
         </div>
         <div class="lef-edit-prof-photo-content">
@@ -88,14 +88,13 @@ if (!empty($mobile_number)) {
                 <input type="file" id="lef-edit-prof-pic-input" style="display:none;" accept="image/jpeg,image/webp,image/avif">
             </div>
 
-            <!-- Upload Progress (Hidden by default) -->
-            <div class="lef-edit-prof-upload-progress-wrapper" id="lef-edit-prof-upload-progress-wrapper" style="display:none; margin-top: 10px;">
-                <div class="lef-edit-prof-progress-bar-container" style="height: 6px; background: var(--leb-border-color); border-radius: 10px; overflow: hidden; margin-bottom: 5px;">
-                    <div id="lef-edit-prof-upload-progress-fill" style="width: 0%; height: 100%; background: var(--leb-primary-color); transition: width 0.3s ease;"></div>
+            <div class="lef-edit-prof-upload-progress-wrapper" id="lef-edit-prof-upload-progress-wrapper">
+                <div class="lef-edit-prof-progress-bar-container">
+                    <div id="lef-edit-prof-upload-progress-fill" class="lef-edit-prof-upload-progress-fill"></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span id="lef-edit-prof-upload-status-text" style="font-size: 0.75rem; font-weight: 700; color: var(--leb-text-muted);">Uploading... <span id="lef-edit-prof-upload-percent">0</span>%</span>
-                    <button id="lef-edit-prof-upload-retry" style="display:none; background: none; border: none; color: var(--leb-primary-color); font-size: 0.75rem; font-weight: 800; cursor: pointer;">Retry</button>
+                <div class="lef-edit-prof-upload-status-row">
+                    <span id="lef-edit-prof-upload-status-text" class="lef-edit-prof-upload-status-text">Uploading... <span id="lef-edit-prof-upload-percent">0</span>%</span>
+                    <button id="lef-edit-prof-upload-retry" class="lef-edit-prof-upload-retry">Retry</button>
                 </div>
             </div>
         </div>
@@ -126,16 +125,16 @@ if (!empty($mobile_number)) {
             <!-- Phone Number -->
             <div class="lef-edit-prof-field">
                 <label class="lef-edit-prof-label">Phone Number</label>
-                <div class="lef-edit-prof-phone-input-group" style="display: flex; gap: 10px;">
-                    <div class="lef-edit-prof-country-select-wrapper" style="position: relative; flex: 0 0 100px;">
-                        <button type="button" class="lef-edit-prof-input" id="lef-edit-prof-country-btn" style="text-align: left; padding-right: 30px;">
+                <div class="lef-edit-prof-phone-input-group">
+                    <div class="lef-edit-prof-country-select-wrapper">
+                        <button type="button" class="lef-edit-prof-input" id="lef-edit-prof-country-btn">
                             <span id="lef-edit-prof-selected-flag"><?php echo esc_html($current_flag); ?></span> <span id="lef-edit-prof-selected-code"><?php echo esc_html($current_code); ?></span>
                         </button>
-                        <div class="lef-edit-prof-country-dropdown" id="lef-edit-prof-country-dropdown" style="display:none; position: absolute; top: 100%; left: 0; width: 220px; background: white; border: 1px solid var(--leb-border-color); border-radius: 8px; box-shadow: var(--leb-card-shadow); z-index: 50; max-height: 250px; overflow-y: auto; margin-top: 5px;">
+                        <div class="lef-edit-prof-country-dropdown" id="lef-edit-prof-country-dropdown">
                             <!-- Dropdown items will be populated by JS -->
                         </div>
                     </div>
-                    <input type="tel" name="phone" id="lef-edit-prof-phone" class="lef-edit-prof-input" value="<?php echo esc_attr($phone_display); ?>" placeholder="Enter number" style="flex: 1;">
+                    <input type="tel" name="phone" id="lef-edit-prof-phone" class="lef-edit-prof-input lef-edit-prof-phone-input" value="<?php echo esc_attr($phone_display); ?>" placeholder="Enter number">
                 </div>
                 <div class="lef-edit-prof-field-error" id="lef-edit-prof-phone-error"></div>
             </div>
@@ -143,34 +142,34 @@ if (!empty($mobile_number)) {
             <!-- New Password -->
             <div class="lef-edit-prof-field">
                 <label class="lef-edit-prof-label">New Password (leave blank to keep current)</label>
-                <div style="position: relative;">
+                <div class="lef-edit-prof-pass-wrapper">
                     <input type="password" name="password" id="lef-edit-prof-pass" class="lef-edit-prof-input" autocomplete="new-password">
-                    <button type="button" class="lef-edit-prof-pass-toggle" data-target="lef-edit-prof-pass" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--leb-text-muted); cursor: pointer; padding: 5px;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                    <button type="button" class="lef-edit-prof-pass-toggle" data-target="lef-edit-prof-pass">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                     </button>
                 </div>
                 <!-- Strength Indicator -->
-                <div class="lef-edit-prof-pass-strength" id="lef-edit-prof-pass-strength" style="display:none; margin-top: 10px;">
-                    <div style="height: 4px; background: var(--leb-border-color); border-radius: 4px; overflow: hidden; display: flex; gap: 4px;">
-                        <div class="strength-segment" style="flex: 1; height: 100%;"></div>
-                        <div class="strength-segment" style="flex: 1; height: 100%;"></div>
-                        <div class="strength-segment" style="flex: 1; height: 100%;"></div>
-                        <div class="strength-segment" style="flex: 1; height: 100%;"></div>
+                <div class="lef-edit-prof-pass-strength" id="lef-edit-prof-pass-strength">
+                    <div class="lef-edit-prof-strength-meter">
+                        <div class="strength-segment"></div>
+                        <div class="strength-segment"></div>
+                        <div class="strength-segment"></div>
+                        <div class="strength-segment"></div>
                     </div>
-                    <p id="lef-edit-prof-pass-hint" style="font-size: 0.75rem; font-weight: 700; margin-top: 6px;"></p>
+                    <p id="lef-edit-prof-pass-hint" class="lef-edit-prof-pass-hint"></p>
                 </div>
             </div>
 
             <!-- Confirm Password -->
             <div class="lef-edit-prof-field">
                 <label class="lef-edit-prof-label">Confirm Password</label>
-                <div style="position: relative;">
+                <div class="lef-edit-prof-pass-wrapper">
                     <input type="password" id="lef-edit-prof-pass-confirm" class="lef-edit-prof-input" autocomplete="new-password">
-                    <button type="button" class="lef-edit-prof-pass-toggle" data-target="lef-edit-prof-pass-confirm" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--leb-text-muted); cursor: pointer; padding: 5px;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                    <button type="button" class="lef-edit-prof-pass-toggle" data-target="lef-edit-prof-pass-confirm">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
@@ -210,10 +209,10 @@ if (!empty($mobile_number)) {
         </div>
 
         <form id="lef-edit-prof-otp-form">
-            <div style="margin-bottom: 20px;">
+            <div class="lef-edit-prof-otp-body">
                 <label class="lef-edit-prof-label">One-Time Password</label>
-                <input class="lef-edit-prof-input" type="text" id="lef-edit-prof-otp-input" inputmode="numeric" maxlength="6" pattern="[0-9]*" placeholder="000000" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
-                <div id="lef-edit-prof-otp-timer" style="font-size: 0.82rem; font-weight: 700; color: var(--leb-text-muted); margin-top: 10px;">Expires in: <span id="lef-edit-prof-otp-countdown">60</span>s</div>
+                <input class="lef-edit-prof-input lef-edit-prof-otp-input-field" type="text" id="lef-edit-prof-otp-input" inputmode="numeric" maxlength="6" pattern="[0-9]*" placeholder="000000">
+                <div id="lef-edit-prof-otp-timer" class="lef-edit-prof-otp-timer">Expires in: <span id="lef-edit-prof-otp-countdown">60</span>s</div>
             </div>
 
             <div class="lef-edit-prof-otp-actions">
@@ -224,40 +223,6 @@ if (!empty($mobile_number)) {
         </form>
     </div>
 </div>
-
-<style>
-    .lef-edit-prof-field-error {
-        color: var(--leb-error-color);
-        font-size: 0.78rem;
-        font-weight: 700;
-        margin-top: 6px;
-        display: none;
-    }
-
-    .lef-edit-prof-field-error.is-visible {
-        display: block;
-    }
-
-    /* Country Dropdown Styles */
-    .lef-edit-prof-country-item {
-        padding: 10px 14px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--leb-secondary-color);
-    }
-
-    .lef-edit-prof-country-item:hover {
-        background: var(--leb-bg-light);
-    }
-
-    .lef-edit-prof-country-item span:last-child {
-        margin-left: auto;
-        color: var(--leb-text-muted);
-        font-size: 0.85rem;
-    }
-</style>
+<?php
+// End of template
+?>

@@ -143,6 +143,94 @@
     margin-top: 8px;
 }
 
+/* ── Phone Input Group ── */
+.lef-edit-prof-phone-input-group {
+    display: flex;
+    gap: 12px;
+}
+
+.lef-edit-prof-country-select-wrapper {
+    position: relative;
+    flex: 0 0 110px;
+}
+
+#lef-edit-prof-country-btn {
+    text-align: left;
+    padding-right: 30px;
+}
+
+.lef-edit-prof-country-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 240px;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 8px;
+}
+
+.lef-edit-prof-phone-input {
+    flex: 1;
+}
+
+/* ── Password Field Controls ── */
+.lef-edit-prof-pass-wrapper {
+    position: relative;
+}
+
+.lef-edit-prof-pass-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--leb-text-muted);
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lef-edit-prof-pass-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.lef-edit-prof-pass-strength {
+    display: none;
+    margin-top: 12px;
+}
+
+.lef-edit-prof-strength-meter {
+    height: 6px;
+    background: var(--leb-border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    gap: 4px;
+}
+
+.strength-segment {
+    flex: 1;
+    height: 100%;
+    background: var(--leb-border-color);
+    transition: background 0.3s ease;
+}
+
+.lef-edit-prof-pass-hint {
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
 .lef-edit-prof-actions {
     border-top: 1px solid var(--leb-border-color);
     display: flex;
@@ -233,6 +321,24 @@
     margin-top: 6px;
 }
 
+.lef-edit-prof-otp-body {
+    margin-bottom: 24px;
+}
+
+.lef-edit-prof-otp-input-field {
+    text-align: center;
+    font-size: 1.5rem !important;
+    letter-spacing: 5px;
+    font-weight: 800 !important;
+}
+
+.lef-edit-prof-otp-timer {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--leb-text-muted);
+    margin-top: 12px;
+}
+
 .lef-edit-prof-otp-close {
     background: var(--leb-bg-light);
     border: 1px solid var(--leb-border-color);
@@ -306,4 +412,48 @@
     margin-left: auto;
     color: var(--leb-text-muted);
     font-size: 0.85rem;
+}
+
+/* ── Upload Progress ── */
+.lef-edit-prof-upload-progress-wrapper {
+    display: none;
+    margin-top: 14px;
+}
+
+.lef-edit-prof-progress-bar-container {
+    height: 8px;
+    background: var(--leb-border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.lef-edit-prof-upload-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--leb-primary-color);
+    transition: width 0.3s ease;
+}
+
+.lef-edit-prof-upload-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lef-edit-prof-upload-status-text {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--leb-text-muted);
+}
+
+.lef-edit-prof-upload-retry {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--leb-primary-color);
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    padding: 2px 0;
 }

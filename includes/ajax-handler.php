@@ -969,7 +969,20 @@ function lef_edit_prof_upload_image() {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/media.php';
 
+	// Custom filter to rename file to something unique: profile_user-id_timestamp_filename
+	$user_id = get_current_user_id();
+	$unique_name_filter = function( $file ) use ( $user_id ) {
+		$ext  = pathinfo( $file['name'], PATHINFO_EXTENSION );
+		$name = pathinfo( $file['name'], PATHINFO_FILENAME );
+		// Sanitize name and append unique markers
+		$name = sanitize_title( $name );
+		$file['name'] = "profile_{$user_id}_" . time() . "_{$name}.{$ext}";
+		return $file;
+	};
+
+	add_filter( 'wp_handle_upload_prefilter', $unique_name_filter );
 	$attachment_id = media_handle_upload( 'profile_pic', 0 );
+	remove_filter( 'wp_handle_upload_prefilter', $unique_name_filter );
 
 	if ( is_wp_error( $attachment_id ) ) {
 		wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ) );

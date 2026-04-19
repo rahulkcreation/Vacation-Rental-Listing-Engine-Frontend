@@ -85,6 +85,22 @@ function lef_get_user_profile_pic( $user_id ) {
 		}
 	}
 
+	if ( ! empty( $pic_url ) ) {
+		// If it's a local URL, check if the file exists on the server
+		$upload_dir = wp_upload_dir();
+		$base_url   = $upload_dir['baseurl'];
+		$base_path  = $upload_dir['basedir'];
+
+		if ( strpos( $pic_url, $base_url ) === 0 ) {
+			$relative_path = str_replace( $base_url, '', $pic_url );
+			$full_path     = $base_path . $relative_path;
+			
+			if ( ! file_exists( $full_path ) ) {
+				$pic_url = ''; // Force placeholder fallback
+			}
+		}
+	}
+
 	return empty( $pic_url ) ? esc_url( $placeholder ) : esc_url( $pic_url );
 }
 
