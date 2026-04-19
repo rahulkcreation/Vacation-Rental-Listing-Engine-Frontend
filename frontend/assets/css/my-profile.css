@@ -1,0 +1,349 @@
+/**
+ * My Profile Dashboard Styles.
+ *
+ * Scoped to .lef-myprofile-wrapper to avoid global conflicts.
+ * Uses --leb- prefixed variables from global.css.
+ *
+ * @package ListingEngineFrontend
+ */
+ 
+/* ─────────────────────────────────────────────────────────
+   Layout & Scaffolding
+   ───────────────────────────────────────────────────────── */
+
+.lef-prof-page {
+    margin: 0 auto;
+    max-width: 1440px;
+    min-height: 100vh;
+    padding: 24px 20px 48px;
+    width: 100%;
+}
+
+.lef-prof-shell {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: var(--lef-prof-sidebar-width) minmax(0, 1fr);
+}
+
+@media (max-width: 1024px) {
+    .lef-prof-shell {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ── Topbar (Mobile Only) ── */
+.lef-prof-topbar {
+    align-items: center;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 12px;
+    box-shadow: var(--leb-card-shadow);
+    display: none;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding: 14px;
+}
+
+@media (max-width: 1024px) {
+    .lef-prof-topbar {
+        display: flex;
+    }
+}
+
+.lef-prof-menu-toggle,
+.lef-prof-sidebar-close {
+    align-items: center;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 8px;
+    color: var(--leb-secondary-color);
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 42px;
+    justify-content: center;
+    transition: all 0.2s ease;
+    width: 42px;
+    cursor: pointer;
+}
+
+.lef-prof-menu-toggle:hover,
+.lef-prof-sidebar-close:hover {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+}
+
+.lef-prof-menu-toggle svg,
+.lef-prof-sidebar-close svg {
+    height: 20px;
+    width: 20px;
+}
+
+.lef-prof-topbar-title {
+    color: var(--leb-secondary-color);
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Sidebar
+   ───────────────────────────────────────────────────────── */
+
+.lef-prof-sidebar {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 12px;
+    box-shadow: var(--leb-card-shadow);
+    height: fit-content;
+    position: sticky;
+    top: 24px;
+    z-index: 10;
+}
+
+@media (max-width: 1024px) {
+    .lef-prof-sidebar {
+        border-radius: 0 12px 12px 0;
+        bottom: 0;
+        left: 0;
+        max-width: calc(100vw - 42px);
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        transform: translateX(-105%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 320px;
+        z-index: 40;
+    }
+    
+    .lef-prof-sidebar.lef-prof-sidebar-open {
+        transform: translateX(0);
+    }
+    
+    .lef-prof-sidebar-backdrop {
+        background: var(--leb-overlay-dark);
+        display: none;
+        inset: 0;
+        position: fixed;
+        z-index: 35;
+        backdrop-filter: blur(4px);
+    }
+    
+    .lef-prof-sidebar-backdrop.lef-prof-sidebar-backdrop-open {
+        display: block;
+    }
+}
+
+.lef-prof-sidebar-head {
+    align-items: center;
+    border-bottom: 1px solid var(--leb-border-color);
+    display: flex;
+    gap: 14px;
+    padding: 20px;
+}
+
+.lef-prof-sidebar-user {
+    align-items: center;
+    display: flex;
+    gap: 14px;
+    min-width: 0;
+}
+
+.lef-prof-sidebar-close {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .lef-prof-sidebar-close {
+        display: inline-flex;
+        margin-left: auto;
+    }
+}
+
+.lef-prof-avatar {
+    align-items: center;
+    background: var(--leb-primary-color);
+    border-radius: 10px;
+    color: var(--leb-white);
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 1.1rem;
+    font-weight: 800;
+    height: 48px;
+    justify-content: center;
+    width: 48px;
+}
+
+.lef-prof-sidebar-title {
+    color: var(--leb-secondary-color);
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.lef-myprofile-wrapper .lef-prof-sidebar-text {
+    color: var(--leb-text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* ── Menu ── */
+.lef-prof-menu {
+    display: grid;
+    gap: 8px;
+    padding: 14px;
+}
+
+.lef-prof-menu-btn {
+    align-items: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--leb-secondary-color);
+    display: flex;
+    font-size: 0.95rem;
+    font-weight: 700;
+    gap: 12px;
+    justify-content: flex-start;
+    min-height: 48px;
+    padding: 10px 14px;
+    text-align: left;
+    transition: all 0.2s ease;
+    width: 100%;
+    cursor: pointer;
+}
+
+.lef-prof-menu-btn:hover {
+    background: var(--leb-bg-light);
+    color: var(--leb-primary-color);
+}
+
+.lef-prof-menu-btn.lef-prof-menu-active {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+}
+
+.lef-prof-menu-btn svg {
+    flex: 0 0 auto;
+    height: 20px;
+    width: 20px;
+    opacity: 0.8;
+}
+
+.lef-prof-menu-btn.lef-prof-menu-active svg {
+    opacity: 1;
+}
+
+.lef-prof-logout-trigger {
+    margin-top: 10px;
+    border-top: 1px solid var(--leb-border-color);
+    padding-top: 18px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.lef-prof-logout-trigger:hover {
+    color: var(--leb-error-color);
+    background: var(--leb-error-light-bg);
+}
+
+/* ─────────────────────────────────────────────────────────
+   Content Panel & Bucket
+   ───────────────────────────────────────────────────────── */
+
+.lef-prof-panel {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 12px;
+    box-shadow: var(--leb-card-shadow);
+    min-height: 600px;
+    position: relative;
+    padding: 32px;
+}
+
+@media (max-width: 640px) {
+    .lef-prof-panel {
+        padding: 20px;
+    }
+}
+
+/* ── Panel Header ── */
+.lef-prof-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    gap: 20px;
+}
+
+@media (max-width: 640px) {
+    .lef-prof-panel-head {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.lef-prof-panel-title {
+    color: var(--leb-secondary-color);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.lef-prof-panel-subtitle {
+    color: var(--leb-text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-top: 6px;
+}
+
+.lef-prof-panel-badge {
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 8px 16px;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Loaders & State
+   ───────────────────────────────────────────────────────── */
+
+.lef-prof-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    width: 100%;
+}
+
+.lef-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--leb-primary-light-bg);
+    border-top-color: var(--leb-primary-color);
+    border-radius: 50%;
+    animation: lef-spin 0.8s linear infinite;
+}
+
+@keyframes lef-spin {
+    to { transform: rotate(360deg); }
+}
+
+.lef-prof-panel.is-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Mobile Utilities
+   ───────────────────────────────────────────────────────── */
+
+body.lef-prof-sidebar-lock {
+    overflow: hidden !important;
+}

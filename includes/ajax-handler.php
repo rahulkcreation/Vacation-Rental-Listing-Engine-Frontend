@@ -877,3 +877,58 @@ function lef_reserv_update_status() {
 }
 add_action( 'wp_ajax_lef_reserv_update_status', 'lef_reserv_update_status' );
 
+/* ==================== MY PROFILE: LOAD SCREEN ==================== */
+/**
+ * AJAX handler to load dashboard sub-screens.
+ */
+function lef_myprofile_load_screen() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Unauthorized' ) );
+	}
+
+	$screen = isset( $_POST['screen'] ) ? sanitize_key( $_POST['screen'] ) : 'edit-profile';
+	
+	$allowed_screens = array( 'edit-profile', 'pay-out', 'my-bookings', 'my-listings' );
+	if ( ! in_array( $screen, $allowed_screens ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid screen' ) );
+	}
+
+	$template_path = LEF_PLUGIN_DIR . 'frontend/template/my-profile/' . $screen . '.php';
+
+	if ( file_exists( $template_path ) ) {
+		ob_start();
+		include $template_path;
+		$html = ob_get_clean();
+		wp_send_json_success( array( 'html' => $html ) );
+	} else {
+		wp_send_json_error( array( 'message' => 'Template not found' ) );
+	}
+}
+add_action( 'wp_ajax_lef_myprofile_load_screen', 'lef_myprofile_load_screen' );
+
+/* ==================== MY PROFILE: LOGOUT URL ==================== */
+/**
+ * AJAX handler to fetch the logout URL from wp_admin_management.
+ */
+function lef_myprofile_get_logout_url() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	global $wpdb;
+	
+	$page_id = $wpdb->get_var( $wpdb->prepare(
+		"SELECT page_id FROM wp_admin_management WHERE name = %s",
+		'Logout'
+	) );
+
+	if ( $page_id ) {
+		$logout_url = get_permalink( $page_id );
+		wp_send_json_success( array( 'url' => $logout_url ) );
+	} else {
+		wp_send_json_success( array( 'url' => wp_logout_url( home_url() ) ) );
+	}
+}
+add_action( 'wp_ajax_lef_myprofile_get_logout_url', 'lef_myprofile_get_logout_url' );
+
+

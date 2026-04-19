@@ -165,6 +165,29 @@ function lef_enqueue_assets() {
 			) );
 		}
 
+		// Assets for [lef_my_profile]
+		if ( has_shortcode( $post->post_content, 'lef_my_profile' ) ) {
+			wp_enqueue_style(
+				'lef-my-profile-css',
+				LEF_PLUGIN_URL . 'frontend/assets/css/my-profile.css',
+				array( 'lef-global-styles' ),
+				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/css/my-profile.css' )
+			);
+
+			wp_enqueue_script(
+				'lef-my-profile-js',
+				LEF_PLUGIN_URL . 'frontend/assets/js/my-profile.js',
+				array( 'jquery' ),
+				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/js/my-profile.js' ),
+				true
+			);
+
+			wp_localize_script( 'lef-my-profile-js', 'lefMyProfileData', array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'lef_myprofile_nonce' ),
+			) );
+		}
+
 		// Pass localized data to JS (if either script is enqueued)
 		if ( wp_script_is( 'lef-list-view-js', 'enqueued' ) || wp_script_is( 'lef-selected-view-js', 'enqueued' ) ) {
 			wp_localize_script( 

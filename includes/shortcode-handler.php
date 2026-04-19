@@ -17,6 +17,7 @@ function lef_register_shortcodes() {
 	add_shortcode( 'selected_list_view', 'lef_render_selected_list_view' );
 	add_shortcode( 'premium_search_bar', 'lef_render_premium_search_bar' );
 	add_shortcode( 'single_property_view', 'lef_render_single_property_view' );
+	add_shortcode( 'lef_my_profile', 'lef_render_my_profile' );
 }
 add_action( 'init', 'lef_register_shortcodes' );
 
@@ -139,6 +140,31 @@ function lef_render_single_property_view() {
 		include $template_path;
 	} else {
 		echo '<p>Single property view template not found.</p>';
+	}
+
+	return ob_get_clean();
+}
+/**
+ * Render the My Profile Dashboard.
+ *
+ * @return string The rendered HTML.
+ */
+function lef_render_my_profile() {
+	if ( ! is_user_logged_in() ) {
+		return '<div class="lef-myprofile-login-required" style="padding: 40px; text-align: center;">
+					<h2 style="margin-bottom: 20px;">Please Login</h2>
+					<p>You must be logged in to access your profile dashboard.</p>
+				</div>';
+	}
+
+	ob_start();
+
+	$template_path = LEF_PLUGIN_DIR . 'frontend/template/my-profile.php';
+
+	if ( file_exists( $template_path ) ) {
+		include $template_path;
+	} else {
+		echo '<p>My Profile template not found.</p>';
 	}
 
 	return ob_get_clean();

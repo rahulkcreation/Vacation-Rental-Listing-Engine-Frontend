@@ -10,3 +10,5 @@
 [premium_search_bar]
 
 [single_property_view]
+
+[lef_my_profile]
