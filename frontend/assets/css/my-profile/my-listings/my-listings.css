@@ -1,0 +1,657 @@
+/* Note: Global variables like --leb-primary-color come from global.css */
+.lef-host-list-page {
+    width: 100%;
+}
+
+.lef-host-list-header,
+.lef-host-list-search-panel,
+.lef-host-list-tabs,
+.lef-host-list-list-panel {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 8px;
+    box-shadow: var(--leb-card-shadow);
+    width: 100%;
+}
+
+.lef-host-list-header {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    min-height: 70px;
+    padding: 16px 18px;
+}
+
+.lef-host-list-header-left {
+    align-items: center;
+    display: flex;
+    gap: 14px;
+    min-width: 0;
+}
+
+.lef-host-list-header-icon {
+    align-items: center;
+    background: var(--leb-primary-color);
+    border-radius: 8px;
+    color: var(--leb-white);
+    display: flex;
+    flex: 0 0 auto;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+
+.lef-host-list-header-icon svg {
+    height: 23px;
+    width: 23px;
+}
+
+.lef-host-list-title {
+    color: var(--leb-secondary-color);
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.lef-host-list-add-btn {
+    align-items: center;
+    background: var(--leb-primary-color);
+    border: 1px solid var(--leb-primary-color);
+    border-radius: 8px;
+    color: var(--leb-white);
+    display: inline-flex;
+    font-size: 0.92rem;
+    font-weight: 800;
+    gap: 8px;
+    justify-content: center;
+    min-height: 38px;
+    min-width: 168px;
+    padding: 8px 18px;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+}
+
+.lef-host-list-add-btn:hover,
+.lef-host-list-add-btn:focus-visible {
+    background: var(--leb-primary-dark);
+    border-color: var(--leb-primary-dark);
+    box-shadow: 0 12px 30px var(--leb-primary-glow);
+    outline: 0;
+}
+
+.lef-host-list-add-btn svg {
+    height: 16px;
+    width: 16px;
+}
+
+.lef-host-list-search-panel {
+    margin-bottom: 18px;
+    padding: 13px 18px;
+}
+
+.lef-host-list-search-box {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    min-height: 34px;
+}
+
+.lef-host-list-search-panel.lef-host-list-search-focused {
+    box-shadow: var(--leb-focus-shadow);
+}
+
+.lef-host-list-search-icon {
+    align-items: center;
+    color: var(--leb-text-muted);
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+}
+
+.lef-host-list-search-icon svg {
+    height: 20px;
+    width: 20px;
+}
+
+.lef-host-list-search-input {
+    background: transparent;
+    border: 0;
+    color: var(--leb-text-color);
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 700;
+    min-width: 0;
+    outline: 0;
+    width: 100%;
+}
+
+.lef-host-list-search-input::placeholder {
+    color: var(--leb-text-muted);
+}
+
+.lef-host-list-clear-btn {
+    align-items: center;
+    background: var(--leb-bg-light);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 8px;
+    color: var(--leb-text-muted);
+    display: none;
+    height: 32px;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    width: 32px;
+}
+
+.lef-host-list-clear-btn.lef-host-list-clear-visible {
+    display: inline-flex;
+}
+
+.lef-host-list-clear-btn:hover {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+}
+
+.lef-host-list-clear-btn svg {
+    height: 16px;
+    width: 16px;
+}
+
+.lef-host-list-tabs {
+    display: grid;
+    gap: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-bottom: 18px;
+    padding: 8px;
+}
+
+.lef-host-list-tab {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    color: var(--leb-text-color);
+    display: inline-flex;
+    font-size: 0.9rem;
+    font-weight: 800;
+    gap: 8px;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 12px;
+    transition: background 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+
+.lef-host-list-tab:hover {
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+}
+
+.lef-host-list-tab.lef-host-list-tab-active {
+    background: var(--leb-primary-color);
+    color: var(--leb-white);
+}
+
+.lef-host-list-tab-count {
+    align-items: center;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 8px;
+    color: var(--leb-text-muted);
+    display: inline-flex;
+    font-size: 0.74rem;
+    font-weight: 800;
+    height: 22px;
+    justify-content: center;
+    min-width: 22px;
+    padding: 0 6px;
+}
+
+.lef-host-list-tab-active .lef-host-list-tab-count {
+    background: var(--leb-white-alpha-40);
+    color: var(--leb-white);
+}
+
+.lef-host-list-list-panel {
+    overflow: hidden;
+    padding: 0 14px 22px;
+}
+
+.lef-host-list-select-row-wrap {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    min-height: 56px;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--leb-border-color);
+    margin-bottom: 15px;
+}
+
+.lef-host-list-select-row {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+}
+
+.lef-host-list-bulk-actions {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+}
+
+.lef-host-list-bulk-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--leb-border-default);
+    font-size: 0.85rem;
+    color: var(--leb-secondary-color);
+}
+
+.lef-host-list-bulk-btn {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 6px;
+    color: var(--leb-secondary-color);
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.lef-host-list-bulk-btn:hover {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+}
+
+.lef-host-list-bulk-delete {
+    color: var(--leb-error-color);
+}
+.lef-host-list-bulk-delete:hover {
+    background: var(--leb-error-light-bg);
+    border-color: var(--leb-error-color);
+    color: var(--leb-error-color);
+}
+
+.lef-host-list-checkbox {
+    appearance: none;
+    background: var(--leb-white);
+    border: 2px solid var(--leb-border-default);
+    border-radius: 4px;
+    display: inline-grid;
+    flex: 0 0 auto;
+    height: 18px;
+    margin: 0;
+    place-content: center;
+    width: 18px;
+}
+
+.lef-host-list-checkbox::before {
+    background: var(--leb-primary-color);
+    content: "";
+    height: 9px;
+    transform: scale(0);
+    transition: transform 0.12s ease-in-out;
+    width: 9px;
+}
+
+.lef-host-list-checkbox:checked::before {
+    transform: scale(1);
+}
+
+.lef-host-list-checkbox:focus-visible {
+    box-shadow: var(--leb-focus-shadow);
+    outline: 0;
+}
+
+.lef-host-list-select-label {
+    color: var(--leb-text-muted);
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.lef-host-list-card-list {
+    display: grid;
+    gap: 10px;
+}
+
+.lef-host-list-card {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 8px;
+    min-height: 244px;
+    overflow: hidden;
+    padding: 12px;
+}
+
+.lef-host-list-card-top {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    min-height: 42px;
+}
+
+.lef-host-list-thumb {
+    background: var(--leb-primary-light-bg);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 8px;
+    height: 48px;
+    object-fit: cover;
+    width: 48px;
+}
+
+.lef-host-list-card-body {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(160px, 0.9fr) minmax(280px, 2fr);
+    padding: 4px 0 20px;
+}
+
+.lef-host-list-labels,
+.lef-host-list-values {
+    display: grid;
+    gap: 10px;
+}
+
+.lef-host-list-values {
+    padding-top: 34px;
+}
+
+.lef-host-list-sno {
+    align-items: center;
+    background: var(--leb-primary-color);
+    border-radius: 8px;
+    color: var(--leb-white);
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 800;
+    height: 24px;
+    justify-content: center;
+    min-width: 24px;
+    padding: 0 7px;
+    width: max-content;
+}
+
+.lef-host-list-mobile-sno {
+    display: none;
+}
+
+.lef-host-list-label {
+    color: var(--leb-text-muted);
+    font-size: 0.82rem;
+    font-weight: 800;
+    min-height: 22px;
+}
+
+.lef-host-list-value {
+    align-items: center;
+    color: var(--leb-text-color);
+    display: flex;
+    font-size: 0.84rem;
+    font-weight: 800;
+    justify-content: flex-end;
+    min-height: 22px;
+    text-align: right;
+    word-break: break-word;
+}
+
+.lef-host-list-status {
+    align-items: center;
+    border: 1px solid var(--leb-border-default);
+    border-radius: 8px;
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 800;
+    justify-content: center;
+    line-height: 1;
+    min-height: 30px;
+    padding: 7px 12px;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.lef-host-list-status[data-lef-host-list-status="published"] {
+    background: var(--leb-success-light-bg);
+    color: var(--leb-success-color);
+}
+
+.lef-host-list-status[data-lef-host-list-status="pending"],
+.lef-host-list-status[data-lef-host-list-status="draft"] {
+    background: var(--leb-warning-light-bg);
+    color: var(--leb-warning-color);
+}
+
+.lef-host-list-status[data-lef-host-list-status="rejected"] {
+    background: var(--leb-error-light-bg);
+    color: var(--leb-error-color);
+}
+
+.lef-host-list-actions {
+    align-items: center;
+    border-top: 1px solid var(--leb-border-color);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    min-height: 48px;
+    padding-top: 10px;
+}
+
+.lef-host-list-action-btn {
+    align-items: center;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 8px;
+    color: var(--leb-secondary-color);
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 800;
+    gap: 6px;
+    justify-content: center;
+    min-height: 32px;
+    min-width: 82px;
+    padding: 6px 12px;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+}
+
+.lef-host-list-action-btn:hover,
+.lef-host-list-action-btn:focus-visible {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+    outline: 0;
+}
+
+.lef-host-list-action-delete {
+    color: var(--leb-error-color);
+}
+
+.lef-host-list-action-delete:hover,
+.lef-host-list-action-delete:focus-visible {
+    background: var(--leb-error-light-bg);
+    border-color: var(--leb-error-color);
+    color: var(--leb-error-color);
+}
+
+.lef-host-list-action-btn svg {
+    height: 15px;
+    width: 15px;
+}
+
+.lef-host-list-empty {
+    align-items: center;
+    color: var(--leb-text-muted);
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    min-height: 220px;
+    padding: 28px;
+    text-align: center;
+}
+
+.lef-host-list-empty.lef-host-list-empty-visible {
+    display: flex;
+}
+
+.lef-host-list-empty-title {
+    color: var(--leb-secondary-color);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.lef-host-list-empty-text {
+    color: var(--leb-text-muted);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.lef-host-list-pagination {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 20px 0 0;
+}
+
+.lef-host-list-pagination-text {
+    color: var(--leb-text-muted);
+    font-size: 0.96rem;
+    font-weight: 700;
+}
+
+.lef-host-list-pagination-controls {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.lef-host-list-page-btn {
+    align-items: center;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 8px;
+    color: var(--leb-text-muted);
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 800;
+    height: 34px;
+    justify-content: center;
+    min-width: 34px;
+    padding: 0 9px;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+}
+
+.lef-host-list-page-btn:hover:not(:disabled) {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+}
+
+.lef-host-list-page-btn.lef-host-list-page-active {
+    background: var(--leb-primary-color);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-white);
+}
+
+.lef-host-list-page-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.lef-host-list-page-btn svg {
+    height: 16px;
+    width: 16px;
+}
+
+@media (max-width: 760px) {
+    .lef-host-list-select-row-wrap {
+        align-items: stretch;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    .lef-host-list-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .lef-host-list-add-btn,
+    .lef-host-list-tabs {
+        width: 100%;
+    }
+
+    .lef-host-list-tabs {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lef-host-list-card {
+        min-height: auto;
+    }
+
+    .lef-host-list-card-body {
+        grid-template-columns: 1fr;
+    }
+
+    .lef-host-list-labels {
+        display: none;
+    }
+
+    .lef-host-list-values {
+        padding-top: 0;
+    }
+
+    .lef-host-list-mobile-sno {
+        display: flex;
+    }
+
+    .lef-host-list-value {
+        border-bottom: 1px solid var(--leb-border-color);
+        justify-content: space-between;
+        text-align: right;
+    }
+
+    .lef-host-list-value::before {
+        color: var(--leb-text-muted);
+        content: attr(data-lef-host-list-label);
+        flex: 0 0 auto;
+        font-size: 0.82rem;
+        font-weight: 800;
+        padding-right: 12px;
+        text-align: left;
+    }
+
+    .lef-host-list-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .lef-host-list-action-btn {
+        width: 100%;
+    }
+
+    .lef-host-list-pagination {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .lef-host-list-pagination-controls {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .lef-host-list-title {
+        font-size: 1.25rem;
+    }
+
+    .lef-host-list-tabs {
+        grid-template-columns: 1fr;
+    }
+}

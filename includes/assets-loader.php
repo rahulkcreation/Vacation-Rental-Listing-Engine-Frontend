@@ -245,6 +245,22 @@ function lef_enqueue_assets() {
 				true
 			);
 
+			// My Listings Assets
+			wp_enqueue_script(
+				'lef-my-listings-js',
+				LEF_PLUGIN_URL . 'frontend/assets/js/my-profile/my-listings/my-listings.js',
+				array( 'jquery', 'lef-my-profile-js' ),
+				LEF_VERSION . '.' . filemtime( LEF_PLUGIN_DIR . 'frontend/assets/js/my-profile/my-listings/my-listings.js' ),
+				true
+			);
+
+			wp_enqueue_style(
+				'lef-my-listings-css',
+				LEF_PLUGIN_URL . 'frontend/assets/css/my-profile/my-listings/my-listings.css',
+				array( 'lef-my-profile-css' ),
+				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/css/my-profile/my-listings/my-listings.css' )
+			);
+
 			wp_localize_script( 'lef-my-profile-js', 'lefMyProfileData', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'lef_myprofile_nonce' ),

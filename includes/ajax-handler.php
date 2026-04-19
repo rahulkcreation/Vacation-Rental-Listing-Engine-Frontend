@@ -913,6 +913,178 @@ function lef_myprofile_load_screen() {
 }
 add_action( 'wp_ajax_lef_myprofile_load_screen', 'lef_myprofile_load_screen' );
 
+/* ==================== MY PROFILE: MY LISTINGS ==================== */
+/**
+ * Fetch listings for the current host.
+ */
+function lef_get_host_listings() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Unauthorized' ) );
+	}
+
+	global $wpdb;
+	$user_id = get_current_user_id();
+
+	$properties = $wpdb->get_results( $wpdb->prepare(
+		"SELECT p.id, p.title, p.price, p.status, t.name as type_name
+		 FROM {$wpdb->prefix}ls_property p
+		 LEFT JOIN {$wpdb->prefix}ls_types t ON p.type = t.id
+		 WHERE p.host_id = %d
+		 ORDER BY p.id DESC",
+		$user_id
+	) );
+
+	$listings = array();
+
+	if ( $properties ) {
+		foreach ( $properties as $prop ) {
+			// Get first image
+			$img_url = '';
+			$image_row = $wpdb->get_row( $wpdb->prepare(
+				"SELECT image FROM {$wpdb->prefix}ls_img WHERE property_id = %d LIMIT 1",
+				$prop->id
+			) );
+
+			if ( $image_row && ! empty( $image_row->image ) ) {
+				if ( is_numeric( $image_row->image ) ) {
+					$img_src = wp_get_attachment_url( $image_row->image );
+					$img_url = $img_src ? $img_src : '';
+				} else {
+					$img_url = $image_row->image;
+				}
+			}
+
+			$formatted_price = '$' . number_format( floatval( $prop->price ), 2 ) . ' / night';
+
+			$listings[] = array(
+				'id'     => $prop->id,
+				'title'  => stripslashes( (string) $prop->title ),
+				'price'  => $formatted_price,
+				'status' => (string) $prop->status,
+				'type'   => $prop->type_name ? stripslashes( (string) $prop->type_name ) : 'Property',
+				'image'  => $img_url
+			);
+		}
+	}
+
+	wp_send_json_success( array( 'listings' => $listings ) );
+}
+add_action( 'wp_ajax_lef_get_host_listings', 'lef_get_host_listings' );
+
+/**
+ * Handle listing actions (change_status, delete, duplicate)
+ */
+function lef_host_list_action() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Unauthorized' ) );
+	}
+
+	global $wpdb;
+	$user_id = get_current_user_id();
+	$type    = isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : '';
+	$ids     = isset( $_POST['ids'] ) ? array_map( 'intval', (array) $_POST['ids'] ) : array();
+
+	if ( empty( $ids ) ) {
+		wp_send_json_error( array( 'message' => 'No properties selected.' ) );
+	}
+
+	// Make sure properties belong to current user
+	$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+	$query_args = array_merge( array( $user_id ), $ids );
+	
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$valid_ids = $wpdb->get_col( $wpdb->prepare(
+		"SELECT id FROM {$wpdb->prefix}ls_property WHERE host_id = %d AND id IN ($placeholders)", 
+		...$query_args
+	) );
+
+	if ( empty( $valid_ids ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid permissions or properties not found.' ) );
+	}
+
+	switch ( $type ) {
+		case 'change_status':
+			$status = isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : '';
+			$allowed_statuses = array( 'pending', 'draft' );
+			
+			if ( ! in_array( $status, $allowed_statuses, true ) ) {
+				wp_send_json_error( array( 'message' => 'Invalid status.' ) );
+			}
+
+			// Update statuses
+			$status_placeholders = implode( ',', array_fill( 0, count( $valid_ids ), '%d' ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( $wpdb->prepare(
+				"UPDATE {$wpdb->prefix}ls_property SET status = %s WHERE id IN ($status_placeholders)", 
+				array_merge( array( $status ), $valid_ids )
+			) );
+
+			wp_send_json_success( array( 'message' => 'Statuses updated successfully.' ) );
+			break;
+
+		case 'delete':
+			$del_placeholders = implode( ',', array_fill( 0, count( $valid_ids ), '%d' ) );
+			
+			// Optional: delete associated images
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( $wpdb->prepare(
+				"DELETE FROM {$wpdb->prefix}ls_img WHERE property_id IN ($del_placeholders)", 
+				...$valid_ids
+			) );
+
+			// Delete properties
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( $wpdb->prepare(
+				"DELETE FROM {$wpdb->prefix}ls_property WHERE id IN ($del_placeholders)", 
+				...$valid_ids
+			) );
+
+			wp_send_json_success( array( 'message' => 'Properties deleted successfully.' ) );
+			break;
+
+		case 'duplicate':
+			// Duplicate each property one by one
+			foreach ( $valid_ids as $p_id ) {
+				$prop = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ls_property WHERE id = %d", $p_id ), ARRAY_A );
+				
+				if ( $prop ) {
+					unset( $prop['id'] ); // Remove primary key
+					$prop['title'] = $prop['title'] . ' (Copy)';
+					$prop['status'] = 'draft'; // Duplicates are marked draft by default
+					$prop['updated_at'] = current_time('mysql');
+					$prop['created_at'] = current_time('mysql');
+
+					$wpdb->insert( "{$wpdb->prefix}ls_property", $prop );
+					$new_id = $wpdb->insert_id;
+
+					if ( $new_id ) {
+						// Duplicate images
+						$images = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ls_img WHERE property_id = %d", $p_id ), ARRAY_A );
+						foreach ( $images as $img ) {
+							unset( $img['id'] );
+							$img['property_id'] = $new_id;
+							$img['created_at'] = current_time('mysql');
+							$img['updated_at'] = current_time('mysql');
+							$wpdb->insert( "{$wpdb->prefix}ls_img", $img );
+						}
+					}
+				}
+			}
+
+			wp_send_json_success( array( 'message' => count( $valid_ids ) . ' property(s) duplicated as Draft.' ) );
+			break;
+
+		default:
+			wp_send_json_error( array( 'message' => 'Invalid action.' ) );
+			break;
+	}
+}
+add_action( 'wp_ajax_lef_host_list_action', 'lef_host_list_action' );
+
 /* ==================== MY PROFILE: LOGOUT URL ==================== */
 /**
  * AJAX handler to fetch the logout URL from wp_admin_management.
