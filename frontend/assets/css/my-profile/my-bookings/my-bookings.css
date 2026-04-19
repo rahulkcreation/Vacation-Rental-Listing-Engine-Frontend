@@ -317,7 +317,69 @@
 .lef-my-book-empty {
     padding: 60px 20px;
     text-align: center;
+    color: var(--leb-text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
 }
+
+/* ── Loader (shown during AJAX fetch) ── */
+.lef-my-book-loader {
+    align-items: center;
+    color: var(--leb-text-muted);
+    display: flex;
+    font-size: 0.9rem;
+    font-weight: 600;
+    gap: 10px;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.lef-my-book-loader span {
+    animation: lef-spin 0.8s linear infinite;
+    border: 3px solid var(--leb-border-color);
+    border-radius: 50%;
+    border-top-color: var(--leb-primary-color);
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+}
+
+@keyframes lef-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Error message (shown on AJAX network error) ── */
+.lef-my-book-error {
+    color: var(--leb-error-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* ── Pagination dots separator ── */
+.lef-my-book-dots {
+    align-items: center;
+    color: var(--leb-text-muted);
+    display: flex;
+    font-size: 1rem;
+    height: 36px;
+    padding: 0 4px;
+}
+
+/* ── List meta text (right side of list header) ── */
+.lef-my-book-list-meta {
+    color: var(--leb-text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ── Card actions wrapper ── */
+.lef-my-book-card-actions {
+    align-items: center;
+    display: flex;
+}
+
 
 /* ── Mobile ── */
 @media (max-width: 800px) {
