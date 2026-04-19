@@ -48,7 +48,8 @@
             // Logout
             this.$logoutBtn.on('click', (e) => {
                 e.preventDefault();
-                this.handleLogout();
+                const targetUrl = $(e.currentTarget).attr('href');
+                this.handleLogout(targetUrl);
             });
         },
 
@@ -100,9 +101,11 @@
             });
         },
 
-        handleLogout() {
+        handleLogout(redirectUrl) {
             if (!window.LEF_Confirm) {
                 console.error('LEF_Confirm component not found.');
+                // Fallback direct redirect if component missing
+                if (redirectUrl) window.location.href = redirectUrl;
                 return;
             }
 
@@ -111,34 +114,20 @@
                 message: 'Are you sure you want to log out of your profile?'
             }, (confirmed) => {
                 if (confirmed) {
-                    this.performLogoutRedirect();
+                    this.performLogoutRedirect(redirectUrl);
                 }
             });
         },
 
-        performLogoutRedirect() {
-            // Show a generic saving state or just wait for the redirect
+        performLogoutRedirect(redirectUrl) {
             if (window.LEF_Toast) window.LEF_Toast.show('Logging out...', 'info');
-
-            $.ajax({
-                url: lefMyProfileData.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'lef_myprofile_get_logout_url',
-                    nonce: lefMyProfileData.nonce
-                },
-                success: (response) => {
-                    if (response.success && response.data.url) {
-                        window.location.href = response.data.url;
-                    } else {
-                        // Fallback redirect
-                        window.location.href = '/';
-                    }
-                },
-                error: () => {
-                    window.location.href = '/';
-                }
-            });
+            
+            // Redirect directly to the URL without an extra AJAX call
+            if (redirectUrl && redirectUrl !== '#') {
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = '/';
+            }
         }
     };
 

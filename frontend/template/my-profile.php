@@ -66,6 +66,18 @@ $profile_pic = lef_get_user_profile_pic($user_id);
                     </button>
                 </div>
 
+<?php
+// Determine Role Flags
+$is_admin_or_host = array_intersect( ['administrator', 'host'], (array) $current_user->roles );
+$is_traveller     = in_array( 'traveller', (array) $current_user->roles );
+
+// Fetch dynamic logout URL
+global $wpdb;
+$logout_url = $wpdb->get_var( "SELECT value FROM wp_admin_management WHERE name = 'logout'" );
+if ( ! $logout_url ) {
+    $logout_url = wp_logout_url( home_url() );
+}
+?>
                 <nav class="lef-prof-menu">
                     <button class="lef-prof-menu-btn lef-prof-menu-active" type="button" data-screen="edit-profile">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -74,38 +86,48 @@ $profile_pic = lef_get_user_profile_pic($user_id);
                         </svg>
                         Edit Profile
                     </button>
-                    <button class="lef-prof-menu-btn" type="button" data-screen="pay-out">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                            <path d="M2 10h20"></path>
-                        </svg>
-                        Payout
-                    </button>
-                    <button class="lef-prof-menu-btn" type="button" data-screen="my-bookings">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M8 2v4"></path>
-                            <path d="M16 2v4"></path>
-                            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                            <path d="M3 10h18"></path>
-                        </svg>
-                        My Booking
-                    </button>
-                    <button class="lef-prof-menu-btn" type="button" data-screen="my-listings">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 21h18"></path>
-                            <path d="M5 21V7l8-4v18"></path>
-                            <path d="M19 21V11l-6-4"></path>
-                        </svg>
-                        My Listing
-                    </button>
-                    <button class="lef-prof-menu-btn lef-prof-logout-trigger" type="button">
+                    
+                    <?php if ( $is_admin_or_host ) : ?>
+                        <button class="lef-prof-menu-btn" type="button" data-screen="pay-out">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                <path d="M2 10h20"></path>
+                            </svg>
+                            Payout
+                        </button>
+                    <?php endif; ?>
+
+                    <?php if ( $is_traveller ) : ?>
+                        <button class="lef-prof-menu-btn" type="button" data-screen="my-bookings">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 2v4"></path>
+                                <path d="M16 2v4"></path>
+                                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                            My Booking
+                        </button>
+                    <?php endif; ?>
+
+                    <?php if ( $is_admin_or_host ) : ?>
+                        <button class="lef-prof-menu-btn" type="button" data-screen="my-listings">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18"></path>
+                                <path d="M5 21V7l8-4v18"></path>
+                                <path d="M19 21V11l-6-4"></path>
+                            </svg>
+                            My Listing
+                        </button>
+                    <?php endif; ?>
+
+                    <a href="<?php echo esc_url( $logout_url ); ?>" class="lef-prof-menu-btn lef-prof-logout-trigger" style="text-decoration: none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                             <path d="m16 17 5-5-5-5"></path>
                             <path d="M21 12H9"></path>
                         </svg>
                         Logout
-                    </button>
+                    </a>
                 </nav>
             </aside>
 
