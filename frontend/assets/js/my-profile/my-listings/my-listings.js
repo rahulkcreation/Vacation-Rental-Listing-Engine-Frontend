@@ -64,6 +64,7 @@
 
             // Status Tabs
             this.$tabs.on('click', (e) => {
+                e.preventDefault();
                 const status = $(e.currentTarget).data('lef-host-list-status-tab');
                 this.activeStatus = status;
                 this.currentPage = 1;
@@ -76,6 +77,7 @@
 
             // Pagination Controls
             this.$pageControls.on('click', '[data-lef-host-list-page]', (e) => {
+                e.preventDefault();
                 const $btn = $(e.currentTarget);
                 if ($btn.prop('disabled')) return;
 

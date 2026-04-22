@@ -15,8 +15,18 @@
             this.cacheDOM();
             this.bindEvents();
             
-            // Load default screen (Edit Profile) on start
-            this.loadScreen('edit-profile');
+            // Determine default screen from URL hash or fallback to 'edit-profile'
+            let initialScreen = 'edit-profile';
+            if (window.location.hash) {
+                const hashScreen = window.location.hash.substring(1);
+                // Verify if the hash matches a valid screen button
+                if (this.$menuBtns.filter(`[data-screen="${hashScreen}"]`).length > 0) {
+                    initialScreen = hashScreen;
+                }
+            }
+            
+            // Load the determined screen on start
+            this.loadScreen(initialScreen);
         },
 
         cacheDOM() {
@@ -38,8 +48,10 @@
 
             // Navigation
             this.$menuBtns.on('click', (e) => {
+                e.preventDefault();
                 const screen = $(e.currentTarget).data('screen');
                 if (screen) {
+                    window.location.hash = screen;
                     this.loadScreen(screen);
                     this.toggleSidebar(false);
                 }
