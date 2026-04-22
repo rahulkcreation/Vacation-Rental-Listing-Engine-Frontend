@@ -1,0 +1,855 @@
+/**
+ * view-edit.css
+ *
+ * Styles for the Property Add / Edit form panel within My Listings.
+ * All selectors are scoped with the `.lef-ve-` prefix to prevent conflicts.
+ * Uses only CSS custom properties from global.css — NO inline values.
+ *
+ * @package ListingEngineFrontend
+ */
+
+/* =====================================================
+   PANEL WRAPPER
+   ===================================================== */
+.lef-ve-panel {
+    width: 100%;
+    position: relative;
+    animation: lef-ve-fade-in 0.25s ease;
+}
+
+@keyframes lef-ve-fade-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================================================
+   NAV BAR
+   ===================================================== */
+.lef-ve-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--leb-border-default);
+    background: var(--leb-white);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.lef-ve-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--leb-primary-color);
+    transition: background 0.2s ease;
+}
+
+.lef-ve-back-btn:hover {
+    background: var(--leb-primary-light-bg);
+}
+
+.lef-ve-back-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.lef-ve-nav-heading {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--leb-secondary-color);
+}
+
+/* =====================================================
+   FORM SECTIONS
+   ===================================================== */
+.lef-ve-section {
+    margin-bottom: 24px;
+}
+
+/* Two-column grid for location + type */
+.lef-ve-two-col-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .lef-ve-two-col-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================================
+   LABELS
+   ===================================================== */
+.lef-ve-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--leb-text-muted);
+    margin-bottom: 6px;
+}
+
+.lef-ve-required {
+    color: var(--leb-primary-color);
+    margin-left: 2px;
+}
+
+.lef-ve-label-hint {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--leb-text-muted);
+    margin-left: 6px;
+}
+
+.lef-ve-section-heading {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--leb-secondary-color);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--leb-border-default);
+}
+
+.lef-ve-field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--leb-text-muted);
+    margin-bottom: 6px;
+}
+
+/* =====================================================
+   TEXT INPUT & TEXTAREA
+   ===================================================== */
+.lef-ve-input,
+.lef-ve-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--leb-text-color);
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lef-ve-input::placeholder,
+.lef-ve-textarea::placeholder {
+    color: var(--leb-text-muted);
+    opacity: 0.65;
+}
+
+.lef-ve-input:focus,
+.lef-ve-textarea:focus {
+    border-color: var(--leb-primary-color);
+    box-shadow: var(--leb-focus-shadow);
+}
+
+.lef-ve-textarea {
+    min-height: 140px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+/* Error / Success states */
+.lef-ve-input.lef-ve-error,
+.lef-ve-textarea.lef-ve-error,
+.lef-ve-number-input.lef-ve-error {
+    border-color: var(--leb-error-color);
+    background: var(--leb-error-light-bg);
+}
+
+/* =====================================================
+   PROPERTY DETAILS GRID
+   ===================================================== */
+.lef-ve-details-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 900px) {
+    .lef-ve-details-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .lef-ve-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .lef-ve-detail-field:nth-child(5) {
+        grid-column: 1 / -1;
+    }
+}
+
+.lef-ve-number-input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--leb-text-color);
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    /* Hide spinner arrows */
+    -moz-appearance: textfield;
+}
+
+.lef-ve-number-input::-webkit-outer-spin-button,
+.lef-ve-number-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.lef-ve-number-input:focus {
+    border-color: var(--leb-primary-color);
+    box-shadow: var(--leb-focus-shadow);
+}
+
+/* =====================================================
+   IMAGE UPLOAD AREA
+   ===================================================== */
+.lef-ve-upload-area {
+    border: 2px dashed var(--leb-border-color);
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--leb-primary-light-bg);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.lef-ve-upload-area:hover,
+.lef-ve-upload-area.lef-ve-drag-over {
+    border-color: var(--leb-primary-color);
+    background: var(--leb-primary-light-bg);
+    transform: scale(1.005);
+}
+
+.lef-ve-upload-icon {
+    color: var(--leb-text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.lef-ve-upload-icon svg {
+    width: 44px;
+    height: 44px;
+}
+
+.lef-ve-upload-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--leb-text-color);
+    margin-bottom: 4px;
+}
+
+.lef-ve-upload-subtext {
+    font-size: 13px;
+    color: var(--leb-text-muted);
+}
+
+/* =====================================================
+   IMAGE PREVIEW GRID
+   ===================================================== */
+.lef-ve-image-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+    .lef-ve-image-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .lef-ve-image-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.lef-ve-img-item {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 10px;
+    border: 1px solid var(--leb-border-default);
+    overflow: hidden;
+    cursor: grab;
+}
+
+.lef-ve-img-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Cover badge on first image */
+.lef-ve-img-item.lef-ve-cover-img::after {
+    content: '\2605 Cover';
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    background: var(--leb-success-color);
+    color: var(--leb-white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    pointer-events: none;
+}
+
+/* Remove button */
+.lef-ve-img-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    border-radius: 50%;
+    background: var(--leb-error-color);
+    border: none;
+    color: var(--leb-white);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.15s ease;
+}
+
+.lef-ve-img-remove:hover {
+    transform: scale(1.15);
+}
+
+/* =====================================================
+   CUSTOM SELECT DROPDOWNS
+   ===================================================== */
+.lef-ve-custom-select-wrap {
+    position: relative;
+}
+
+.lef-ve-select-trigger {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--leb-text-color);
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 48px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+}
+
+.lef-ve-select-trigger:focus,
+.lef-ve-select-trigger.lef-ve-open {
+    border-color: var(--leb-primary-color);
+    box-shadow: var(--leb-focus-shadow);
+    outline: none;
+}
+
+.lef-ve-select-trigger.lef-ve-error {
+    border-color: var(--leb-error-color);
+}
+
+.lef-ve-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--leb-primary-color);
+    transition: transform 0.2s ease;
+}
+
+.lef-ve-select-trigger.lef-ve-open .lef-ve-arrow {
+    transform: rotate(180deg);
+}
+
+.lef-ve-placeholder {
+    color: var(--leb-text-muted);
+    opacity: 0.65;
+}
+
+/* Multi-select tags wrapper */
+.lef-ve-selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Individual tag pill */
+.lef-ve-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.lef-ve-tag-remove {
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    margin-left: 2px;
+    color: var(--leb-primary-color);
+}
+
+/* Single-select value */
+.lef-ve-single-value {
+    font-size: 15px;
+    color: var(--leb-text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Dropdown panel */
+.lef-ve-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 10px;
+    box-shadow: var(--leb-card-shadow);
+    z-index: 100;
+    max-height: 220px;
+    overflow-y: auto;
+    display: none;
+}
+
+.lef-ve-dropdown.lef-ve-open {
+    display: block;
+}
+
+/* Option rows */
+.lef-ve-option,
+.lef-ve-status-option {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s ease;
+    color: var(--leb-text-color);
+}
+
+.lef-ve-option:hover,
+.lef-ve-status-option:hover {
+    background: var(--leb-primary-light-bg);
+}
+
+.lef-ve-option.lef-ve-selected {
+    color: var(--leb-primary-color);
+    font-weight: 600;
+    background: var(--leb-primary-light-bg);
+}
+
+.lef-ve-status-option.lef-ve-selected {
+    font-weight: 600;
+    background: var(--leb-primary-light-bg);
+}
+
+/* Checkbox for multi-select options */
+.lef-ve-opt-checkbox {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    border: 2px solid var(--leb-border-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: all 0.15s ease;
+    background: var(--leb-white);
+}
+
+.lef-ve-option.lef-ve-selected .lef-ve-opt-checkbox {
+    background: var(--leb-primary-color);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-white);
+}
+
+/* Status dot indicators */
+.lef-ve-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.lef-ve-dot-draft   { background: var(--leb-text-muted); }
+.lef-ve-dot-pending { background: var(--leb-warning-color); }
+
+/* =====================================================
+   CALENDAR
+   ===================================================== */
+.lef-ve-calendar-container {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-default);
+    border-radius: 14px;
+    box-shadow: var(--leb-card-shadow);
+    padding: 20px 24px;
+}
+
+/* Desktop nav */
+.lef-ve-cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.lef-ve-cal-nav-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--leb-secondary-color);
+    min-width: 200px;
+    text-align: center;
+}
+
+/* Mobile nav hidden on desktop */
+.lef-ve-cal-mobile-nav {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.lef-ve-cal-mobile-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--leb-secondary-color);
+}
+
+.lef-ve-cal-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--leb-border-default);
+    background: var(--leb-white);
+    color: var(--leb-primary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    padding: 0;
+}
+
+.lef-ve-cal-btn:hover {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+}
+
+/* Months wrapper */
+.lef-ve-cal-months-wrap {
+    display: flex;
+    gap: 24px;
+}
+
+.lef-ve-cal-month {
+    flex: 1;
+    min-width: 0;
+}
+
+.lef-ve-cal-month-header {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--leb-secondary-color);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--leb-border-default);
+}
+
+.lef-ve-cal-day-names,
+.lef-ve-cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.lef-ve-cal-day-names { margin-bottom: 4px; }
+
+.lef-ve-day-name {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--leb-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 0;
+}
+
+.lef-ve-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    color: var(--leb-text-color);
+    user-select: none;
+}
+
+.lef-ve-day:hover:not(.lef-ve-day-disabled):not(.lef-ve-day-empty) {
+    background: var(--leb-primary-light-bg);
+}
+
+.lef-ve-day.lef-ve-day-today {
+    font-weight: 700;
+    border: 2px solid var(--leb-primary-color);
+}
+
+.lef-ve-day.lef-ve-day-selected {
+    background: var(--leb-primary-color);
+    color: var(--leb-white);
+    font-weight: 600;
+}
+
+.lef-ve-day.lef-ve-day-selected.lef-ve-day-today {
+    border-color: var(--leb-primary-dark);
+}
+
+.lef-ve-day.lef-ve-day-disabled {
+    color: var(--leb-text-muted);
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.lef-ve-day.lef-ve-day-empty {
+    cursor: default;
+}
+
+/* Blocked dates summary */
+.lef-ve-dates-summary {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--leb-border-default);
+}
+
+.lef-ve-dates-count {
+    font-size: 14px;
+    color: var(--leb-text-muted);
+    margin-bottom: 8px;
+}
+
+.lef-ve-dates-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.lef-ve-date-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.lef-ve-chip-remove {
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    color: var(--leb-primary-color);
+    margin-left: 2px;
+}
+
+.lef-ve-clear-dates-btn {
+    padding: 5px 13px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--leb-error-color);
+    background: var(--leb-error-light-bg);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease;
+}
+
+.lef-ve-clear-dates-btn:hover {
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+}
+
+/* =====================================================
+   SUBMIT BUTTON
+   ===================================================== */
+.lef-ve-submit-btn {
+    width: 100%;
+    padding: 16px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    font-family: inherit;
+    color: var(--leb-white);
+    background: linear-gradient(135deg, var(--leb-primary-color), var(--leb-primary-dark));
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px var(--leb-primary-glow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-height: 52px;
+}
+
+.lef-ve-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px var(--leb-primary-glow);
+}
+
+.lef-ve-submit-btn:active {
+    transform: scale(0.98) translateY(0);
+    box-shadow: 0 2px 10px var(--leb-primary-glow);
+}
+
+.lef-ve-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =====================================================
+   FORM LOADER OVERLAY
+   ===================================================== */
+.lef-ve-loader-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--leb-overlay-bg);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+/* =====================================================
+   MOBILE CALENDAR RESPONSIVE
+   ===================================================== */
+@media (max-width: 991px) {
+    .lef-ve-cal-nav {
+        display: none;
+    }
+
+    .lef-ve-cal-mobile-nav {
+        display: flex;
+    }
+
+    .lef-ve-cal-months-wrap {
+        flex-direction: column;
+    }
+
+    .lef-ve-cal-month {
+        display: none;
+    }
+
+    .lef-ve-cal-month.lef-ve-cal-month-active {
+        display: block;
+    }
+}
+
+/* =====================================================
+   GENERAL RESPONSIVE
+   ===================================================== */
+@media (max-width: 600px) {
+    .lef-ve-calendar-container {
+        padding: 16px 12px;
+    }
+
+    .lef-ve-nav-heading {
+        font-size: 14px;
+    }
+}
+
+/* =====================================================
+   IMAGE UPLOAD PROGRESS & DRAG DROP
+   ===================================================== */
+.lef-ve-img-item.lef-ve-dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+    border: 2px dashed var(--leb-primary-color);
+}
+.lef-ve-img-item.lef-ve-drag-over {
+    border: 2px solid var(--leb-primary-color);
+    box-shadow: 0 0 10px rgba(var(--leb-primary-color-rgb), 0.3);
+}
+.lef-ve-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    z-index: 5;
+    border-radius: inherit;
+}
+.lef-ve-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.lef-ve-progress-fill {
+    height: 100%;
+    background: var(--leb-primary-color);
+    width: 0%;
+    transition: width 0.2s ease;
+}

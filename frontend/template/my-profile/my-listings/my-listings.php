@@ -94,3 +94,8 @@
         </div>
     </section>
 </div>
+
+<?php
+/* Include the View/Edit Property Form panel (hidden by default, shown via JS) */
+include LEF_PLUGIN_DIR . 'frontend/template/my-profile/my-listings/view-edit.php';
+?>

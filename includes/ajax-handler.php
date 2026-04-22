@@ -952,7 +952,12 @@ function lef_get_host_listings() {
 					$img_src = wp_get_attachment_url( $image_row->image );
 					$img_url = $img_src ? $img_src : '';
 				} else {
-					$img_url = $image_row->image;
+					$arr = json_decode( $image_row->image, true );
+					if ( is_array( $arr ) && ! empty( $arr ) && isset( $arr[0]['url'] ) ) {
+						$img_url = $arr[0]['url'];
+					} else {
+						$img_url = $image_row->image;
+					}
 				}
 			}
 
@@ -1029,21 +1034,50 @@ function lef_host_list_action() {
 		case 'delete':
 			$del_placeholders = implode( ',', array_fill( 0, count( $valid_ids ), '%d' ) );
 			
-			// Optional: delete associated images
+			// 1. Fetch and delete physical image files from WordPress media library
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$img_rows = $wpdb->get_results( $wpdb->prepare(
+				"SELECT image FROM {$wpdb->prefix}ls_img WHERE property_id IN ($del_placeholders)", 
+				...$valid_ids
+			) );
+
+			if ( ! empty( $img_rows ) ) {
+				foreach ( $img_rows as $row ) {
+					if ( ! empty( $row->image ) ) {
+						$images_arr = json_decode( $row->image, true );
+						if ( is_array( $images_arr ) ) {
+							foreach ( $images_arr as $img ) {
+								if ( isset( $img['id'] ) && intval( $img['id'] ) > 0 ) {
+									wp_delete_attachment( intval( $img['id'] ), true );
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// 2. Delete associated image rows from DB
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$wpdb->query( $wpdb->prepare(
 				"DELETE FROM {$wpdb->prefix}ls_img WHERE property_id IN ($del_placeholders)", 
 				...$valid_ids
 			) );
 
-			// Delete properties
+			// 3. Delete associated block dates
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( $wpdb->prepare(
+				"DELETE FROM {$wpdb->prefix}ls_block_date WHERE property_id IN ($del_placeholders)", 
+				...$valid_ids
+			) );
+
+			// 4. Delete properties
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$wpdb->query( $wpdb->prepare(
 				"DELETE FROM {$wpdb->prefix}ls_property WHERE id IN ($del_placeholders)", 
 				...$valid_ids
 			) );
 
-			wp_send_json_success( array( 'message' => 'Properties deleted successfully.' ) );
+			wp_send_json_success( array( 'message' => 'Properties and associated data deleted successfully.' ) );
 			break;
 
 		case 'duplicate':
@@ -1054,28 +1088,47 @@ function lef_host_list_action() {
 				if ( $prop ) {
 					unset( $prop['id'] ); // Remove primary key
 					$prop['title'] = $prop['title'] . ' (Copy)';
-					$prop['status'] = 'draft'; // Duplicates are marked draft by default
+					$prop['status'] = 'pending'; // Duplicates are marked pending by default
 					$prop['updated_at'] = current_time('mysql');
-					$prop['created_at'] = current_time('mysql');
 
-					$wpdb->insert( "{$wpdb->prefix}ls_property", $prop );
+					// Dynamic column check to prevent DB errors
+					$columns = $wpdb->get_col("DESCRIBE {$wpdb->prefix}ls_property");
+					$clean_prop = array();
+					foreach($prop as $k => $v){ if(in_array($k, $columns)) $clean_prop[$k] = $v; }
+
+					$wpdb->insert( "{$wpdb->prefix}ls_property", $clean_prop );
 					$new_id = $wpdb->insert_id;
 
 					if ( $new_id ) {
 						// Duplicate images
 						$images = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ls_img WHERE property_id = %d", $p_id ), ARRAY_A );
+						$img_cols = $wpdb->get_col("DESCRIBE {$wpdb->prefix}ls_img");
 						foreach ( $images as $img ) {
 							unset( $img['id'] );
 							$img['property_id'] = $new_id;
-							$img['created_at'] = current_time('mysql');
 							$img['updated_at'] = current_time('mysql');
-							$wpdb->insert( "{$wpdb->prefix}ls_img", $img );
+							
+							$clean_img = array();
+							foreach($img as $k => $v){ if(in_array($k, $img_cols)) $clean_img[$k] = $v; }
+							$wpdb->insert( "{$wpdb->prefix}ls_img", $clean_img );
+						}
+						
+						// Duplicate block dates
+						$dates = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ls_block_date WHERE property_id = %d", $p_id ), ARRAY_A );
+						$date_cols = $wpdb->get_col("DESCRIBE {$wpdb->prefix}ls_block_date");
+						foreach ( $dates as $date_row ) {
+							unset( $date_row['id'] );
+							$date_row['property_id'] = $new_id;
+							
+							$clean_date = array();
+							foreach($date_row as $k => $v){ if(in_array($k, $date_cols)) $clean_date[$k] = $v; }
+							$wpdb->insert( "{$wpdb->prefix}ls_block_date", $clean_date );
 						}
 					}
 				}
 			}
 
-			wp_send_json_success( array( 'message' => count( $valid_ids ) . ' property(s) duplicated as Draft.' ) );
+			wp_send_json_success( array( 'message' => count( $valid_ids ) . ' property(s) duplicated as Pending.' ) );
 			break;
 
 		default:
@@ -1650,3 +1703,382 @@ function lef_get_booking_details() {
 add_action( 'wp_ajax_lef_get_booking_details', 'lef_get_booking_details' );
 
 
+
+// ─────────────────────────────────────────────────────────────
+// My Listings — View/Edit Property AJAX Handlers (v2.1.5)
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Fetch form data for property add/edit.
+ *
+ * Returns amenities, locations, types lists.
+ * If property_id is provided (edit mode), also returns
+ * the property row, images, and block dates.
+ *
+ * @since 2.1.5
+ */
+function lef_ve_get_form_data() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Login required.' ) );
+	}
+
+	global $wpdb;
+	$user_id     = get_current_user_id();
+	$property_id = isset( $_POST['property_id'] ) ? intval( $_POST['property_id'] ) : 0;
+
+	// Fetch dropdown data
+	$amenities = $wpdb->get_results( "SELECT id, name FROM {$wpdb->prefix}ls_amenities ORDER BY name ASC" );
+	$locations = $wpdb->get_results( "SELECT id, name FROM {$wpdb->prefix}ls_location ORDER BY name ASC" );
+	$types     = $wpdb->get_results( "SELECT id, name FROM {$wpdb->prefix}ls_types ORDER BY name ASC" );
+
+	$result = array(
+		'amenities' => $amenities,
+		'locations' => $locations,
+		'types'     => $types,
+		'property'  => null,
+		'images'    => array(),
+		'block_dates' => array(),
+	);
+
+	// Edit mode — fetch property details
+	if ( $property_id > 0 ) {
+		$property = $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}ls_property WHERE id = %d AND host_id = %d",
+			$property_id, $user_id
+		) );
+
+		if ( ! $property ) {
+			wp_send_json_error( array( 'message' => 'Property not found or access denied.' ) );
+		}
+
+		$result['property'] = $property;
+
+		// Images
+		$result['images'] = $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}ls_img WHERE property_id = %d",
+			$property_id
+		) );
+
+		// Block dates
+		$result['block_dates'] = $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}ls_block_date WHERE property_id = %d",
+			$property_id
+		) );
+	}
+
+	wp_send_json_success( $result );
+}
+add_action( 'wp_ajax_lef_ve_get_form_data', 'lef_ve_get_form_data' );
+
+
+/**
+ * Upload property image from native file input
+ *
+ * @since 2.1.5
+ */
+function lef_ve_upload_property_image() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Login required.' ) );
+	}
+
+	if ( empty( $_FILES['property_image'] ) ) {
+		wp_send_json_error( array( 'message' => 'No file uploaded.' ) );
+	}
+
+	$file = $_FILES['property_image'];
+
+	// 1. Check size (< 1MB)
+	if ( $file['size'] > 1024 * 1024 ) {
+		wp_send_json_error( array( 'message' => 'Image size should not exceed 1MB.' ) );
+	}
+
+	// 2. Check Extension/Mime
+	$allowed_types = array( 'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif' );
+	if ( ! in_array( $file['type'], $allowed_types ) ) {
+		wp_send_json_error( array( 'message' => 'Only JPEG, PNG, WEBP, and AVIF formats are allowed.' ) );
+	}
+
+	// 3. Handle Upload using WordPress Media API
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+
+	// Custom filter to rename file to something unique
+	$user_id = get_current_user_id();
+	$unique_name_filter = function( $file ) use ( $user_id ) {
+		$ext  = pathinfo( $file['name'], PATHINFO_EXTENSION );
+		$name = pathinfo( $file['name'], PATHINFO_FILENAME );
+		$name = sanitize_title( $name );
+		$file['name'] = "property_{$user_id}_" . time() . "_" . wp_generate_password( 6, false ) . "_{$name}.{$ext}";
+		return $file;
+	};
+
+	add_filter( 'wp_handle_upload_prefilter', $unique_name_filter );
+	$attachment_id = media_handle_upload( 'property_image', 0 );
+	remove_filter( 'wp_handle_upload_prefilter', $unique_name_filter );
+
+	if ( is_wp_error( $attachment_id ) ) {
+		wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ) );
+	}
+
+	$img_url = wp_get_attachment_url( $attachment_id );
+
+	wp_send_json_success( array( 
+		'id'  => $attachment_id,
+		'url' => $img_url
+	) );
+}
+add_action( 'wp_ajax_lef_ve_upload_property_image', 'lef_ve_upload_property_image' );
+
+
+/**
+ * Instant delete property image from server and database
+ *
+ * @since 2.1.5
+ */
+function lef_ve_delete_property_image() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Login required.' ) );
+	}
+
+	global $wpdb;
+	$image_id = isset( $_POST['image_id'] ) ? intval( $_POST['image_id'] ) : 0;
+	$property_id = isset( $_POST['property_id'] ) ? intval( $_POST['property_id'] ) : 0;
+
+	if ( $image_id <= 0 ) {
+		wp_send_json_error( array( 'message' => 'Invalid image ID.' ) );
+	}
+
+	// Delete the physical file
+	wp_delete_attachment( $image_id, true );
+
+	// If property_id is provided, instantly update the DB row
+	if ( $property_id > 0 ) {
+		$owner_check = $wpdb->get_var( $wpdb->prepare( "SELECT host_id FROM {$wpdb->prefix}ls_property WHERE id = %d", $property_id ) );
+		if ( intval( $owner_check ) === get_current_user_id() ) {
+			$img_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ls_img WHERE property_id = %d", $property_id ) );
+			if ( $img_row && !empty($img_row->image) ) {
+				$images_arr = json_decode( $img_row->image, true );
+				if ( is_array( $images_arr ) ) {
+					$new_images = array();
+					foreach ( $images_arr as $img ) {
+						if ( isset($img['id']) && $img['id'] == $image_id ) continue;
+						$new_images[] = $img;
+					}
+					$wpdb->update(
+						"{$wpdb->prefix}ls_img",
+						array( 'image' => wp_json_encode( $new_images ) ),
+						array( 'property_id' => $property_id )
+					);
+				}
+			}
+		}
+	}
+
+	wp_send_json_success( array( 'message' => 'Image deleted permanently.' ) );
+}
+add_action( 'wp_ajax_lef_ve_delete_property_image', 'lef_ve_delete_property_image' );
+
+
+/**
+ * Save (insert or update) a property listing.
+ *
+ * Handles property data in wp_ls_property,
+ * images in wp_ls_img, and block dates in wp_ls_block_date.
+ *
+ * Status logic:
+ * - New: always draft
+ * - Edit published: forced to pending
+ * - Edit other: user picks draft/pending
+ *
+ * @since 2.1.5
+ */
+function lef_ve_save_property() {
+	check_ajax_referer( 'lef_myprofile_nonce', 'nonce' );
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => 'Login required.' ) );
+	}
+
+	global $wpdb;
+	$user_id     = get_current_user_id();
+	$property_id = isset( $_POST['property_id'] ) ? intval( $_POST['property_id'] ) : 0;
+	$mode        = isset( $_POST['mode'] ) ? sanitize_text_field( $_POST['mode'] ) : 'new';
+
+	// Sanitize all inputs
+	$title       = isset( $_POST['title'] ) ? sanitize_text_field( $_POST['title'] ) : '';
+	$description = isset( $_POST['description'] ) ? sanitize_textarea_field( $_POST['description'] ) : '';
+	$guests      = isset( $_POST['guests'] ) ? intval( $_POST['guests'] ) : 0;
+	$bedroom     = isset( $_POST['bedroom'] ) ? intval( $_POST['bedroom'] ) : 0;
+	$bed         = isset( $_POST['bed'] ) ? intval( $_POST['bed'] ) : 0;
+	$bathroom    = isset( $_POST['bathroom'] ) ? intval( $_POST['bathroom'] ) : 0;
+	$price       = isset( $_POST['price'] ) ? intval( $_POST['price'] ) : 0;
+	$address     = isset( $_POST['address'] ) ? sanitize_text_field( $_POST['address'] ) : '';
+	$location    = isset( $_POST['location'] ) ? intval( $_POST['location'] ) : 0;
+	$type        = isset( $_POST['type'] ) ? intval( $_POST['type'] ) : 0;
+	$status      = isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : 'draft';
+
+	// Amenities — stored as JSON array of IDs
+	$amenities_raw = isset( $_POST['amenities'] ) ? $_POST['amenities'] : '[]';
+	$amenities_arr = json_decode( stripslashes( $amenities_raw ), true );
+	if ( ! is_array( $amenities_arr ) ) {
+		$amenities_arr = array();
+	}
+	$amenities_json = wp_json_encode( array_map( 'intval', $amenities_arr ) );
+
+	// Status safety: user can only set draft or pending
+	$allowed_statuses = array( 'draft', 'pending' );
+	if ( ! in_array( $status, $allowed_statuses, true ) ) {
+		$status = 'draft';
+	}
+
+	// Property data array
+	$prop_data = array(
+		'title'       => $title,
+		'description' => $description,
+		'guests'      => $guests,
+		'bedroom'     => $bedroom,
+		'bed'         => $bed,
+		'bathroom'    => $bathroom,
+		'price'       => $price,
+		'address'     => $address,
+		'location'    => $location,
+		'type'        => $type,
+		'amenities'   => $amenities_json,
+		'status'      => $status,
+		'updated_at'  => current_time( 'mysql' ),
+	);
+
+	if ( $mode === 'new' || $property_id === 0 ) {
+		$prop_data['host_id']    = $user_id;
+		$prop_data['created_at'] = current_time( 'mysql' );
+	}
+
+	// Fetch actual database columns to avoid strict mode errors
+	$columns = $wpdb->get_col( "DESCRIBE {$wpdb->prefix}ls_property", 0 );
+	
+	if ( ! empty( $columns ) ) {
+		// Handle column name variations based on common schema patterns
+		if ( ! in_array( 'amenities', $columns, true ) && in_array( 'amenities_id', $columns, true ) ) {
+			$prop_data['amenities_id'] = $prop_data['amenities'];
+		}
+		if ( ! in_array( 'location', $columns, true ) && in_array( 'location_id', $columns, true ) ) {
+			$prop_data['location_id'] = $prop_data['location'];
+		}
+		if ( ! in_array( 'type', $columns, true ) && in_array( 'type_id', $columns, true ) ) {
+			$prop_data['type_id'] = $prop_data['type'];
+		}
+		if ( ! in_array( 'bedroom', $columns, true ) && in_array( 'bedrooms', $columns, true ) ) {
+			$prop_data['bedrooms'] = $prop_data['bedroom'];
+		}
+		if ( ! in_array( 'bed', $columns, true ) && in_array( 'beds', $columns, true ) ) {
+			$prop_data['beds'] = $prop_data['bed'];
+		}
+		if ( ! in_array( 'bathroom', $columns, true ) && in_array( 'bathrooms', $columns, true ) ) {
+			$prop_data['bathrooms'] = $prop_data['bathroom'];
+		}
+
+		// Filter $prop_data to only include columns that actually exist
+		$filtered_prop_data = array();
+		foreach ( $prop_data as $key => $value ) {
+			if ( in_array( $key, $columns, true ) ) {
+				$filtered_prop_data[ $key ] = $value;
+			}
+		}
+	} else {
+		// Fallback if DESCRIBE fails
+		$filtered_prop_data = $prop_data;
+	}
+
+	if ( $mode === 'new' || $property_id === 0 ) {
+		// ── INSERT new property ──
+		$inserted = $wpdb->insert( "{$wpdb->prefix}ls_property", $filtered_prop_data );
+		if ( ! $inserted ) {
+			wp_send_json_error( array( 'message' => 'Failed to create property. DB Error: ' . $wpdb->last_error ) );
+		}
+		$property_id = $wpdb->insert_id;
+	} else {
+		// ── UPDATE existing property ──
+		// Verify ownership
+		$owner_check = $wpdb->get_var( $wpdb->prepare(
+			"SELECT host_id FROM {$wpdb->prefix}ls_property WHERE id = %d",
+			$property_id
+		) );
+		if ( intval( $owner_check ) !== $user_id ) {
+			wp_send_json_error( array( 'message' => 'Access denied.' ) );
+		}
+
+		$wpdb->update(
+			"{$wpdb->prefix}ls_property",
+			$filtered_prop_data,
+			array( 'id' => $property_id )
+		);
+	}
+
+	// ── Save Images ──
+	$images_raw = isset( $_POST['images'] ) ? stripslashes( $_POST['images'] ) : '[]';
+	$images_arr = json_decode( $images_raw, true );
+	if ( is_array( $images_arr ) && ! empty( $images_arr ) ) {
+		// Delete old image rows for this property
+		$wpdb->delete( "{$wpdb->prefix}ls_img", array( 'property_id' => $property_id ) );
+
+		// Re-normalize sort orders and insert single row with JSON
+		$img_json_arr = array();
+		foreach ( $images_arr as $idx => $img ) {
+			$img_json_arr[] = array(
+				'id'         => isset( $img['id'] ) ? intval( $img['id'] ) : 0,
+				'url'        => isset( $img['url'] ) ? esc_url_raw( $img['url'] ) : '',
+				'sort_order' => $idx,
+			);
+		}
+
+		$wpdb->insert(
+			"{$wpdb->prefix}ls_img",
+			array(
+				'property_id' => $property_id,
+				'image'       => wp_json_encode( $img_json_arr ),
+			)
+		);
+	}
+
+	// ── Save Block Dates ──
+	$dates_raw = isset( $_POST['block_dates'] ) ? stripslashes( $_POST['block_dates'] ) : '[]';
+	$dates_arr = json_decode( $dates_raw, true );
+
+	// Delete old block date rows
+	$wpdb->delete( "{$wpdb->prefix}ls_block_date", array( 'property_id' => $property_id ) );
+
+	if ( is_array( $dates_arr ) && ! empty( $dates_arr ) ) {
+		// Sanitize each date string
+		$clean_dates = array();
+		foreach ( $dates_arr as $d ) {
+			$d = sanitize_text_field( $d );
+			if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $d ) ) {
+				$clean_dates[] = $d;
+			}
+		}
+
+		if ( ! empty( $clean_dates ) ) {
+			$wpdb->insert(
+				"{$wpdb->prefix}ls_block_date",
+				array(
+					'property_id' => $property_id,
+					'dates'       => wp_json_encode( $clean_dates ),
+					'created_at'  => current_time( 'mysql' ),
+				)
+			);
+		}
+	}
+
+	wp_send_json_success( array(
+		'message'     => ( $mode === 'new' ? 'Property created successfully!' : 'Property updated successfully!' ),
+		'property_id' => $property_id,
+	) );
+}
+add_action( 'wp_ajax_lef_ve_save_property', 'lef_ve_save_property' );

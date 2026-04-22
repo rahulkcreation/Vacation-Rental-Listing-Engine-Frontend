@@ -261,6 +261,24 @@ function lef_enqueue_assets() {
 				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/css/my-profile/my-listings/my-listings.css' )
 			);
 
+			// View/Edit Property Form Assets (v2.1.5)
+			wp_enqueue_style(
+				'lef-my-listings-view-edit-css',
+				LEF_PLUGIN_URL . 'frontend/assets/css/my-profile/my-listings/view-edit.css',
+				array( 'lef-my-listings-css' ),
+				filemtime( LEF_PLUGIN_DIR . 'frontend/assets/css/my-profile/my-listings/view-edit.css' )
+			);
+
+			wp_enqueue_script(
+				'lef-my-listings-view-edit-js',
+				LEF_PLUGIN_URL . 'frontend/assets/js/my-profile/my-listings/view-edit.js',
+				array( 'jquery', 'lef-my-listings-js' ),
+				LEF_VERSION . '.' . filemtime( LEF_PLUGIN_DIR . 'frontend/assets/js/my-profile/my-listings/view-edit.js' ),
+				true
+			);
+
+			// Enqueue WP Media Library removed per user request
+
 			wp_localize_script( 'lef-my-profile-js', 'lefMyProfileData', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'lef_myprofile_nonce' ),

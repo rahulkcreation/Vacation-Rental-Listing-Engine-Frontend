@@ -112,8 +112,7 @@
             // Actions - Single
             this.$cardList.on('click', '.lef-host-list-action-edit', (e) => {
                 const id = $(e.currentTarget).closest('.lef-host-list-card').data('id');
-                // Could integrate with view-edit modal dynamically here
-                if(window.LEF_Toast) window.LEF_Toast.show('Loading edit view...', 'info');
+                if(window.LEF_ViewEdit) window.LEF_ViewEdit.open('edit', id);
             });
 
             this.$cardList.on('click', '.lef-host-list-action-duplicate', (e) => {
@@ -163,7 +162,7 @@
             
             // Add Property Placeholder
             this.$addBtn.on('click', () => {
-                if(window.LEF_Toast) window.LEF_Toast.show('Loading Add Property view...', 'info');
+                if(window.LEF_ViewEdit) window.LEF_ViewEdit.open('new');
             });
         },
 
