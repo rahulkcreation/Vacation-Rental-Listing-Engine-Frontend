@@ -1,54 +1,525 @@
 /**
- * Dashboard CSS
+ * dashboard.css
+ *
+ * Styles for the Admin Dashboard page.
+ * Prefix: lef-dash-
+ * All colours reference global.css tokens (--leb-*).
+ * Zero inline styles.
+ *
+ * @package ListingEngineFrontend
  */
 
-.lef-dashboard-wrap {
-	margin-top: 20px;
+/* ─────────────────────────────────────────────────────────────
+   Root wrapper
+   ───────────────────────────────────────────────────────────── */
+#lef-dash-root {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 0.5rem;
 }
 
-.lef-dashboard-welcome-panel {
-	background: #fff;
-	border: 1px solid #c3c4c7;
-	box-shadow: 0 1px 1px rgba(0,0,0,.04);
-	padding: 20px 20px 20px 30px;
-	margin-bottom: 20px;
-	border-radius: 4px;
+/* ─────────────────────────────────────────────────────────────
+   Header
+   ───────────────────────────────────────────────────────────── */
+.lef-dash-header {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.2rem 1.5rem;
 }
 
-.lef-dashboard-welcome-panel h2 {
-	margin: 0 0 10px;
-	font-size: 24px;
-	font-weight: 500;
+.lef-dash-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.lef-dashboard-widgets {
-	display: flex;
-	gap: 20px;
-	flex-wrap: wrap;
+.lef-dash-header-icon {
+    background: var(--leb-primary-color);
+    border-radius: 1rem;
+    color: var(--leb-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
 }
 
-.lef-dashboard-widget {
-	flex: 1;
-	min-width: 300px;
-	background: #fff;
-	border: 1px solid #c3c4c7;
-	box-shadow: 0 1px 1px rgba(0,0,0,.04);
-	padding: 20px;
-	border-radius: 4px;
+.lef-dash-header-icon svg {
+    width: 50%;
+    height: 50%;
 }
 
-.lef-dashboard-widget h3 {
-	margin-top: 0;
-	border-bottom: 1px solid #f0f0f1;
-	padding-bottom: 10px;
+.lef-dash-title {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    color: var(--leb-secondary-color);
+    line-height: 1.1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.lef-quick-actions {
-	list-style: none;
-	padding: 0;
-	margin: 0;
+.lef-dash-subtitle {
+    color: var(--leb-text-muted);
+    font-size: 0.88rem;
+    font-weight: 400;
+    margin-top: 0.3rem;
+    line-height: 1.4;
 }
 
-.lef-quick-actions li {
-	margin-bottom: 10px;
+.lef-dash-subtitle strong {
+    color: var(--leb-secondary-color);
+    font-weight: 600;
+}
+
+.lef-dash-version-badge {
+    background: var(--leb-primary-light-bg);
+    border-radius: 100rem;
+    color: var(--leb-primary-color);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Section Wrapper (shared by nav + docs)
+   ───────────────────────────────────────────────────────────── */
+.lef-dash-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lef-dash-section-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.lef-dash-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--leb-secondary-color);
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+}
+
+.lef-dash-section-title svg {
+    width: 18px;
+    height: 18px;
+    color: var(--leb-primary-color);
+    flex: 0 0 auto;
+}
+
+.lef-dash-section-desc {
+    color: var(--leb-text-muted);
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Quick Navigation Cards
+   ───────────────────────────────────────────────────────────── */
+.lef-dash-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.lef-dash-nav-card {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.2rem;
+    text-decoration: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.lef-dash-nav-card:hover {
+    border-color: var(--leb-primary-color);
+    box-shadow: var(--leb-card-shadow);
+    transform: translateY(-2px);
+}
+
+/* Icon variants */
+.lef-dash-nav-card-icon {
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+}
+
+.lef-dash-nav-card-icon svg {
+    width: 50%;
+    height: 50%;
+}
+
+.lef-dash-nav-card-icon--primary {
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+}
+
+.lef-dash-nav-card-icon--success {
+    background: var(--leb-success-light-bg);
+    color: var(--leb-success-color);
+}
+
+.lef-dash-nav-card-icon--warning {
+    background: var(--leb-warning-light-bg);
+    color: var(--leb-warning-color);
+}
+
+.lef-dash-nav-card-icon--info {
+    background: var(--leb-info-light-bg);
+    color: var(--leb-info-color);
+}
+
+.lef-dash-nav-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.lef-dash-nav-card-title {
+    color: var(--leb-secondary-color);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.lef-dash-nav-card-desc {
+    color: var(--leb-text-muted);
+    font-size: 0.82rem;
+    font-weight: 400;
+    margin-top: 0.25rem;
+    line-height: 1.4;
+}
+
+.lef-dash-nav-card-arrow {
+    color: var(--leb-border-default);
+    flex: 0 0 auto;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.lef-dash-nav-card-arrow svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.lef-dash-nav-card:hover .lef-dash-nav-card-arrow {
+    color: var(--leb-primary-color);
+    transform: translateX(3px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Shortcode Documentation Cards
+   ───────────────────────────────────────────────────────────── */
+.lef-dash-docs-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lef-dash-doc-card {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.lef-dash-doc-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--leb-border-color);
+    background: var(--leb-bg-light);
+}
+
+.lef-dash-doc-icon {
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+}
+
+.lef-dash-doc-icon svg {
+    width: 50%;
+    height: 50%;
+}
+
+.lef-dash-doc-icon--primary {
+    background: var(--leb-primary-light-bg);
+    color: var(--leb-primary-color);
+}
+
+.lef-dash-doc-icon--success {
+    background: var(--leb-success-light-bg);
+    color: var(--leb-success-color);
+}
+
+.lef-dash-doc-icon--warning {
+    background: var(--leb-warning-light-bg);
+    color: var(--leb-warning-color);
+}
+
+.lef-dash-doc-icon--info {
+    background: var(--leb-info-light-bg);
+    color: var(--leb-info-color);
+}
+
+.lef-dash-doc-title {
+    color: var(--leb-secondary-color);
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.lef-dash-doc-body {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lef-dash-doc-desc {
+    color: var(--leb-text-color);
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* ── Code blocks ── */
+.lef-dash-doc-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.lef-dash-doc-code-block {
+    background: var(--leb-bg-light);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.lef-dash-doc-code-label {
+    color: var(--leb-text-muted);
+    font-size: 0.73rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border-bottom: 1px solid var(--leb-border-color);
+}
+
+.lef-dash-doc-code-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+}
+
+.lef-dash-doc-code {
+    background: transparent;
+    border: 0;
+    color: var(--leb-primary-dark);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex: 1;
+    word-break: break-all;
+}
+
+.lef-dash-copy-btn {
+    background: var(--leb-white);
+    border: 1px solid var(--leb-border-color);
+    border-radius: 0.5rem;
+    color: var(--leb-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.lef-dash-copy-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.lef-dash-copy-btn:hover {
+    background: var(--leb-primary-light-bg);
+    border-color: var(--leb-primary-color);
+    color: var(--leb-primary-color);
+}
+
+.lef-dash-copy-btn.is-copied {
+    background: var(--leb-success-light-bg);
+    border-color: var(--leb-success-color);
+    color: var(--leb-success-color);
+}
+
+/* ── Parameter table ── */
+.lef-dash-doc-params-title {
+    color: var(--leb-secondary-color);
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    margin: 0 0 0.5rem !important;
+    padding: 0 !important;
+}
+
+.lef-dash-doc-param-table {
+    border: 1px solid var(--leb-border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.lef-dash-doc-param-row {
+    display: grid;
+    grid-template-columns: 130px 80px 80px 1fr;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--leb-border-color);
+    color: var(--leb-text-color);
+    align-items: center;
+}
+
+.lef-dash-doc-param-row:last-child {
+    border-bottom: 0;
+}
+
+.lef-dash-doc-param-row--head {
+    background: var(--leb-bg-light);
+    color: var(--leb-text-muted);
+    font-weight: 600;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.lef-dash-doc-param-row code {
+    background: var(--leb-primary-light-bg);
+    border-radius: 4px;
+    color: var(--leb-primary-dark);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 6px;
+}
+
+/* ── Note / info block ── */
+.lef-dash-doc-note {
+    background: var(--leb-info-light-bg);
+    border-left: 3px solid var(--leb-info-color);
+    border-radius: 0.5rem;
+    color: var(--leb-secondary-color);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 0.6rem 0.8rem;
+}
+
+.lef-dash-doc-note svg {
+    color: var(--leb-info-color);
+    flex: 0 0 auto;
+    width: 15px;
+    height: 15px;
+    margin-top: 2px;
+}
+
+.lef-dash-doc-note code {
+    background: var(--leb-white);
+    border-radius: 4px;
+    color: var(--leb-primary-dark);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 1px 5px;
+}
+
+.lef-dash-doc-note--warning {
+    background: var(--leb-warning-light-bg);
+    border-left-color: var(--leb-warning-color);
+}
+
+.lef-dash-doc-note--warning svg {
+    color: var(--leb-warning-color);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .lef-dash-header {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .lef-dash-doc-param-row {
+        grid-template-columns: 110px 60px 60px 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .lef-dash-header-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .lef-dash-title {
+        font-size: 1.2rem !important;
+    }
+
+    .lef-dash-doc-param-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .lef-dash-doc-param-row--head span:nth-child(3),
+    .lef-dash-doc-param-row--head span:nth-child(4),
+    .lef-dash-doc-param-row span:nth-child(3),
+    .lef-dash-doc-param-row span:nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 425px) {
+    .lef-dash-nav-card-desc {
+        display: none;
+    }
+
+    .lef-dash-doc-body {
+        padding: 0.8rem;
+    }
 }
