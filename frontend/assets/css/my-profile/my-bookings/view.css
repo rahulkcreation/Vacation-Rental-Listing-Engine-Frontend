@@ -212,12 +212,10 @@
         text-align: center;
     }
 
-    .lef-mb-view-btn-primary{
+    .lef-mb-view-btn-primary {
         width: 100%;
     }
-}
 
-@media (max-width: 650px) {
     .lef-mb-view-page-title {
         font-size: 1.4rem;
     }

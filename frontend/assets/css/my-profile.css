@@ -228,7 +228,6 @@
     box-shadow: var(--leb-card-shadow);
     position: relative;
     padding: 20px;
-    overflow-x: hidden;
 }
 
 

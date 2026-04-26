@@ -41,19 +41,17 @@ $property_url = lef_get_secure_detail_url($reserv['property_id']);
             </header>
 
             <section class="lef-reserv-edit-summary" aria-label="Reservation summary">
-                <div class="lef-reserv-edit-summary-info">
-                    <div class="lef-reserv-edit-field">
-                        <span class="lef-reserv-edit-label">Property Name</span>
-                        <span class="lef-reserv-edit-value lef-reserv-edit-property-name">
-                            <?php echo esc_html($reserv['property_title']); ?>
-                        </span>
-                    </div>
-                    <div class="lef-reserv-edit-field">
-                        <span class="lef-reserv-edit-label">Last Updated</span>
-                        <span class="lef-reserv-edit-value">
-                            <?php echo esc_html(date('F j, Y g:i A', strtotime($reserv['updated_at']))); ?>
-                        </span>
-                    </div>
+                <div class="lef-reserv-edit-field">
+                    <span class="lef-reserv-edit-label">Property Name</span>
+                    <span class="lef-reserv-edit-value lef-reserv-edit-property-name">
+                        <?php echo esc_html($reserv['property_title']); ?>
+                    </span>
+                </div>
+                <div class="lef-reserv-edit-field">
+                    <span class="lef-reserv-edit-label">Last Updated</span>
+                    <span class="lef-reserv-edit-value">
+                        <?php echo esc_html(date('F j, Y g:i A', strtotime($reserv['updated_at']))); ?>
+                    </span>
                 </div>
                 <div class="lef-reserv-edit-summary-action">
                     <a href="<?php echo esc_url($property_url); ?>" class="lef-reserv-edit-view-btn" target="_blank">
@@ -185,7 +183,6 @@ $property_url = lef_get_secure_detail_url($reserv['property_id']);
             <!-- Status Update Card -->
             <section class="lef-reserv-edit-status-card" aria-label="Change reservation status">
                 <div>
-                    <h2 class="lef-reserv-edit-status-title">Change Status</h2>
                     <div class="lef-reserv-edit-status-control">
                         <select class="lef-reserv-edit-status-select" id="lef-reserv-edit-status-select">
                             <option value="pending" <?php selected($reserv['status'], 'pending'); ?>>Pending</option>

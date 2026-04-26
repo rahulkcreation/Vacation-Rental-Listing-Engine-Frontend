@@ -4,11 +4,9 @@
  */
 
 .lef-reserv-edit-page {
-    margin: 0 auto;
-    max-width: 1400px;
-    min-height: calc(100vh - 100px);
-    padding: 24px 20px 48px;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
 }
 
 .lef-reserv-edit-topbar,
@@ -17,17 +15,15 @@
 .lef-reserv-edit-status-card {
     background: var(--leb-white);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
-    box-shadow: var(--leb-card-shadow);
+    border-radius: 1rem;
 }
 
 .lef-reserv-edit-topbar {
     align-items: center;
     display: flex;
-    gap: 16px;
+    gap: 2rem;
     justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 18px;
+    padding: 1rem;
 }
 
 .lef-reserv-edit-back-btn {
@@ -37,15 +33,20 @@
     border-radius: 8px;
     color: var(--leb-secondary-color);
     display: inline-flex;
-    font-size: 0.95rem;
-    font-weight: 800;
-    gap: 9px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    gap: 0.2rem;
     justify-content: center;
-    min-height: 42px;
-    padding: 9px 16px;
+    padding: 8px 10px;
     text-decoration: none;
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     white-space: nowrap;
+}
+
+.lef-reserv-edit-back-btn svg {
+    width: 20px;
+    height: 20px;
+    color: var(--leb-secondary-color);
 }
 
 .lef-reserv-edit-back-btn:hover,
@@ -58,19 +59,19 @@
 
 .lef-reserv-edit-page-title {
     color: var(--leb-secondary-color);
-    font-size: 1.65rem;
-    font-weight: 800;
-    line-height: 1.15;
-    margin-right: auto;
+    font-size: 1.45rem !important;
+    font-weight: 500 !important;
+    line-height: 1.1 !important;
+    padding: 0 !important;
+    text-align: center !important;
 }
 
 .lef-reserv-edit-status-badge {
     align-items: center;
-    border: 1px solid var(--leb-border-default);
-    border-radius: 8px;
+    border-radius: 1rem;
     display: inline-flex;
     font-size: 0.9rem;
-    font-weight: 800;
+    font-weight: 500;
     justify-content: center;
     min-height: 36px;
     padding: 8px 14px;
@@ -94,16 +95,9 @@
 
 .lef-reserv-edit-summary {
     display: grid;
-    gap: 18px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    margin-bottom: 20px;
-    padding: 20px;
-}
-
-.lef-reserv-edit-summary-info {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 1rem;
 }
 
 .lef-reserv-edit-field {
@@ -113,22 +107,17 @@
 .lef-reserv-edit-label {
     color: var(--leb-text-muted);
     display: block;
-    font-size: 0.78rem;
-    font-weight: 800;
-    margin-bottom: 5px;
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+    line-height: 1;
 }
 
 .lef-reserv-edit-value {
     color: var(--leb-text-color);
     display: block;
     font-size: 1rem;
-    font-weight: 800;
-    overflow-wrap: anywhere;
-}
-
-.lef-reserv-edit-property-name {
-    color: var(--leb-secondary-color);
-    font-size: 1.15rem;
+    font-weight: 500;
 }
 
 .lef-reserv-edit-summary-action {
@@ -140,13 +129,12 @@
 .lef-reserv-edit-view-btn,
 .lef-reserv-edit-save-btn {
     align-items: center;
-    border-radius: 8px;
+    border-radius: 1rem;
     display: inline-flex;
-    font-size: 0.94rem;
-    font-weight: 800;
-    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    gap: 0.5rem;
     justify-content: center;
-    min-height: 42px;
     padding: 10px 18px;
     transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     white-space: nowrap;
@@ -157,6 +145,16 @@
     background: var(--leb-white);
     border: 1px solid var(--leb-border-default);
     color: var(--leb-secondary-color);
+}
+
+.lef-reserv-edit-view-btn svg {
+    height: 20px;
+    width: 20px;
+    color: var(--leb-secondary-color);
+}
+
+.lef-reserv-edit-view-btn:hover svg {
+    color: var(--leb-primary-color);
 }
 
 .lef-reserv-edit-view-btn:hover,
@@ -171,7 +169,6 @@
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-bottom: 20px;
 }
 
 .lef-reserv-edit-section {
@@ -182,7 +179,7 @@
     align-items: center;
     border-bottom: 1px solid var(--leb-border-color);
     display: flex;
-    gap: 10px;
+    gap: 0.7rem;
     padding: 16px 18px;
 }
 
@@ -190,7 +187,7 @@
     align-items: center;
     background: var(--leb-primary-light-bg);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 1rem;
     color: var(--leb-primary-color);
     display: flex;
     height: 34px;
@@ -199,14 +196,14 @@
 }
 
 .lef-reserv-edit-section-icon svg {
-    height: 18px;
-    width: 18px;
+    height: 50%;
+    width: 50%;
 }
 
 .lef-reserv-edit-section-title {
     color: var(--leb-secondary-color);
-    font-size: 1rem;
-    font-weight: 800;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 
 .lef-reserv-edit-detail-list {
@@ -217,11 +214,10 @@
 
 .lef-reserv-edit-detail-row {
     align-items: center;
-    border-bottom: 1px solid var(--leb-border-color);
+    border-bottom: 1.5px dashed var(--leb-border-color);
     display: flex;
-    gap: 16px;
+    gap: 1rem;
     justify-content: space-between;
-    min-height: 50px;
     padding: 12px 0;
 }
 
@@ -232,52 +228,46 @@
 .lef-reserv-edit-detail-label {
     color: var(--leb-text-muted);
     flex: 0 0 auto;
-    font-size: 0.84rem;
-    font-weight: 800;
+    font-size: 0.9rem;
+    font-weight: 400;
 }
 
 .lef-reserv-edit-detail-value {
     color: var(--leb-text-color);
-    font-size: 0.94rem;
-    font-weight: 800;
+    font-size: 0.9rem;
+    font-weight: 500;
     overflow-wrap: anywhere;
     text-align: right;
 }
 
 .lef-reserv-edit-status-card {
-    align-items: flex-end;
-    display: grid;
-    gap: 16px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    padding: 18px;
-}
-
-.lef-reserv-edit-status-title {
-    color: var(--leb-secondary-color);
-    font-size: 1rem;
-    font-weight: 800;
-    margin-bottom: 10px;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .lef-reserv-edit-status-control {
     position: relative;
-    max-width: 400px;
 }
 
+
 .lef-reserv-edit-status-select {
-    appearance: none;
-    background: var(--leb-white);
+    appearance: none !important;
+    background: var(--leb-white) !important;
     border: 2px solid var(--leb-border-default);
-    border-radius: 8px;
-    color: var(--leb-secondary-color);
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 800;
-    min-height: 46px;
+    border-radius: 1rem !important;
+    color: var(--leb-secondary-color) !important;
+    cursor: pointer !important;
+    font-size: 0.95rem !important;
+    font-weight: 500;
     outline: 0;
-    padding: 10px 42px 10px 14px;
+    padding: 0.3rem 1rem !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
+    line-height: 1.4 !important;
 }
 
 .lef-reserv-edit-status-select:focus {
@@ -290,8 +280,7 @@
     pointer-events: none;
     position: absolute;
     right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 10px;
 }
 
 .lef-reserv-edit-select-icon svg {
@@ -303,22 +292,27 @@
     background: var(--leb-primary-color);
     border: 1px solid var(--leb-primary-color);
     color: var(--leb-white);
-    min-width: 140px;
+    cursor: pointer;
+}
+
+.lef-reserv-edit-save-btn svg {
+    height: 20px;
+    width: 20px;
+    color: var(--leb-white);
 }
 
 .lef-reserv-edit-save-btn:hover,
 .lef-reserv-edit-save-btn:focus-visible {
     background: var(--leb-primary-dark);
     border-color: var(--leb-primary-dark);
-    box-shadow: 0 12px 30px var(--leb-primary-glow);
     outline: 0;
 }
 
 .lef-reserv-edit-save-note {
     color: var(--leb-success-color);
     display: none;
-    font-size: 0.86rem;
-    font-weight: 800;
+    font-size: 0.85rem;
+    font-weight: 400;
     margin-top: 10px;
 }
 
@@ -333,70 +327,36 @@
     }
 }
 
-@media (max-width: 760px) {
-    .lef-reserv-edit-page {
-        padding: 16px 12px 32px;
-    }
-
-    .lef-reserv-edit-topbar {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .lef-reserv-edit-page-title {
-        margin-right: 0;
-    }
-
-    .lef-reserv-edit-back-btn,
-    .lef-reserv-edit-status-badge {
-        width: 100%;
-    }
-
-    .lef-reserv-edit-summary,
-    .lef-reserv-edit-status-card {
-        grid-template-columns: 1fr;
-    }
-
-    .lef-reserv-edit-summary-info {
+@media (max-width: 767px) {
+    .lef-reserv-edit-summary {
         grid-template-columns: 1fr;
     }
 
     .lef-reserv-edit-summary-action,
-    .lef-reserv-edit-save-btn {
-        width: 100%;
-    }
-
     .lef-reserv-edit-view-btn {
         width: 100%;
     }
+
+    .lef-reserv-edit-page-title {
+        font-size: 1.2rem !important;
+    }
 }
 
-@media (max-width: 460px) {
+@media (max-width: 375px) {
     .lef-reserv-edit-page-title {
-        font-size: 1.35rem;
+        display: none;
     }
 
-    .lef-reserv-edit-topbar,
-    .lef-reserv-edit-summary,
-    .lef-reserv-edit-status-card {
-        padding: 14px;
+    .lef-reserv-edit-section-title{
+         font-size: 1rem;
     }
 
-    .lef-reserv-edit-section-head {
-        padding: 14px;
+    .lef-reserv-edit-value {
+        font-size: 0.9rem;
     }
 
-    .lef-reserv-edit-detail-list {
-        padding: 2px 14px 14px;
-    }
-
-    .lef-reserv-edit-detail-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 5px;
-    }
-
+    .lef-reserv-edit-detail-label,
     .lef-reserv-edit-detail-value {
-        text-align: left;
+        font-size: 0.8rem;
     }
 }

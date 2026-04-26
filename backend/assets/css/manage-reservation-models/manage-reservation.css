@@ -4,98 +4,98 @@
  * Uses global tokens from global.css
  */
 
+#lef-reserv-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
 .lef-reserv-header {
     align-items: center;
     background: var(--leb-white);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
-    box-shadow: var(--leb-card-shadow);
+    border-radius: 1rem;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 18px;
-    width: 100%;
+    padding: 1rem;
 }
 
 .lef-reserv-title-wrap {
     align-items: center;
     display: flex;
-    gap: 14px;
-    min-width: 0;
+    gap: 1rem;
 }
 
 .lef-reserv-title-icon {
     align-items: center;
     background: var(--leb-primary-color);
-    border-radius: 8px;
-    box-shadow: 0 12px 30px var(--leb-primary-glow);
+    border-radius: 1rem;
     color: var(--leb-white);
     display: flex;
     flex: 0 0 auto;
-    height: 48px;
     justify-content: center;
-    width: 48px;
+    width: 55px;
+    height: 55px;
 }
 
 .lef-reserv-title-icon svg {
-    height: 24px;
-    width: 24px;
+    height: 50%;
+    width: 50%;
 }
 
 .lef-reserv-title {
     color: var(--leb-secondary-color);
-    font-size: 1.85rem !important; /* Override standard WP sizing if needed */
-    font-weight: 800;
+    font-size: 1.6rem !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    padding: 0 !important;
     margin: 0 !important;
-    line-height: 1.15;
 }
 
 .lef-reserv-subtitle {
     color: var(--leb-text-muted);
-    font-size: 0.88rem;
-    font-weight: 500;
-    margin-top: 4px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 0.4rem;
+    width: 90%;
 }
 
 .lef-reserv-summary {
     align-items: center;
     background: var(--leb-primary-light-bg);
-    border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 1rem;
     color: var(--leb-secondary-color);
     display: inline-flex;
-    font-size: 0.9rem;
-    font-weight: 700;
-    gap: 8px;
-    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    gap: 0.8rem;
+    padding: 8px 12px;
     white-space: nowrap;
 }
 
 .lef-reserv-summary-count {
     align-items: center;
     background: var(--leb-primary-color);
-    border-radius: 8px;
+    border-radius: 100rem;
     color: var(--leb-white);
     display: inline-flex;
     justify-content: center;
-    min-width: 32px;
-    padding: 3px 8px;
+    min-width: 30px;
+    padding: 4px 8px;
+    font-size: 0.7rem;
 }
 
 /* Search Section */
-.lef-reserv-search-section {
-    margin-bottom: 16px;
-}
 
 .lef-reserv-search-box {
     align-items: center;
     background: var(--leb-white);
     border: 2px solid var(--leb-border-color);
-    border-radius: 8px;
-    box-shadow: var(--leb-card-shadow);
+    border-radius: 1rem;
     display: flex;
-    gap: 12px;
-    padding: 8px 10px 8px 18px;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -108,38 +108,56 @@
     align-items: center;
     color: var(--leb-text-muted);
     display: flex;
-    flex: 0 0 auto;
+    width: 22px;
+    height: auto;
 }
 
 .lef-reserv-search-icon svg {
-    height: 20px;
-    width: 20px;
+    height: 100%;
+    width: 100%;
 }
 
 .lef-reserv-search-input {
     background: transparent;
     border: 0 !important;
     box-shadow: none !important;
-    color: var(--leb-text-color);
+    color: var(--leb-text-color) !important;
     flex: 1;
-    font-size: 0.95rem !important;
-    min-width: 0;
+    font-size: 1rem !important;
     outline: 0;
-    padding: 10px 0 !important;
     width: 100%;
+    padding: 0 !important;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* Hide default browser search/clear icons */
+.lef-reserv-search-input::-webkit-search-decoration,
+.lef-reserv-search-input::-webkit-search-cancel-button,
+.lef-reserv-search-input::-webkit-search-results-button,
+.lef-reserv-search-input::-webkit-search-results-decoration {
+    display: none;
+    -webkit-appearance: none;
 }
 
 .lef-reserv-search-clear {
     align-items: center;
     background: var(--leb-bg-light);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 100rem;
     color: var(--leb-text-muted);
     display: none;
-    height: 34px;
     justify-content: center;
-    width: 34px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
 }
+
+.lef-reserv-search-clear svg {
+    height: 50%;
+    width: 50%;
+}
+
 
 .lef-reserv-search-clear.lef-reserv-search-clear-visible {
     display: inline-flex;
@@ -149,28 +167,24 @@
 .lef-reserv-tabs {
     background: var(--leb-white);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
-    box-shadow: var(--leb-card-shadow);
+    border-radius: 1rem;
     display: grid;
-    gap: 8px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-bottom: 16px;
-    padding: 8px;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .lef-reserv-tab {
     align-items: center;
     background: transparent;
     border: 0;
-    border-radius: 8px;
+    border-radius: 1rem;
     color: var(--leb-text-muted);
     display: inline-flex;
     font-size: 0.94rem;
-    font-weight: 700;
-    gap: 8px;
+    font-weight: 500;
+    gap: 0.6rem;
     justify-content: center;
-    min-height: 44px;
-    padding: 10px 12px;
+    padding: 10px;
     transition: background 0.2s ease, color 0.2s ease;
     cursor: pointer;
 }
@@ -186,19 +200,18 @@
 }
 
 .lef-reserv-tab-count {
-    background: rgba(255, 255, 255, 0.4);
-    border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
-    font-size: 0.78rem;
-    min-width: 28px;
-    padding: 1px 7px;
+    background: var(--leb-white);
+    border-radius: 100rem;
+    color: var(--leb-primary-color);
+    font-size: 0.6rem;
+    padding: 4px 10px;
 }
 
 /* List Area */
 .lef-reserv-list-shell {
     background: var(--leb-white);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 1rem;
     box-shadow: var(--leb-card-shadow);
     overflow: hidden;
 }
@@ -213,17 +226,10 @@
 
 .lef-reserv-list-title {
     color: var(--leb-secondary-color);
-    font-size: 1rem !important;
-    font-weight: 800;
-    margin: 0 !important;
+    font-size: 1.2rem !important;
+    font-weight: 500;
 }
 
-.lef-reserv-list-meta {
-    color: var(--leb-text-muted);
-    font-size: 0.84rem;
-    font-weight: 600;
-    margin: 0;
-}
 
 .lef-reserv-card-list {
     display: grid;
@@ -232,14 +238,14 @@
 }
 
 .lef-reserv-card {
-    background: var(--leb-white);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 1rem;
     display: grid;
-    gap: 16px;
+    gap: 1rem;
     grid-template-columns: 56px minmax(0, 1fr) auto;
-    padding: 16px;
+    padding: 0.8rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
 }
 
 .lef-reserv-card:hover {
@@ -251,14 +257,14 @@
     align-items: center;
     background: var(--leb-primary-light-bg);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 100rem;
     color: var(--leb-primary-color);
     display: flex;
-    font-size: 0.95rem;
-    font-weight: 800;
-    height: 44px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    height: 40px;
     justify-content: center;
-    width: 44px;
+    width: 40px;
 }
 
 .lef-reserv-card-info {
@@ -270,26 +276,26 @@
 .lef-reserv-field-label {
     color: var(--leb-text-muted);
     display: block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    margin-bottom: 4px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+    line-height: 1;
 }
 
 .lef-reserv-field-value {
     color: var(--leb-text-color);
     display: block;
-    font-size: 0.94rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    font-weight: 550;
 }
 
 .lef-reserv-status-badge {
     align-items: center;
-    border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     display: inline-flex;
-    font-size: 0.82rem;
-    font-weight: 800;
-    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 4px 12px;
 }
 
 .lef-reserv-status-badge[data-lef-reserv-status="pending"] {
@@ -307,25 +313,31 @@
     color: var(--leb-error-color);
 }
 
+.lef-reserv-card-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .lef-reserv-view-btn {
     align-items: center;
     background: var(--leb-primary-color);
     border: 1px solid var(--leb-primary-color);
-    border-radius: 8px;
+    border-radius: 1rem;
     color: var(--leb-white);
     display: inline-flex;
-    font-size: 0.86rem;
-    font-weight: 800;
+    font-size: 0.8rem;
+    font-weight: 500;
     gap: 8px;
-    min-height: 40px;
-    padding: 9px 15px;
+    padding: 8px 15px;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-decoration: none !important;
 }
 
 .lef-reserv-view-btn:hover {
-    background: var(--leb-primary-dark);
-    box-shadow: 0 12px 30px var(--leb-primary-glow);
+    color: var(--leb-white);
+    transform: translateY(-2px);
 }
 
 /* Pagination */
@@ -346,14 +358,14 @@
     align-items: center;
     background: var(--leb-white);
     border: 1px solid var(--leb-border-color);
-    border-radius: 8px;
+    border-radius: 100rem;
     color: var(--leb-text-muted);
     display: inline-flex;
-    font-size: 0.82rem;
-    font-weight: 800;
-    height: 36px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    height: 30px;
     justify-content: center;
-    min-width: 36px;
+    min-width: 30px;
     cursor: pointer;
 }
 
@@ -393,17 +405,160 @@
     margin-bottom: 16px;
 }
 
+.lef-reserv-empty-icon svg {
+    height: 50%;
+    width: 50%;
+}
+
 /* Responsive */
-@media (max-width: 900px) {
-    .lef-reserv-card-info {
-        grid-template-columns: 1fr 1fr;
+@media (max-width: 768px) {
+    .lef-reserv-title {
+        font-size: 1.3rem !important;
+    }
+
+    .lef-reserv-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .lef-reserv-list-title {
+        font-size: 1.1rem !important;
+    }
+
+    .lef-reserv-card {
+        position: relative;
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .lef-reserv-sno {
+        font-size: 0.85rem;
+        width: 30px;
+        height: 30px;
+    }
+
+    .lef-reserv-field-label-date,
+    .lef-reserv-field-value-date {
+        text-align: right;
+    }
+
+    .lef-reserv-field.lef-reserv-field-status {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .lef-reserv-field-label-status {
+        text-align: center;
+    }
+
+    .lef-reserv-field-value {
+        font-size: 0.9rem;
+    }
+
+    .lef-reserv-card-actions {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .lef-reserv-view-btn {
+        padding: 4px 15px;
+    }
+
+}
+
+@media (max-width: 570px) {
+    .lef-reserv-summary {
+        display: none;
+    }
+
+    .lef-reserv-search-box {
+        padding: 0.4rem 1rem;
+    }
+
+    .lef-reserv-search-icon {
+        width: 20px;
     }
 }
 
-@media (max-width: 720px) {
-    .lef-reserv-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
+@media (max-width: 425px) {
+    .lef-reserv-title-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .lef-reserv-title {
+        font-size: 1.2rem !important;
+    }
+
+    .lef-reserv-subtitle {
+        font-size: 0.75rem;
+        line-height: 1.1;
+        margin-top: 0.2rem;
+    }
+
+    .lef-reserv-search-input {
+        font-size: 0.85rem !important;
+    }
+
+    .lef-reserv-tab {
+        font-size: 0.8rem;
+    }
+
+    .lef-reserv-list-title {
+        font-size: 1rem !important;
+    }
+
+    .lef-reserv-view-btn {
+        font-size: 0.7rem;
+        font-weight: 400;
+    }
+
+    .lef-reserv-field-label {
+        font-size: 0.8rem;
+        line-height: 1.1;
+    }
+
+    .lef-reserv-field-value {
+        font-size: 0.8rem;
+        line-height: 1.1;
+    }
+
+    .lef-reserv-status-badge {
+        font-size: 0.7rem;
+        padding: 3px 12px;
+    }
+}
+
+@media (max-width: 375px) {
+
+    .lef-reserv-tabs {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lef-reserv-card-info {
+        grid-template-columns: 1fr;
+    }
+
+    .lef-reserv-field {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+
+    .lef-reserv-field.lef-reserv-field-status {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .lef-reserv-field-label {
+        margin: 0;
+        text-align: left;
+    }
+
+    .lef-reserv-field-value {
+        font-size: 0.75rem;
     }
 }

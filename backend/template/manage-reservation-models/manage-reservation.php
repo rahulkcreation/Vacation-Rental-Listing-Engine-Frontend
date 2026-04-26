@@ -88,7 +88,6 @@ if (! defined('ABSPATH')) {
         <section class="lef-reserv-list-shell" aria-label="Reservation list">
             <div class="lef-reserv-list-head">
                 <h2 class="lef-reserv-list-title" id="lef-reserv-list-title">Pending Reservations</h2>
-                <p class="lef-reserv-list-meta" id="lef-reserv-list-meta">10 reservations per page</p>
             </div>
 
             <div class="lef-reserv-card-list" id="lef-reserv-card-list"></div>

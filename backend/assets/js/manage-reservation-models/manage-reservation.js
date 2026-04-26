@@ -115,18 +115,18 @@
                 <div class="lef-reserv-sno">${serialNo}</div>
                 <div class="lef-reserv-card-info">
                     <div class="lef-reserv-field">
-                        <span class="lef-reserv-field-label">Reservation Number</span>
-                        <span class="lef-reserv-field-value">${item.reservation_number}</span>
+                        <span class="lef-reserv-field-label lef-reserv-field-label-title">Reservation Number</span>
+                        <span class="lef-reserv-field-value lef-reserv-field-value-title">${item.reservation_number}</span>
                     </div>
-                    <div class="lef-reserv-field">
-                        <span class="lef-reserv-field-label">Status</span>
-                        <span class="lef-reserv-status-badge" data-lef-reserv-status="${item.status}">
+                    <div class="lef-reserv-field lef-reserv-field-status">
+                        <span class="lef-reserv-field-label lef-reserv-field-label-status">Status</span>
+                        <span class="lef-reserv-status-badge lef-reserv-field-value-status" data-lef-reserv-status="${item.status}">
                             ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                         </span>
                     </div>
                     <div class="lef-reserv-field">
-                        <span class="lef-reserv-field-label">Date Requested</span>
-                        <span class="lef-reserv-field-value">${item.created_at}</span>
+                        <span class="lef-reserv-field-label lef-reserv-field-label-date">Date Requested</span>
+                        <span class="lef-reserv-field-value lef-reserv-field-value-date">${item.created_at}</span>
                     </div>
                 </div>
                 <div class="lef-reserv-card-actions">
