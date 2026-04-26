@@ -6,7 +6,7 @@
 .lef-host-list-p-m-b-common {
     padding-bottom: 2rem;
     margin-bottom: 2rem;
-    border-bottom: solid 1px var(--leb-border-color);
+    border-bottom: solid 1.5px var(--leb-border-color);
 }
 
 
@@ -205,9 +205,9 @@
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    border-bottom: 1px solid var(--leb-border-color);
+    border-bottom: 2px solid var(--leb-border-color);
     margin: 2rem 0rem;
-    min-height: 60px;
+    padding-bottom: 1rem;
 }
 
 .lef-host-list-select-row {
@@ -560,6 +560,10 @@ input.lef-host-list-row-checkbox {
         height: auto;
         min-width: auto;
     }
+
+    .lef-host-list-bulk-select {
+        width: 100px;
+    }
 }
 
 @media (max-width:370px) {
@@ -583,8 +587,12 @@ input.lef-host-list-row-checkbox {
         font-size: 1.2rem;
     }
 
-    .lef-host-list-action-btn{
+    .lef-host-list-action-btn {
         font-size: 1rem;
         min-width: 75px;
+    }
+
+    .lef-host-list-bulk-btn {
+        font-size: 1.1rem;
     }
 }

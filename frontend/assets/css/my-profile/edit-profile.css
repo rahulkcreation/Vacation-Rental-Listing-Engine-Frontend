@@ -54,6 +54,7 @@
 .lef-edit-prof-photo-preview img {
     height: 100% !important;
     object-fit: cover;
+    object-position: top center;
     width: 100%;
 }
 
@@ -491,19 +492,21 @@
         margin-top: 0.5rem;
     }
 
-    .lef-edit-prof-label{
+    .lef-edit-prof-label {
         font-size: 1.25rem;
     }
 
-    .lef-edit-prof-input{
+    .lef-edit-prof-input {
         font-size: 1.25rem;
     }
 
-    .lef-edit-prof-help, .lef-edit-prof-field-error,  .lef-edit-prof-pass-hint{
+    .lef-edit-prof-help,
+    .lef-edit-prof-field-error,
+    .lef-edit-prof-pass-hint {
         font-size: 1.1rem;
     }
 
-    .lef-edit-prof-save-btn{
+    .lef-edit-prof-save-btn {
         width: 100%;
         font-size: 1.3rem;
     }

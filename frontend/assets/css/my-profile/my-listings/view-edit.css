@@ -470,8 +470,7 @@
 
 .lef-ve-option.lef-ve-selected {
     color: var(--leb-primary-color);
-    font-weight: 600;
-    background: var(--leb-primary-light-bg);
+    font-weight: 500;
 }
 
 .lef-ve-status-option.lef-ve-selected {
